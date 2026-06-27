@@ -1,0 +1,5 @@
+{
+  "includeGeneratedM3u": true,
+  "remoteM3u": [],
+  "notes": "第一版默认从构建生成的 m3u/*.m3u 里自动筛选。后续可以把确认可用的合法公开 M3U 地址加入 remoteM3u。"
+}
