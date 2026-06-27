@@ -1,5 +1,5 @@
 {
-  "notes": "官方源优先配置。only directStreams will be written into custom.m3u. officialPages are used as references and should not be written directly into M3U because HTML/player pages cannot be played by IPTV players.",
+  "notes": "官方源优先配置。directStreams 可手工填入已确认可直连的官方 HLS；officialPages 会在构建时从官方页面和同域 JS 中自动提取公开 m3u8。HTML 播放页不会直接写入 M3U。",
   "trustedDomains": [
     "cctv.com",
     "cntv.cn",
@@ -17,17 +17,34 @@
     "viu.tv",
     "tdm.com.mo"
   ],
+  "pageCrawl": {
+    "enabled": true,
+    "timeoutMs": 8000,
+    "maxScriptsPerPage": 12
+  },
   "officialPages": {
-    "CCTV": [
-      "https://tv.cctv.com/live/",
-      "https://www.yangshipin.cn/"
-    ],
     "浙江卫视": [
-      "https://ztv.cztv.com/index.html"
+      "https://ztv.cztv.com/live/index.html"
     ],
-    "CGTN": [
-      "https://www.cgtn.com/"
-    ]
+    "CCTV-1": ["https://tv.cctv.com/live/cctv1/"],
+    "CCTV-2": ["https://tv.cctv.com/live/cctv2/"],
+    "CCTV-3": ["https://tv.cctv.com/live/cctv3/"],
+    "CCTV-4": ["https://tv.cctv.com/live/cctv4/"],
+    "CCTV-5": ["https://tv.cctv.com/live/cctv5/"],
+    "CCTV-5+": ["https://tv.cctv.com/live/cctv5plus/"],
+    "CCTV-6": ["https://tv.cctv.com/live/cctv6/"],
+    "CCTV-7": ["https://tv.cctv.com/live/cctv7/"],
+    "CCTV-8": ["https://tv.cctv.com/live/cctv8/"],
+    "CCTV-9": ["https://tv.cctv.com/live/cctv9/"],
+    "CCTV-10": ["https://tv.cctv.com/live/cctv10/"],
+    "CCTV-11": ["https://tv.cctv.com/live/cctv11/"],
+    "CCTV-12": ["https://tv.cctv.com/live/cctv12/"],
+    "CCTV-13": ["https://tv.cctv.com/live/cctv13/"],
+    "CCTV-14": ["https://tv.cctv.com/live/cctv14/"],
+    "CCTV-15": ["https://tv.cctv.com/live/cctv15/"],
+    "CCTV-16": ["https://tv.cctv.com/live/cctv16/"],
+    "CCTV-17": ["https://tv.cctv.com/live/cctv17/"],
+    "CGTN": ["https://www.cgtn.com/tv"]
   },
   "directStreams": []
 }
