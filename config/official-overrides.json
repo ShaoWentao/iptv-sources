@@ -67,6 +67,15 @@
     },
     {
       "channel": "浙江卫视",
+      "title": "浙江卫视 1080P 官方源 Ali LXW",
+      "provider": "CZTVC",
+      "page": "https://ztv.cztv.com/live/index.html",
+      "url": "https://ali-xwl.cztv.com/live/channel011080Plxw.m3u8",
+      "resolution": "1920x1080",
+      "quality": "1080P"
+    },
+    {
+      "channel": "浙江卫视",
       "title": "浙江卫视 1080P 官方源 Ali",
       "provider": "CZTVC",
       "page": "https://ztv.cztv.com/live/index.html",
