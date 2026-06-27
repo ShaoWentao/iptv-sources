@@ -56,7 +56,7 @@ function parseM3u(text, sourceName) {
     const groupTitle = attr(line, 'group-title');
     const title = tvgName || displayName;
     if (!title) continue;
-    items.push({ title, displayName, tvgName, groupTitle, url, sourceName });
+    items.push({ title, displayName, tvgName, groupTitle, url, sourceName, rawLine: line });
   }
   return items;
 }
@@ -64,7 +64,7 @@ function parseM3u(text, sourceName) {
 async function loadLocalM3uFiles() {
   if (!fs.existsSync(m3uDir)) return [];
   const files = (await readdir(m3uDir)).filter(
-    (file) => file.endsWith('.m3u') && file !== 'custom.m3u'
+    (file) => file.endsWith('.m3u') && !['custom.m3u'].includes(file)
   );
   const items = [];
   for (const file of files) {
@@ -141,6 +141,41 @@ function matchTarget(item, targets) {
   return best;
 }
 
+function parseResolution(value = '') {
+  const matched = String(value).match(/(\d{3,5})x(\d{3,5})/i);
+  if (!matched) return { width: 0, height: 0, pixels: 0 };
+  const width = Number(matched[1]);
+  const height = Number(matched[2]);
+  return { width, height, pixels: width * height };
+}
+
+function qualityHintScore(text = '') {
+  const value = String(text).toLowerCase();
+  let score = 0;
+
+  if (/8k|4320/.test(value)) score += 90000;
+  if (/4k|2160|uhd|超高清/.test(value)) score += 70000;
+  if (/1080p|1080|fhd|fullhd|蓝光/.test(value)) score += 43000;
+  if (/720p|720/.test(value)) score += 26000;
+  if (/高清|hd/.test(value)) score += 22000;
+  if (/576p|576/.test(value)) score += 12000;
+  if (/480p|480|360p|360|标清|低清|sd/.test(value)) score -= 38000;
+
+  return score;
+}
+
+function qualityFromResolution(resolution = '') {
+  const { width, height, pixels } = parseResolution(resolution);
+  if (!pixels) return { width: 0, height: 0, pixels: 0, label: '', score: 0 };
+
+  if (height >= 4320 || width >= 7680) return { width, height, pixels, label: '8K', score: 90000 };
+  if (height >= 2160 || width >= 3840) return { width, height, pixels, label: '4K', score: 70000 };
+  if (height >= 1080 || width >= 1920) return { width, height, pixels, label: '1080P', score: 43000 };
+  if (height >= 720 || width >= 1280) return { width, height, pixels, label: '720P', score: 26000 };
+  if (height >= 576) return { width, height, pixels, label: '576P', score: 12000 };
+  return { width, height, pixels, label: `${height}P`, score: -25000 };
+}
+
 function collectCandidates(items, targets, maxCandidatesPerChannel) {
   const byChannel = new Map();
   const seen = new Set();
@@ -152,19 +187,27 @@ function collectCandidates(items, targets, maxCandidatesPerChannel) {
     if (seen.has(key)) continue;
     seen.add(key);
 
+    const preQualityScore = qualityHintScore(
+      [item.title, item.displayName, item.tvgName, item.groupTitle, item.sourceName, item.url].join(' ')
+    );
     const list = byChannel.get(matched.target.name) || [];
-    list.push({ ...item, target: matched.target, matchScore: matched.score });
+    list.push({ ...item, target: matched.target, matchScore: matched.score, preQualityScore });
     byChannel.set(matched.target.name, list);
   }
 
   for (const [name, list] of byChannel) {
-    list.sort((a, b) => b.matchScore - a.matchScore || a.url.length - b.url.length);
+    list.sort(
+      (a, b) =>
+        b.matchScore - a.matchScore ||
+        b.preQualityScore - a.preQualityScore ||
+        a.url.length - b.url.length
+    );
     byChannel.set(name, list.slice(0, maxCandidatesPerChannel));
   }
   return byChannel;
 }
 
-async function probeUrl(url, timeoutMs) {
+async function probeUrl(item, timeoutMs) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   const started = performance.now();
@@ -172,13 +215,13 @@ async function probeUrl(url, timeoutMs) {
   let sample = '';
 
   try {
-    const res = await fetch(url, {
+    const res = await fetch(item.url, {
       method: 'GET',
       redirect: 'follow',
       signal: controller.signal,
       headers: {
         'User-Agent': USER_AGENT,
-        Range: 'bytes=0-4095',
+        Range: 'bytes=0-8191',
       },
     });
 
@@ -193,7 +236,7 @@ async function probeUrl(url, timeoutMs) {
         const chunk = await reader.read();
         if (chunk.value) {
           bytes = chunk.value.byteLength;
-          sample = new TextDecoder().decode(chunk.value.slice(0, 4096));
+          sample = new TextDecoder().decode(chunk.value.slice(0, 8192));
         }
       } finally {
         try {
@@ -205,17 +248,34 @@ async function probeUrl(url, timeoutMs) {
     const latencyMs = Math.round(performance.now() - started);
     const bandwidths = [...sample.matchAll(/BANDWIDTH=(\d+)/g)].map((m) => Number(m[1]));
     const bandwidth = bandwidths.length ? Math.max(...bandwidths) : 0;
-    const resolution = sample.match(/RESOLUTION=(\d+x\d+)/)?.[1] || '';
+    const resolution = sample.match(/RESOLUTION=(\d+x\d+)/i)?.[1] || '';
+    const resolutionQuality = qualityFromResolution(resolution);
     const isM3u8 = /mpegurl|m3u8|vnd\.apple/i.test(contentType) || sample.includes('#EXTM3U');
-    const score =
-      100000 -
-      latencyMs * 20 +
-      Math.min(bandwidth / 1000, 8000) +
-      (isM3u8 ? 1200 : 0) +
-      (resolution ? 800 : 0) +
-      Math.min(bytes, 4096) / 8;
+    const hint = qualityHintScore(
+      [item.title, item.displayName, item.tvgName, item.groupTitle, item.sourceName, item.url, sample].join(' ')
+    );
 
-    return { ok: true, latencyMs, contentType, bandwidth, resolution, score };
+    const bandwidthScore = Math.min(bandwidth / 100, 50000);
+    const qualityScore = resolutionQuality.score + hint + bandwidthScore;
+    const score =
+      qualityScore * 10 +
+      (isM3u8 ? 6000 : 0) +
+      Math.min(bytes, 8192) / 4 -
+      latencyMs * 3;
+
+    return {
+      ok: true,
+      latencyMs,
+      contentType,
+      bandwidth,
+      resolution,
+      width: resolutionQuality.width,
+      height: resolutionQuality.height,
+      pixels: resolutionQuality.pixels,
+      qualityLabel: resolutionQuality.label,
+      qualityScore,
+      score,
+    };
   } catch (error) {
     return { ok: false, latencyMs: timeoutMs, reason: error.name || error.message, score: 0 };
   } finally {
@@ -250,7 +310,7 @@ async function probeCandidates(byChannel, targetConfig) {
 
   console.log(`[CUSTOM] Probe candidates: ${all.length}`);
   const results = await mapLimit(all, probe.concurrency || 24, async ({ name, item }) => {
-    const result = await probeUrl(item.url, probe.timeoutMs || 2000);
+    const result = await probeUrl(item, probe.timeoutMs || 2500);
     return { name, item: { ...item, probe: result } };
   });
 
@@ -263,8 +323,15 @@ async function probeCandidates(byChannel, targetConfig) {
 
   for (const [name, list] of next) {
     list.sort((a, b) => {
-      const delta = (b.probe?.score || 0) - (a.probe?.score || 0);
-      if (delta !== 0) return delta;
+      const qualityDelta = (b.probe?.qualityScore || 0) - (a.probe?.qualityScore || 0);
+      if (qualityDelta !== 0) return qualityDelta;
+
+      const pixelDelta = (b.probe?.pixels || 0) - (a.probe?.pixels || 0);
+      if (pixelDelta !== 0) return pixelDelta;
+
+      const bandwidthDelta = (b.probe?.bandwidth || 0) - (a.probe?.bandwidth || 0);
+      if (bandwidthDelta !== 0) return bandwidthDelta;
+
       return (a.probe?.latencyMs || 99999) - (b.probe?.latencyMs || 99999);
     });
     next.set(name, list);
@@ -273,43 +340,83 @@ async function probeCandidates(byChannel, targetConfig) {
   return next;
 }
 
+function cleanMetaValue(value = '') {
+  return String(value).replace(/"/g, '').trim();
+}
+
 function makeM3u(targets, byChannel, targetConfig) {
   const epgUrl = targetConfig.epgUrl || '';
   const lines = [`#EXTM3U${epgUrl ? ` x-tvg-url="${epgUrl}"` : ''}`];
   const maxAlternates = targetConfig.maxAlternatesPerChannel || 4;
   const report = [];
+  const backups = [];
 
   for (const target of targets) {
     const list = (byChannel.get(target.name) || []).slice(0, maxAlternates);
+    const main = list[0];
+    const hiddenBackups = list.slice(1);
+
     report.push({
       name: target.name,
       group: target.group,
       count: list.length,
-      sources: list.map((item, index) => ({
+      selected: main
+        ? {
+            title: main.title,
+            sourceName: main.sourceName,
+            latencyMs: main.probe?.latencyMs,
+            resolution: main.probe?.resolution,
+            qualityLabel: main.probe?.qualityLabel,
+            bandwidth: main.probe?.bandwidth,
+            qualityScore: main.probe?.qualityScore,
+            url: main.url,
+          }
+        : null,
+      backups: hiddenBackups.map((item, index) => ({
         order: index + 1,
         title: item.title,
         sourceName: item.sourceName,
         latencyMs: item.probe?.latencyMs,
         resolution: item.probe?.resolution,
+        qualityLabel: item.probe?.qualityLabel,
         bandwidth: item.probe?.bandwidth,
+        qualityScore: item.probe?.qualityScore,
         url: item.url,
       })),
     });
 
-    list.forEach((item, index) => {
-      const displayName = index === 0 ? target.name : `${target.name} 备用${index}`;
-      const title = item.title ? item.title.replace(/"/g, '') : target.name;
-      const resolution = item.probe?.resolution ? ` resolution="${item.probe.resolution}"` : '';
-      const latency = item.probe?.latencyMs ? ` latency="${item.probe.latencyMs}ms"` : '';
-      lines.push('');
-      lines.push(
-        `#EXTINF:-1 tvg-name="${target.name}" group-title="${target.group}" source-title="${title}"${resolution}${latency},${displayName}`
-      );
-      lines.push(item.url);
+    if (!main) continue;
+
+    backups.push({
+      name: target.name,
+      group: target.group,
+      main: main.url,
+      backups: hiddenBackups.map((item) => item.url),
+      sources: list.map((item, index) => ({
+        role: index === 0 ? 'main' : 'backup',
+        title: item.title,
+        sourceName: item.sourceName,
+        latencyMs: item.probe?.latencyMs,
+        resolution: item.probe?.resolution,
+        qualityLabel: item.probe?.qualityLabel,
+        bandwidth: item.probe?.bandwidth,
+        qualityScore: item.probe?.qualityScore,
+        url: item.url,
+      })),
     });
+
+    const title = cleanMetaValue(main.title || target.name);
+    const resolution = main.probe?.resolution ? ` resolution="${main.probe.resolution}"` : '';
+    const quality = main.probe?.qualityLabel ? ` quality="${main.probe.qualityLabel}"` : '';
+    const latency = main.probe?.latencyMs ? ` latency="${main.probe.latencyMs}ms"` : '';
+    lines.push('');
+    lines.push(
+      `#EXTINF:-1 tvg-name="${target.name}" group-title="${target.group}" source-title="${title}"${resolution}${quality}${latency},${target.name}`
+    );
+    lines.push(main.url);
   }
 
-  return { m3u: `${lines.join('\n')}\n`, report };
+  return { m3u: `${lines.join('\n')}\n`, report, backups };
 }
 
 async function main() {
@@ -328,12 +435,12 @@ async function main() {
   const byChannel = collectCandidates(
     items,
     targets,
-    targetConfig.maxCandidatesPerChannel || 6
+    targetConfig.maxCandidatesPerChannel || 12
   );
   console.log(`[CUSTOM] Matched target channels: ${byChannel.size}/${targets.length}`);
 
   const probed = await probeCandidates(byChannel, targetConfig);
-  const { m3u, report } = makeM3u(targets, probed, targetConfig);
+  const { m3u, report, backups } = makeM3u(targets, probed, targetConfig);
 
   await mkdir(m3uDir, { recursive: true });
   await writeFile(path.join(m3uDir, 'custom.m3u'), m3u, 'utf-8');
@@ -342,10 +449,17 @@ async function main() {
     JSON.stringify({ generatedAt: new Date().toISOString(), report }, null, 2),
     'utf-8'
   );
+  await writeFile(
+    path.join(m3uDir, 'custom-backups.json'),
+    JSON.stringify({ generatedAt: new Date().toISOString(), channels: backups }, null, 2),
+    'utf-8'
+  );
 
-  const available = report.filter((item) => item.count > 0).length;
-  const urls = report.reduce((sum, item) => sum + item.count, 0);
-  console.log(`[CUSTOM] Write custom.m3u: ${available}/${targets.length} channels, ${urls} playable URLs`);
+  const available = report.filter((item) => item.selected).length;
+  const hiddenBackupCount = backups.reduce((sum, item) => sum + item.backups.length, 0);
+  console.log(
+    `[CUSTOM] Write custom.m3u: ${available}/${targets.length} channels, ${available} main URLs, ${hiddenBackupCount} hidden backup URLs`
+  );
 }
 
 main().catch((error) => {
