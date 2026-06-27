@@ -1,8 +1,10 @@
 name: docker image
 
+# Disabled automatic Docker publishing for this fork.
+# The IPTV/EPG Cloudflare Pages deployment does not require Docker Hub.
+# Run this workflow manually only after adding DOCKERHUB_USERNAME and DOCKERHUB_TOKEN.
 on:
-  push:
-    branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
