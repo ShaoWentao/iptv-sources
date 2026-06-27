@@ -1,10 +1,10 @@
 {
   "epgUrl": "https://tv.shaowt.com/epg/51zmt.xml",
-  "maxAlternatesPerChannel": 4,
-  "maxCandidatesPerChannel": 6,
+  "maxAlternatesPerChannel": 5,
+  "maxCandidatesPerChannel": 12,
   "probe": {
     "enabled": true,
-    "timeoutMs": 1800,
+    "timeoutMs": 2500,
     "concurrency": 32
   },
   "groups": [
