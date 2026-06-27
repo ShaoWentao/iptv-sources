@@ -9,6 +9,7 @@
   "scripts": {
     "dev": "cross-env NODE_ENV=development tsup --watch",
     "build": "tsup",
+    "postbuild": "npm run m3u",
     "build:static": "tsx src/index.ts",
     "postbuild:static": "npm run static && node ./scripts/build-custom.mjs",
     "m3u": "node ./dist/index.js",
