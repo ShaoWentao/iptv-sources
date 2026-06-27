@@ -1,0 +1,33 @@
+{
+  "notes": "官方源优先配置。only directStreams will be written into custom.m3u. officialPages are used as references and should not be written directly into M3U because HTML/player pages cannot be played by IPTV players.",
+  "trustedDomains": [
+    "cctv.com",
+    "cntv.cn",
+    "yangshipin.cn",
+    "cctvplus.com",
+    "cgtn.com",
+    "news.cgtn.com",
+    "cztv.com",
+    "ztv.cztv.com",
+    "zjstv.com",
+    "phoenixtv.com",
+    "ifeng.com",
+    "rthk.hk",
+    "hoy.tv",
+    "viu.tv",
+    "tdm.com.mo"
+  ],
+  "officialPages": {
+    "CCTV": [
+      "https://tv.cctv.com/live/",
+      "https://www.yangshipin.cn/"
+    ],
+    "浙江卫视": [
+      "https://ztv.cztv.com/index.html"
+    ],
+    "CGTN": [
+      "https://www.cgtn.com/"
+    ]
+  },
+  "directStreams": []
+}
