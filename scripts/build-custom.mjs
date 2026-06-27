@@ -8,10 +8,12 @@ const m3uDir = path.join(root, 'm3u');
 const targetPath = path.join(root, 'config', 'target-channels.json');
 const aliasPath = path.join(root, 'config', 'channel-aliases.json');
 const candidatePath = path.join(root, 'config', 'candidate-sources.json');
+const officialPath = path.join(root, 'config', 'official-overrides.json');
 
 const USER_AGENT = 'VLC/3.0.20 LibVLC/3.0.20';
 
-function readJson(file) {
+function readJson(file, fallback = {}) {
+  if (!fs.existsSync(file)) return fallback;
   return JSON.parse(fs.readFileSync(file, 'utf-8'));
 }
 
@@ -42,7 +44,24 @@ function attr(line, name) {
   return reg.exec(line)?.[1] || '';
 }
 
-function parseM3u(text, sourceName) {
+function getHostname(url = '') {
+  try {
+    return new URL(url).hostname.toLowerCase();
+  } catch {
+    return '';
+  }
+}
+
+function isTrustedDomain(url, officialConfig) {
+  const host = getHostname(url);
+  if (!host) return false;
+  return (officialConfig.trustedDomains || []).some((domain) => {
+    const normalized = String(domain).toLowerCase();
+    return host === normalized || host.endsWith(`.${normalized}`);
+  });
+}
+
+function parseM3u(text, sourceName, officialConfig = {}) {
   const lines = text.replace(/\r/g, '').split('\n').map((line) => line.trim()).filter(Boolean);
   const items = [];
   for (let i = 0; i < lines.length; i += 1) {
@@ -56,12 +75,45 @@ function parseM3u(text, sourceName) {
     const groupTitle = attr(line, 'group-title');
     const title = tvgName || displayName;
     if (!title) continue;
-    items.push({ title, displayName, tvgName, groupTitle, url, sourceName, rawLine: line });
+    const trustedOfficial = isTrustedDomain(url, officialConfig);
+    items.push({
+      title,
+      displayName,
+      tvgName,
+      groupTitle,
+      url,
+      sourceName,
+      rawLine: line,
+      trustedOfficial,
+      officialForced: false,
+    });
   }
   return items;
 }
 
-async function loadLocalM3uFiles() {
+function loadOfficialDirectStreams(officialConfig = {}) {
+  const items = [];
+  for (const stream of officialConfig.directStreams || []) {
+    if (!stream?.channel || !/^https?:\/\//i.test(stream.url || '')) continue;
+    items.push({
+      title: stream.title || stream.channel,
+      displayName: stream.channel,
+      tvgName: stream.channel,
+      groupTitle: stream.group || '官方',
+      url: stream.url,
+      sourceName: stream.provider || 'official-overrides',
+      rawLine: '',
+      trustedOfficial: true,
+      officialForced: true,
+      officialPage: stream.page || '',
+      declaredResolution: stream.resolution || '',
+      declaredQuality: stream.quality || '',
+    });
+  }
+  return items;
+}
+
+async function loadLocalM3uFiles(officialConfig) {
   if (!fs.existsSync(m3uDir)) return [];
   const files = (await readdir(m3uDir)).filter(
     (file) => file.endsWith('.m3u') && !['custom.m3u'].includes(file)
@@ -70,7 +122,7 @@ async function loadLocalM3uFiles() {
   for (const file of files) {
     const fullPath = path.join(m3uDir, file);
     const text = await readFile(fullPath, 'utf-8');
-    items.push(...parseM3u(text, file));
+    items.push(...parseM3u(text, file, officialConfig));
   }
   return items;
 }
@@ -91,14 +143,14 @@ async function fetchText(url, timeoutMs = 6000) {
   }
 }
 
-async function loadRemoteM3u(remoteM3u = []) {
+async function loadRemoteM3u(remoteM3u = [], officialConfig) {
   const items = [];
   for (const source of remoteM3u) {
     const name = source.name || source.url;
     try {
       console.log(`[CUSTOM] Fetch remote candidate: ${name}`);
       const text = await fetchText(source.url, source.timeoutMs || 8000);
-      items.push(...parseM3u(text, name));
+      items.push(...parseM3u(text, name, officialConfig));
     } catch (error) {
       console.log(`[CUSTOM] Remote candidate failed: ${name} - ${error.message}`);
     }
@@ -164,6 +216,12 @@ function qualityHintScore(text = '') {
   return score;
 }
 
+function officialPriorityScore(item) {
+  if (item.officialForced) return 2000000;
+  if (item.trustedOfficial) return 1200000;
+  return 0;
+}
+
 function qualityFromResolution(resolution = '') {
   const { width, height, pixels } = parseResolution(resolution);
   if (!pixels) return { width: 0, height: 0, pixels: 0, label: '', score: 0 };
@@ -191,18 +249,27 @@ function collectCandidates(items, targets, maxCandidatesPerChannel) {
       [item.title, item.displayName, item.tvgName, item.groupTitle, item.sourceName, item.url].join(' ')
     );
     const list = byChannel.get(matched.target.name) || [];
-    list.push({ ...item, target: matched.target, matchScore: matched.score, preQualityScore });
+    list.push({
+      ...item,
+      target: matched.target,
+      matchScore: matched.score,
+      preQualityScore,
+      officialScore: officialPriorityScore(item),
+    });
     byChannel.set(matched.target.name, list);
   }
 
   for (const [name, list] of byChannel) {
     list.sort(
       (a, b) =>
+        b.officialScore - a.officialScore ||
         b.matchScore - a.matchScore ||
         b.preQualityScore - a.preQualityScore ||
         a.url.length - b.url.length
     );
-    byChannel.set(name, list.slice(0, maxCandidatesPerChannel));
+    const forcedOfficialCount = list.filter((item) => item.officialForced).length;
+    const limit = Math.max(maxCandidatesPerChannel, forcedOfficialCount || 0);
+    byChannel.set(name, list.slice(0, limit));
   }
   return byChannel;
 }
@@ -248,15 +315,30 @@ async function probeUrl(item, timeoutMs) {
     const latencyMs = Math.round(performance.now() - started);
     const bandwidths = [...sample.matchAll(/BANDWIDTH=(\d+)/g)].map((m) => Number(m[1]));
     const bandwidth = bandwidths.length ? Math.max(...bandwidths) : 0;
-    const resolution = sample.match(/RESOLUTION=(\d+x\d+)/i)?.[1] || '';
+    const declaredResolution = item.declaredResolution || '';
+    const detectedResolution = sample.match(/RESOLUTION=(\d+x\d+)/i)?.[1] || '';
+    const resolution = declaredResolution || detectedResolution;
     const resolutionQuality = qualityFromResolution(resolution);
     const isM3u8 = /mpegurl|m3u8|vnd\.apple/i.test(contentType) || sample.includes('#EXTM3U');
     const hint = qualityHintScore(
-      [item.title, item.displayName, item.tvgName, item.groupTitle, item.sourceName, item.url, sample].join(' ')
+      [
+        item.title,
+        item.displayName,
+        item.tvgName,
+        item.groupTitle,
+        item.sourceName,
+        item.url,
+        item.declaredQuality,
+        sample,
+      ].join(' ')
     );
 
     const bandwidthScore = Math.min(bandwidth / 100, 50000);
-    const qualityScore = resolutionQuality.score + hint + bandwidthScore;
+    const qualityScore =
+      officialPriorityScore(item) +
+      resolutionQuality.score +
+      hint +
+      bandwidthScore;
     const score =
       qualityScore * 10 +
       (isM3u8 ? 6000 : 0) +
@@ -272,9 +354,11 @@ async function probeUrl(item, timeoutMs) {
       width: resolutionQuality.width,
       height: resolutionQuality.height,
       pixels: resolutionQuality.pixels,
-      qualityLabel: resolutionQuality.label,
+      qualityLabel: resolutionQuality.label || item.declaredQuality || '',
       qualityScore,
       score,
+      trustedOfficial: item.trustedOfficial || item.officialForced,
+      officialForced: item.officialForced,
     };
   } catch (error) {
     return { ok: false, latencyMs: timeoutMs, reason: error.name || error.message, score: 0 };
@@ -323,6 +407,9 @@ async function probeCandidates(byChannel, targetConfig) {
 
   for (const [name, list] of next) {
     list.sort((a, b) => {
+      const officialDelta = (b.officialScore || 0) - (a.officialScore || 0);
+      if (officialDelta !== 0) return officialDelta;
+
       const qualityDelta = (b.probe?.qualityScore || 0) - (a.probe?.qualityScore || 0);
       if (qualityDelta !== 0) return qualityDelta;
 
@@ -364,6 +451,9 @@ function makeM3u(targets, byChannel, targetConfig) {
         ? {
             title: main.title,
             sourceName: main.sourceName,
+            official: main.trustedOfficial || main.officialForced,
+            officialForced: main.officialForced,
+            officialPage: main.officialPage || '',
             latencyMs: main.probe?.latencyMs,
             resolution: main.probe?.resolution,
             qualityLabel: main.probe?.qualityLabel,
@@ -376,6 +466,9 @@ function makeM3u(targets, byChannel, targetConfig) {
         order: index + 1,
         title: item.title,
         sourceName: item.sourceName,
+        official: item.trustedOfficial || item.officialForced,
+        officialForced: item.officialForced,
+        officialPage: item.officialPage || '',
         latencyMs: item.probe?.latencyMs,
         resolution: item.probe?.resolution,
         qualityLabel: item.probe?.qualityLabel,
@@ -391,11 +484,15 @@ function makeM3u(targets, byChannel, targetConfig) {
       name: target.name,
       group: target.group,
       main: main.url,
+      mainOfficial: main.trustedOfficial || main.officialForced,
       backups: hiddenBackups.map((item) => item.url),
       sources: list.map((item, index) => ({
         role: index === 0 ? 'main' : 'backup',
         title: item.title,
         sourceName: item.sourceName,
+        official: item.trustedOfficial || item.officialForced,
+        officialForced: item.officialForced,
+        officialPage: item.officialPage || '',
         latencyMs: item.probe?.latencyMs,
         resolution: item.probe?.resolution,
         qualityLabel: item.probe?.qualityLabel,
@@ -408,10 +505,11 @@ function makeM3u(targets, byChannel, targetConfig) {
     const title = cleanMetaValue(main.title || target.name);
     const resolution = main.probe?.resolution ? ` resolution="${main.probe.resolution}"` : '';
     const quality = main.probe?.qualityLabel ? ` quality="${main.probe.qualityLabel}"` : '';
+    const official = main.trustedOfficial || main.officialForced ? ' official="true"' : '';
     const latency = main.probe?.latencyMs ? ` latency="${main.probe.latencyMs}ms"` : '';
     lines.push('');
     lines.push(
-      `#EXTINF:-1 tvg-name="${target.name}" group-title="${target.group}" source-title="${title}"${resolution}${quality}${latency},${target.name}`
+      `#EXTINF:-1 tvg-name="${target.name}" group-title="${target.group}" source-title="${title}"${resolution}${quality}${official}${latency},${target.name}`
     );
     lines.push(main.url);
   }
@@ -423,14 +521,19 @@ async function main() {
   const targetConfig = readJson(targetPath);
   const aliasesConfig = readJson(aliasPath);
   const candidateConfig = readJson(candidatePath);
+  const officialConfig = readJson(officialPath, { trustedDomains: [], directStreams: [] });
   const targets = buildTargets(targetConfig, aliasesConfig);
 
   const items = [];
-  if (candidateConfig.includeGeneratedM3u !== false) {
-    items.push(...(await loadLocalM3uFiles()));
-  }
-  items.push(...(await loadRemoteM3u(candidateConfig.remoteM3u || [])));
+  const officialDirect = loadOfficialDirectStreams(officialConfig);
+  items.push(...officialDirect);
 
+  if (candidateConfig.includeGeneratedM3u !== false) {
+    items.push(...(await loadLocalM3uFiles(officialConfig)));
+  }
+  items.push(...(await loadRemoteM3u(candidateConfig.remoteM3u || [], officialConfig)));
+
+  console.log(`[CUSTOM] Loaded official direct streams: ${officialDirect.length}`);
   console.log(`[CUSTOM] Loaded candidates: ${items.length}`);
   const byChannel = collectCandidates(
     items,
@@ -456,9 +559,10 @@ async function main() {
   );
 
   const available = report.filter((item) => item.selected).length;
+  const officialSelected = report.filter((item) => item.selected?.official).length;
   const hiddenBackupCount = backups.reduce((sum, item) => sum + item.backups.length, 0);
   console.log(
-    `[CUSTOM] Write custom.m3u: ${available}/${targets.length} channels, ${available} main URLs, ${hiddenBackupCount} hidden backup URLs`
+    `[CUSTOM] Write custom.m3u: ${available}/${targets.length} channels, ${available} main URLs, ${officialSelected} official main URLs, ${hiddenBackupCount} hidden backup URLs`
   );
 }
 
