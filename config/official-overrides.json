@@ -44,7 +44,8 @@
     "CCTV-15": ["https://tv.cctv.com/live/cctv15/"],
     "CCTV-16": ["https://tv.cctv.com/live/cctv16/"],
     "CCTV-17": ["https://tv.cctv.com/live/cctv17/"],
-    "CGTN": ["https://www.cgtn.com/tv"]
+    "CGTN": ["https://www.cgtn.com/tv"],
+    "CGTN Documentary": ["https://www.cgtn.com/tv"]
   },
   "directStreams": [
     {
@@ -82,6 +83,38 @@
       "url": "http://ali-xwl.cztv.com/live/channel011080Pnew.m3u8",
       "resolution": "1920x1080",
       "quality": "1080P"
+    },
+    {
+      "channel": "CGTN",
+      "title": "CGTN English 官方 HLS",
+      "provider": "CGTN",
+      "page": "https://www.cgtn.com/tv",
+      "url": "https://news.cgtn.com/resource/live/english/cgtn-news.m3u8",
+      "quality": "official"
+    },
+    {
+      "channel": "CGTN Documentary",
+      "title": "CGTN Documentary 官方 HLS",
+      "provider": "CGTN",
+      "page": "https://www.cgtn.com/tv",
+      "url": "https://news.cgtn.com/resource/live/document/cgtn-doc.m3u8",
+      "quality": "official"
+    },
+    {
+      "channel": "港台电视31",
+      "title": "RTHK TV31 官方 HLS",
+      "provider": "RTHK",
+      "page": "https://www.rthk.hk/tv",
+      "url": "https://rthktv31-live.akamaized.net/hls/live/2036818/RTHKTV31/master.m3u8",
+      "quality": "official"
+    },
+    {
+      "channel": "港台电视32",
+      "title": "RTHK TV32 官方 HLS",
+      "provider": "RTHK",
+      "page": "https://www.rthk.hk/tv",
+      "url": "https://rthktv32-live.akamaized.net/hls/live/2036819/RTHKTV32/master.m3u8",
+      "quality": "official"
     }
   ]
 }
