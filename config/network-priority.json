@@ -1,0 +1,62 @@
+{
+  "activeProfile": "guangdong-telecom",
+  "profiles": {
+    "guangdong-telecom": {
+      "name": "广东电信优先",
+      "description": "用于 custom.m3u 主源排序。适合广东电信宽带/IPTV 网络，优先选择标题、来源或 URL 中带广东电信、China Telecom、CTCC、189、21cn、广东地区电信/IPTV/CDN 特征的源。",
+      "hardPreferOfficial": true,
+      "preferredPatterns": [
+        "广东电信",
+        "廣東電信",
+        "广东\\s*CT",
+        "广东\\s*Telecom",
+        "Guangdong\\s*Telecom",
+        "China\\s*Telecom",
+        "CTCC",
+        "telecom",
+        "chinatelecom",
+        "gdtelecom",
+        "gdct",
+        "ctcdn",
+        "ctyun",
+        "21cn",
+        "189\\.cn",
+        "iptv.*gd",
+        "gd.*iptv",
+        "广东.*IPTV",
+        "电信.*IPTV",
+        "IPTV.*电信"
+      ],
+      "preferredIpPatterns": [
+        "^14\\.2[0-9]\\.",
+        "^59\\.3[2-9]\\.",
+        "^61\\.14[0-9]\\.",
+        "^113\\.9[6-9]\\.",
+        "^119\\.12[0-9]\\.",
+        "^121\\.1[0-9]\\.",
+        "^125\\.8[8-9]\\.",
+        "^183\\.5[6-9]\\.",
+        "^219\\.13[0-9]\\."
+      ],
+      "avoidPatterns": [
+        "广东移动",
+        "廣東移動",
+        "China\\s*Mobile",
+        "CMCC",
+        "gmcc",
+        "gdcm",
+        "rrs[0-9]*\\.hw\\.gmcc\\.net",
+        "移动.*IPTV",
+        "IPTV.*移动",
+        "广东联通",
+        "China\\s*Unicom",
+        "CUCC",
+        "联通.*IPTV",
+        "IPTV.*联通"
+      ],
+      "preferredBoost": 650000,
+      "preferredIpBoost": 450000,
+      "avoidPenalty": 450000
+    }
+  }
+}
