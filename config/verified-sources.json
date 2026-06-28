@@ -1,0 +1,12 @@
+{
+  "notes": "已确认源库。这里只放官方公开源、可回溯的电视台公开 CDN、以及用户网络中确认可用的 IPTV 分发源。第三方公开列表仍作为候选线索，不直接等同于确认源。",
+  "tiers": {
+    "official": "电视台官网、官方页面、官方域名或官方公开 CDN。",
+    "telecom-distribution": "广东电信等运营商 IPTV/CDN 分发源，适合指定网络环境。",
+    "mobile-distribution": "广东移动等运营商 IPTV/CDN 分发源，适合指定网络环境。",
+    "unicom-distribution": "广东联通等运营商 IPTV/CDN 分发源，适合指定网络环境。",
+    "public-candidate": "公开候选源，只作为线索，不建议直接作为正式主源。"
+  },
+  "defaultNetwork": "guangdong-telecom",
+  "streams": []
+}
