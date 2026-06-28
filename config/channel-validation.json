@@ -1,0 +1,25 @@
+{
+  "enabled": true,
+  "notes": "用于清理频道名匹配错误。只对非官方源生效，官方强制源和可信官方域名源不受影响。",
+  "broadAliases": [
+    "综合频道",
+    "新闻频道",
+    "体育频道",
+    "少儿频道",
+    "电影频道",
+    "财经频道",
+    "综艺频道",
+    "纪录频道",
+    "科教频道",
+    "音乐频道",
+    "电视剧频道",
+    "都市频道",
+    "公共频道",
+    "生活频道",
+    "影视频道",
+    "体育赛事"
+  ],
+  "minSubstringAliasLength": 4,
+  "strictTitleCheck": true,
+  "rejectIfOtherTargetInTitle": true
+}
