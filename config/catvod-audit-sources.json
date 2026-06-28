@@ -1,0 +1,59 @@
+{
+  "notes": "CatVod/TVBox 源审计配置。这里只用于识别和分类内部资源链接，不会直接进入 custom.m3u。",
+  "sources": [
+    {
+      "name": "咖啡源",
+      "url": "https://iptv.catvod.com/kf/catvod.m3u"
+    },
+    {
+      "name": "OK源",
+      "url": "https://iptv.catvod.com/ok/catvod.m3u"
+    },
+    {
+      "name": "88源",
+      "url": "https://iptv.catvod.com/88/catvod.m3u"
+    },
+    {
+      "name": "DB源",
+      "url": "https://iptv.catvod.com/db/catvod.m3u"
+    },
+    {
+      "name": "DM源",
+      "url": "https://iptv.catvod.com/dm/catvod.m3u"
+    },
+    {
+      "name": "cdnlive",
+      "url": "https://iptv.catvod.com/cdnlivetv/catvod.m3u"
+    }
+  ],
+  "classification": {
+    "directLivePatterns": [
+      "\\.m3u8(\\?|$)",
+      "\\.m3u(\\?|$)",
+      "/PLTV/",
+      "/hls/",
+      "/live/",
+      "m3u8"
+    ],
+    "blockedPatterns": [
+      "catvod",
+      "tvbox",
+      "drpy",
+      "spider",
+      "csp_",
+      "csp-",
+      "\\.jar(\\?|$)",
+      "\\.json(\\?|$)",
+      "\\.js(\\?|$)",
+      "\\.apk(\\?|$)",
+      "\\.html?(\\?|$)",
+      "api\\.php.*provide.*vod",
+      "/provide/vod",
+      "/vod/",
+      "player",
+      "parse",
+      "jx=",
+      "alist"
+    ]
+  }
+}
