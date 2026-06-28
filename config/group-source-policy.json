@@ -1,0 +1,9 @@
+{
+  "notes": "按频道分组控制正式 custom.m3u 的来源策略。港澳台频道来源波动较大，默认只保留官方强制源或可信官方域名源。第三方公开列表仍可在 remote-candidates-report.json 中作为候选查看。",
+  "groups": {
+    "港澳台": {
+      "requireOfficial": true,
+      "reason": "港澳台频道只保留 official-overrides 或 trustedDomains 命中的公开可信源，减少失效源进入正式 custom.m3u。"
+    }
+  }
+}
