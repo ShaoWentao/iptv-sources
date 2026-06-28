@@ -2,6 +2,6 @@
   "enabled": true,
   "minHeight": 1080,
   "minQualityLabel": "1080P",
-  "strictUnknownResolution": true,
-  "notes": "正式 custom.m3u 最低清晰度限制。开启后，最终主源和备用源只保留检测到 1080P 及以上的资源；检测不到分辨率的非官方源也会被排除，避免 720x576、720P、标清源进入播放列表。"
+  "strictUnknownResolution": false,
+  "notes": "正式 custom.m3u 仍然排除已检测到低于 1080P 的资源，例如 720x576、720P、576P、480P。对于检测不到分辨率的源，先保留参与排序，避免频道数量被过度压缩；后续可通过实际播放反馈继续黑名单清理。"
 }
