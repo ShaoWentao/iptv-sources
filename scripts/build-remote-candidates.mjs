@@ -13,6 +13,53 @@ function readJson(file, fallback = {}) {
   return JSON.parse(fs.readFileSync(file, 'utf-8'));
 }
 
+function redactUrl(url = '') {
+  return String(url)
+    .replace(/([?&](?:tk|token)=)[^&]+/gi, '$1***')
+    .replace(/([?&](?:key|auth|sign|sig)=)[^&]+/gi, '$1***');
+}
+
+function parseEnvSources() {
+  const raw = process.env.CATVOD_REMOTE_SOURCES || process.env.CATVOD_REMOTE_URLS || '';
+  if (!raw.trim()) return [];
+
+  try {
+    const parsed = JSON.parse(raw);
+    const list = Array.isArray(parsed) ? parsed : [parsed];
+    return list
+      .map((item, index) => {
+        if (typeof item === 'string') {
+          return {
+            name: `CatVod private source ${index + 1}`,
+            url: item,
+            timeoutMs: 12000,
+            private: true,
+            type: 'private-catvod-token',
+          };
+        }
+        return {
+          name: item.name || `CatVod private source ${index + 1}`,
+          url: item.url,
+          timeoutMs: item.timeoutMs || 12000,
+          private: true,
+          type: item.type || 'private-catvod-token',
+        };
+      })
+      .filter((item) => /^https?:\/\//i.test(item.url || ''));
+  } catch {
+    return raw
+      .split(/[\n,]+/)
+      .map((url, index) => ({
+        name: `CatVod private source ${index + 1}`,
+        url: url.trim(),
+        timeoutMs: 12000,
+        private: true,
+        type: 'private-catvod-token',
+      }))
+      .filter((item) => /^https?:\/\//i.test(item.url || ''));
+  }
+}
+
 function toRegexList(values = []) {
   return values.map((value) => new RegExp(value, 'i'));
 }
@@ -95,14 +142,21 @@ function cleanMetaValue(value = '') {
 
 async function main() {
   const config = readJson(remoteConfigPath, { sources: [], filter: {} });
+  const envSources = parseEnvSources();
+  const sources = [...(config.sources || []), ...envSources];
   const accepted = [];
   const rejected = [];
   const seen = new Set();
 
-  for (const source of config.sources || []) {
+  if (envSources.length) {
+    console.log(`[REMOTE] Loaded private CatVod sources from environment: ${envSources.length}`);
+  }
+
+  for (const source of sources) {
     const name = source.name || source.url;
+    const safeUrl = source.private ? redactUrl(source.url) : source.url;
     try {
-      console.log(`[REMOTE] Fetch remote source: ${name}`);
+      console.log(`[REMOTE] Fetch remote source: ${name} ${source.private ? safeUrl : ''}`.trim());
       const text = await fetchText(source.url, source.timeoutMs || 10000);
       const items = parseM3u(text, name);
       console.log(`[REMOTE] Parsed ${items.length} items from ${name}`);
@@ -112,20 +166,20 @@ async function main() {
         const key = `${item.title}\t${item.url}`;
         if (result.accepted && !seen.has(key)) {
           seen.add(key);
-          accepted.push({ ...item, reason: result.reason });
+          accepted.push({ ...item, reason: result.reason, privateSource: Boolean(source.private) });
         } else if (!result.accepted) {
-          rejected.push({ ...item, reason: result.reason });
+          rejected.push({ ...item, reason: result.reason, privateSource: Boolean(source.private) });
         }
       }
     } catch (error) {
       console.log(`[REMOTE] Failed: ${name} - ${error.message}`);
-      rejected.push({ sourceName: name, title: '', url: source.url, reason: error.message });
+      rejected.push({ sourceName: name, title: '', url: source.private ? safeUrl : source.url, reason: error.message, privateSource: Boolean(source.private) });
     }
   }
 
   const lines = [
     '#EXTM3U',
-    '# Filtered remote IPTV candidates. CatVod/TVBox/VOD/API/HTML/proxy-like entries are removed before custom build.',
+    '# Filtered remote IPTV candidates. TVBox/VOD/API/HTML/proxy-like entries are removed before custom build.',
   ];
 
   for (const item of accepted) {
@@ -144,6 +198,8 @@ async function main() {
     JSON.stringify(
       {
         generatedAt: new Date().toISOString(),
+        sourceCount: sources.length,
+        privateSourceCount: envSources.length,
         acceptedCount: accepted.length,
         rejectedCount: rejected.length,
         accepted: accepted.map((item) => ({
@@ -152,13 +208,15 @@ async function main() {
           sourceName: item.sourceName,
           url: item.url,
           reason: item.reason,
+          privateSource: item.privateSource,
         })),
         rejectedSamples: rejected.slice(0, 500).map((item) => ({
           title: item.title,
           groupTitle: item.groupTitle,
           sourceName: item.sourceName,
-          url: item.url,
+          url: item.privateSource ? redactUrl(item.url) : item.url,
           reason: item.reason,
+          privateSource: item.privateSource,
         })),
       },
       null,
