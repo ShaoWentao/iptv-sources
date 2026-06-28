@@ -6,6 +6,7 @@ const root = process.cwd();
 const m3uDir = path.join(root, 'm3u');
 const targetPath = path.join(root, 'config', 'target-channels.json');
 const networkPriorityPath = path.join(root, 'config', 'network-priority.json');
+const qualityPolicyPath = path.join(root, 'config', 'quality-policy.json');
 const reportPath = path.join(m3uDir, 'custom-report.json');
 const backupsPath = path.join(m3uDir, 'custom-backups.json');
 const customPath = path.join(m3uDir, 'custom.m3u');
@@ -88,6 +89,41 @@ function qualityRank(item = {}) {
   return 3;
 }
 
+function detectedHeight(item = {}) {
+  const resolution = String(item.resolution || '');
+  const height = Number(resolution.match(/x(\d{3,5})/)?.[1] || 0);
+  if (height > 0) return height;
+
+  const label = String(item.qualityLabel || '').toLowerCase();
+  if (/8k|4320/.test(label)) return 4320;
+  if (/4k|2160/.test(label)) return 2160;
+  if (/1080/.test(label)) return 1080;
+  if (/720/.test(label)) return 720;
+  if (/576/.test(label)) return 576;
+  if (/480/.test(label)) return 480;
+  if (/360/.test(label)) return 360;
+  return 0;
+}
+
+function qualityPolicyCheck(item = {}, policy = {}) {
+  if (!policy.enabled) return { ok: true, reason: '' };
+
+  const minHeight = Number(policy.minHeight || 1080);
+  const height = detectedHeight(item);
+
+  if (height >= minHeight) return { ok: true, reason: '' };
+
+  if (height > 0) {
+    return { ok: false, reason: `below-min-height:${height}<${minHeight}` };
+  }
+
+  if (policy.strictUnknownResolution === false) {
+    return { ok: true, reason: 'unknown-resolution-allowed' };
+  }
+
+  return { ok: false, reason: `unknown-resolution:min-${minHeight}` };
+}
+
 function latencyMs(item = {}) {
   const value = Number(item.latencyMs || 99999);
   return Number.isFinite(value) && value > 0 ? value : 99999;
@@ -102,16 +138,11 @@ function speedScore(item = {}, profile) {
 
   let score = officialBoost + network.score;
 
-  // 1080P and 720P usually start faster and remain watchable.
-  if (quality === 6) score += 80000;
-  else if (quality === 5) score += 70000;
-  else if (quality === 4) score += 50000;
-  else if (quality >= 7) score += 35000;
-  else score += 20000;
+  if (quality >= 7) score += 90000;
+  else if (quality === 6) score += 80000;
+  else score += 10000;
 
-  // Very high-bitrate 4K/8K sources often slow down first-frame response.
-  if (quality >= 7 && !item.official && !item.officialForced) score -= 30000;
-  if (bandwidth > 12000000 && !item.official && !item.officialForced) score -= 15000;
+  if (bandwidth > 18000000 && !item.official && !item.officialForced) score -= 12000;
 
   score -= Math.min(latency, 15000) * 25;
 
@@ -135,6 +166,7 @@ function normalizeCandidate(item = {}, profile = null) {
   const network = networkPriority(candidate, profile);
   return {
     ...candidate,
+    detectedHeight: detectedHeight(candidate),
     networkPriority: network.label,
     networkPriorityScore: network.score,
     networkPriorityMatched: network.matched,
@@ -159,15 +191,20 @@ async function main() {
 
   const targetConfig = readJson(targetPath, {});
   const networkConfig = readJson(networkPriorityPath, {});
+  const qualityPolicy = readJson(qualityPolicyPath, { enabled: false });
   const activeNetworkProfile = getActiveNetworkProfile(networkConfig);
   const reportJson = readJson(reportPath, { report: [] });
   const lines = [`#EXTM3U${targetConfig.epgUrl ? ` x-tvg-url="${targetConfig.epgUrl}"` : ''}`];
   const nextReport = [];
   const nextBackups = [];
   const changes = [];
+  const removedByQuality = [];
 
   if (activeNetworkProfile) {
     console.log(`[SPEED] Active network priority: ${activeNetworkProfile.name || networkConfig.activeProfile}`);
+  }
+  if (qualityPolicy.enabled) {
+    console.log(`[SPEED] Active quality policy: minimum ${qualityPolicy.minHeight || 1080}P`);
   }
 
   for (const channel of reportJson.report || []) {
@@ -180,6 +217,21 @@ async function main() {
     for (const item of candidates) {
       if (!item.url || seen.has(item.url)) continue;
       seen.add(item.url);
+      const quality = qualityPolicyCheck(item, qualityPolicy);
+      if (!quality.ok) {
+        removedByQuality.push({
+          channel: channel.name,
+          group: channel.group,
+          title: item.title,
+          sourceName: item.sourceName,
+          resolution: item.resolution,
+          qualityLabel: item.qualityLabel,
+          detectedHeight: item.detectedHeight,
+          url: item.url,
+          reason: quality.reason,
+        });
+        continue;
+      }
       unique.push(item);
     }
 
@@ -238,6 +290,7 @@ async function main() {
         networkPriorityMatched: item.networkPriorityMatched || '',
         latencyMs: item.latencyMs,
         resolution: item.resolution,
+        detectedHeight: item.detectedHeight,
         qualityLabel: item.qualityLabel,
         bandwidth: item.bandwidth,
         qualityScore: item.qualityScore,
@@ -260,8 +313,11 @@ async function main() {
       {
         generatedAt: new Date().toISOString(),
         activeNetworkProfile: activeNetworkProfile?.name || '',
+        qualityPolicy,
         changedCount: changes.length,
+        removedByQualityCount: removedByQuality.length,
         changes,
+        removedByQuality,
       },
       null,
       2
@@ -269,7 +325,7 @@ async function main() {
     'utf-8'
   );
 
-  console.log(`[SPEED] Optimized custom.m3u for faster start: ${changes.length} main sources changed`);
+  console.log(`[SPEED] Optimized custom.m3u for faster start: ${changes.length} main sources changed, ${removedByQuality.length} sources removed by quality policy`);
 }
 
 main().catch((error) => {
