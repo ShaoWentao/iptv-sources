@@ -8,6 +8,24 @@
       "type": "third-party-auto-update",
       "priority": "candidate",
       "notes": "第三方自动更新聚合源，只作为候选池。"
+    },
+    {
+      "name": "fanmingming/live IPv6 m3u",
+      "url": "https://live.fanmingming.com/tv/m3u/ipv6.m3u",
+      "timeoutMs": 12000,
+      "type": "third-party-open-playlist",
+      "priority": "candidate",
+      "networkScope": "IPv6 / operator IPTV candidate",
+      "notes": "范明明 live 项目公开 M3U 列表。只作为候选池，需经过清洗、匹配和测速；其中部分源可能是 IPv6 或运营商网络限定源。"
+    },
+    {
+      "name": "fanmingming/live IPv6 m3u mirror",
+      "url": "https://live.fanmingming.cn/tv/m3u/ipv6.m3u",
+      "timeoutMs": 12000,
+      "type": "third-party-open-playlist",
+      "priority": "candidate",
+      "networkScope": "IPv6 / operator IPTV candidate",
+      "notes": "范明明 live 镜像域名公开 M3U 列表。只作为候选池，便于主域名访问不稳定时补充候选。"
     }
   ],
   "envSources": {
