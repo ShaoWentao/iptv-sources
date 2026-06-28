@@ -45,7 +45,12 @@
     "CCTV-16": ["https://tv.cctv.com/live/cctv16/"],
     "CCTV-17": ["https://tv.cctv.com/live/cctv17/"],
     "CGTN": ["https://www.cgtn.com/tv"],
-    "CGTN Documentary": ["https://www.cgtn.com/tv"]
+    "CGTN Documentary": ["https://www.cgtn.com/tv"],
+    "港台电视31": ["https://www.rthk.hk/tv"],
+    "港台电视32": ["https://www.rthk.hk/tv"],
+    "港台电视33": ["https://www.rthk.hk/tv"],
+    "港台电视34": ["https://www.rthk.hk/tv"],
+    "港台电视35": ["https://www.rthk.hk/tv"]
   },
   "directStreams": [
     {
@@ -114,6 +119,22 @@
       "provider": "RTHK",
       "page": "https://www.rthk.hk/tv",
       "url": "https://rthktv32-live.akamaized.net/hls/live/2036819/RTHKTV32/master.m3u8",
+      "quality": "official"
+    },
+    {
+      "channel": "港台电视34",
+      "title": "RTHK TV34 / CGTN Documentary 联播 HLS",
+      "provider": "RTHK/CGTN",
+      "page": "https://www.rthk.hk/tv",
+      "url": "https://news.cgtn.com/resource/live/document/cgtn-doc.m3u8",
+      "quality": "official"
+    },
+    {
+      "channel": "港台电视35",
+      "title": "RTHK TV35 / CGTN English 联播 HLS",
+      "provider": "RTHK/CGTN",
+      "page": "https://www.rthk.hk/tv",
+      "url": "https://news.cgtn.com/resource/live/english/cgtn-news.m3u8",
       "quality": "official"
     }
   ]
