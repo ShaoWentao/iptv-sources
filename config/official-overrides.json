@@ -1,5 +1,5 @@
 {
-  "notes": "官方源优先配置。directStreams 可手工填入已确认可直连的官方 HLS；officialPages 会在构建时从官方页面和同域 JS 中自动提取公开 m3u8。HTML 播放页不会直接写入 M3U。",
+  "notes": "官方源优先配置。directStreams 可手工填入已确认可直连的官方 HLS；officialPages 记录官方直播入口，HTML 播放页不会直接写入 M3U。",
   "trustedDomains": [
     "cctv.com",
     "cntv.cn",
@@ -46,11 +46,20 @@
     "CCTV-17": ["https://tv.cctv.com/live/cctv17/"],
     "CGTN": ["https://www.cgtn.com/tv"],
     "CGTN Documentary": ["https://www.cgtn.com/tv"],
+    "CGTN Español": ["https://espanol.cgtn.com/"],
+    "CGTN Français": ["https://francais.cgtn.com/"],
+    "CGTN العربية": ["https://arabic.cgtn.com/"],
+    "CGTN Русский": ["https://russian.cgtn.com/"],
     "港台电视31": ["https://www.rthk.hk/tv"],
     "港台电视32": ["https://www.rthk.hk/tv"],
     "港台电视33": ["https://www.rthk.hk/tv"],
     "港台电视34": ["https://www.rthk.hk/tv"],
-    "港台电视35": ["https://www.rthk.hk/tv"]
+    "港台电视35": ["https://www.rthk.hk/tv"],
+    "澳视澳门": ["https://www.tdm.com.mo/zh-hant/live?Channel=1&type=tv"],
+    "澳视葡文": ["https://www.tdm.com.mo/zh-hant/live?Channel=2&type=tv"],
+    "澳门体育": ["https://www.tdm.com.mo/zh-hant/live?Channel=3&type=tv"],
+    "澳门资讯": ["https://www.tdm.com.mo/zh-hant/live?Channel=4&type=tv"],
+    "澳门综艺": ["https://www.tdm.com.mo/zh-hant/live?Channel=5&type=tv"]
   },
   "directStreams": [
     {
