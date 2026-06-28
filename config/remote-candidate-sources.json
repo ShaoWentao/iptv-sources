@@ -26,6 +26,15 @@
       "priority": "candidate",
       "networkScope": "IPv6 / operator IPTV candidate",
       "notes": "范明明 live 镜像域名公开 M3U 列表。只作为候选池，便于主域名访问不稳定时补充候选。"
+    },
+    {
+      "name": "Kimentanm/APTV iptv.m3u",
+      "url": "https://raw.githubusercontent.com/Kimentanm/aptv/master/m3u/iptv.m3u",
+      "timeoutMs": 12000,
+      "type": "third-party-open-playlist",
+      "priority": "candidate",
+      "networkScope": "public / mixed network candidate",
+      "notes": "APTV 项目的公开 M3U 列表。用户反馈部分资源速度较好。只作为候选池，经过清洗、匹配、测速和去重后，再由 build-custom 选择主源或备用源。"
     }
   ],
   "envSources": {
