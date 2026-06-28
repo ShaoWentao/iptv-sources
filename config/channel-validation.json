@@ -1,6 +1,6 @@
 {
   "enabled": true,
-  "notes": "用于清理频道名匹配错误。只对非官方源生效，官方强制源和可信官方域名源不受影响。",
+  "notes": "用于清理明确的频道名错配。当前采用温和模式：不再要求源标题必须严格包含目标频道名，只在源标题里明显出现另一个目标频道时清理。官方强制源和可信官方域名源不受影响。",
   "broadAliases": [
     "综合频道",
     "新闻频道",
@@ -20,6 +20,6 @@
     "体育赛事"
   ],
   "minSubstringAliasLength": 4,
-  "strictTitleCheck": true,
+  "strictTitleCheck": false,
   "rejectIfOtherTargetInTitle": true
 }
