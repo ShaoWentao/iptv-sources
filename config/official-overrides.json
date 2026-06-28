@@ -1,5 +1,22 @@
 {
-  "notes": "官方源优先配置。directStreams 可手工填入已确认可直连的官方 HLS；officialPages 记录官方直播入口，HTML 播放页不会直接写入 M3U。",
+  "notes": "官方源优先配置。directStreams 可手工填入已确认可直连的官方 HLS；officialPages 记录官方直播入口，HTML 播放页不会直接写入 M3U。IPTV/CDN 分发平台源只在能回溯到官方页面、官方频道或授权分发关系时使用。",
+  "distributionPolicy": {
+    "enabled": true,
+    "rule": "平台源需要满足：频道内容对应、可直连播放、无登录要求、无临时 token、来源可回溯到官方频道或官方分发关系。普通 IPTV 汇总站只作为线索，不直接写入 official directStreams。",
+    "preferredTypes": [
+      "official broadcaster domain",
+      "official page embedded CDN",
+      "public broadcaster distribution CDN",
+      "authorized IPTV distribution platform"
+    ],
+    "excludedTypes": [
+      "random IPTV aggregation list",
+      "unknown restream",
+      "login required stream",
+      "temporary token stream",
+      "referer locked private stream"
+    ]
+  },
   "trustedDomains": [
     "cctv.com",
     "cntv.cn",
@@ -115,6 +132,38 @@
       "quality": "official"
     },
     {
+      "channel": "CGTN Español",
+      "title": "CGTN Español 官方 HLS 候选",
+      "provider": "CGTN",
+      "page": "https://espanol.cgtn.com/",
+      "url": "https://news.cgtn.com/resource/live/espanol/cgtn-e.m3u8",
+      "quality": "official-candidate"
+    },
+    {
+      "channel": "CGTN Français",
+      "title": "CGTN Français 官方 HLS 候选",
+      "provider": "CGTN",
+      "page": "https://francais.cgtn.com/",
+      "url": "https://news.cgtn.com/resource/live/french/cgtn-f.m3u8",
+      "quality": "official-candidate"
+    },
+    {
+      "channel": "CGTN العربية",
+      "title": "CGTN Arabic 官方 HLS 候选",
+      "provider": "CGTN",
+      "page": "https://arabic.cgtn.com/",
+      "url": "https://news.cgtn.com/resource/live/arabic/cgtn-a.m3u8",
+      "quality": "official-candidate"
+    },
+    {
+      "channel": "CGTN Русский",
+      "title": "CGTN Russian 官方 HLS 候选",
+      "provider": "CGTN",
+      "page": "https://russian.cgtn.com/",
+      "url": "https://news.cgtn.com/resource/live/russian/cgtn-r.m3u8",
+      "quality": "official-candidate"
+    },
+    {
       "channel": "港台电视31",
       "title": "RTHK TV31 官方 HLS",
       "provider": "RTHK",
@@ -131,12 +180,36 @@
       "quality": "official"
     },
     {
+      "channel": "港台电视33",
+      "title": "RTHK TV33 官方 HLS 候选",
+      "provider": "RTHK",
+      "page": "https://www.rthk.hk/tv",
+      "url": "https://rthktv33-live.akamaized.net/hls/live/2036820/RTHKTV33/master.m3u8",
+      "quality": "official-candidate"
+    },
+    {
+      "channel": "港台电视34",
+      "title": "RTHK TV34 官方 HLS 候选",
+      "provider": "RTHK",
+      "page": "https://www.rthk.hk/tv",
+      "url": "https://rthktv34-live.akamaized.net/hls/live/2036821/RTHKTV34/master.m3u8",
+      "quality": "official-candidate"
+    },
+    {
       "channel": "港台电视34",
       "title": "RTHK TV34 / CGTN Documentary 联播 HLS",
       "provider": "RTHK/CGTN",
       "page": "https://www.rthk.hk/tv",
       "url": "https://news.cgtn.com/resource/live/document/cgtn-doc.m3u8",
       "quality": "official"
+    },
+    {
+      "channel": "港台电视35",
+      "title": "RTHK TV35 官方 HLS 候选",
+      "provider": "RTHK",
+      "page": "https://www.rthk.hk/tv",
+      "url": "https://rthktv35-live.akamaized.net/hls/live/2036822/RTHKTV35/master.m3u8",
+      "quality": "official-candidate"
     },
     {
       "channel": "港台电视35",
