@@ -15,6 +15,7 @@
     "remote:candidates": "node ./scripts/build-remote-candidates.mjs",
     "custom": "node ./scripts/build-custom.mjs",
     "network:profiles": "node ./scripts/build-network-profiles.mjs",
+    "audit:catvod": "node ./scripts/audit-catvod-sources.mjs",
     "serve": "node ./dist/serve.js",
     "serve:dev": "nodemon ./dist/serve.js",
     "release": "node ./scripts/release.js",
