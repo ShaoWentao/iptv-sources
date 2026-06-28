@@ -5,11 +5,30 @@ import path from 'path';
 const root = process.cwd();
 const m3uDir = path.join(root, 'm3u');
 const configPath = path.join(root, 'config', 'catvod-audit-sources.json');
+const privateConfigPath = path.join(root, 'config', 'catvod-audit-private.json');
 const USER_AGENT = 'VLC/3.0.20 LibVLC/3.0.20';
 
 function readJson(file, fallback = {}) {
   if (!fs.existsSync(file)) return fallback;
   return JSON.parse(fs.readFileSync(file, 'utf-8'));
+}
+
+function mergeConfig(publicConfig, privateConfig) {
+  return {
+    ...publicConfig,
+    ...privateConfig,
+    sources: [...(publicConfig.sources || []), ...(privateConfig.sources || [])],
+    classification: {
+      ...(publicConfig.classification || {}),
+      ...(privateConfig.classification || {}),
+    },
+  };
+}
+
+function redactUrl(url = '') {
+  return String(url)
+    .replace(/([?&](?:tk|token)=)[^&]+/gi, '$1***')
+    .replace(/([?&](?:key|auth|sign|sig)=)[^&]+/gi, '$1***');
 }
 
 function toRegexList(values = []) {
@@ -82,14 +101,20 @@ function cleanMetaValue(value = '') {
 }
 
 async function main() {
-  const config = readJson(configPath, { sources: [], classification: {} });
+  const publicConfig = readJson(configPath, { sources: [], classification: {} });
+  const privateConfig = readJson(privateConfigPath, { sources: [] });
+  const config = mergeConfig(publicConfig, privateConfig);
   const report = [];
   const directCandidates = [];
+
+  if (fs.existsSync(privateConfigPath)) {
+    console.log('[CATVOD] Loaded private token sources from config/catvod-audit-private.json');
+  }
 
   for (const source of config.sources || []) {
     const sourceReport = {
       name: source.name,
-      url: source.url,
+      url: source.private ? redactUrl(source.url) : source.url,
       ok: false,
       contentType: '',
       finalUrl: '',
@@ -97,15 +122,16 @@ async function main() {
       counts: {},
       items: [],
       error: '',
+      private: Boolean(source.private),
     };
 
     try {
-      console.log(`[CATVOD] Fetch: ${source.name} ${source.url}`);
+      console.log(`[CATVOD] Fetch: ${source.name} ${source.private ? redactUrl(source.url) : source.url}`);
       const { text, contentType, finalUrl } = await fetchText(source.url, source.timeoutMs || 10000);
       const items = parseM3u(text, source.name);
       sourceReport.ok = true;
       sourceReport.contentType = contentType;
-      sourceReport.finalUrl = finalUrl;
+      sourceReport.finalUrl = source.private ? redactUrl(finalUrl) : finalUrl;
       sourceReport.total = items.length;
 
       for (const item of items) {
