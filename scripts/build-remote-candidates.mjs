@@ -60,6 +60,10 @@ function parseEnvSources() {
   }
 }
 
+function shouldMergePrivateSources() {
+  return /^(1|true|yes)$/i.test(String(process.env.CATVOD_REMOTE_MERGE || ''));
+}
+
 function toRegexList(values = []) {
   return values.map((value) => new RegExp(value, 'i'));
 }
@@ -143,13 +147,18 @@ function cleanMetaValue(value = '') {
 async function main() {
   const config = readJson(remoteConfigPath, { sources: [], filter: {} });
   const envSources = parseEnvSources();
-  const sources = [...(config.sources || []), ...envSources];
+  const mergePrivate = shouldMergePrivateSources();
+  const sources = [...(config.sources || []), ...(mergePrivate ? envSources : [])];
   const accepted = [];
   const rejected = [];
   const seen = new Set();
 
-  if (envSources.length) {
-    console.log(`[REMOTE] Loaded private CatVod sources from environment: ${envSources.length}`);
+  if (envSources.length && !mergePrivate) {
+    console.log(`[REMOTE] Private CatVod sources detected: ${envSources.length}. Keep audit-only because CATVOD_REMOTE_MERGE is not true.`);
+  }
+
+  if (envSources.length && mergePrivate) {
+    console.log(`[REMOTE] Merge private CatVod sources from environment: ${envSources.length}`);
   }
 
   for (const source of sources) {
@@ -200,6 +209,7 @@ async function main() {
         generatedAt: new Date().toISOString(),
         sourceCount: sources.length,
         privateSourceCount: envSources.length,
+        privateMergeEnabled: mergePrivate,
         acceptedCount: accepted.length,
         rejectedCount: rejected.length,
         accepted: accepted.map((item) => ({
