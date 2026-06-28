@@ -5,6 +5,7 @@ import path from 'path';
 const root = process.cwd();
 const m3uDir = path.join(root, 'm3u');
 const blocklistPath = path.join(root, 'config', 'source-blocklist.json');
+const groupPolicyPath = path.join(root, 'config', 'group-source-policy.json');
 const targetPath = path.join(root, 'config', 'target-channels.json');
 const reportPath = path.join(m3uDir, 'custom-report.json');
 const backupsPath = path.join(m3uDir, 'custom-backups.json');
@@ -23,12 +24,17 @@ function cleanMetaValue(value = '') {
   return String(value).replace(/"/g, '').trim();
 }
 
-function buildMatcher(blocklist) {
+function buildMatcher(blocklist, groupPolicy) {
   const urlPatterns = toRegexList(blocklist.blockedUrlPatterns || []);
   const sourcePatterns = toRegexList(blocklist.blockedSourcePatterns || []);
   const titlePatterns = toRegexList(blocklist.blockedTitlePatterns || []);
 
-  return (item = {}) => {
+  return (item = {}, channel = {}) => {
+    const policy = groupPolicy.groups?.[channel.group] || {};
+    if (policy.requireOfficial && !(item.official || item.officialForced)) {
+      return { blocked: true, reason: `group-policy:${channel.group}:require-official` };
+    }
+
     if (item.official || item.officialForced) return { blocked: false, reason: '' };
 
     const url = String(item.url || '');
@@ -80,9 +86,10 @@ async function main() {
   }
 
   const blocklist = readJson(blocklistPath, {});
+  const groupPolicy = readJson(groupPolicyPath, { groups: {} });
   const targetConfig = readJson(targetPath, {});
   const reportJson = readJson(reportPath, { report: [] });
-  const isBlocked = buildMatcher(blocklist);
+  const isBlocked = buildMatcher(blocklist, groupPolicy);
   const removed = [];
   const lines = [`#EXTM3U${targetConfig.epgUrl ? ` x-tvg-url="${targetConfig.epgUrl}"` : ''}`];
   const sanitizedReport = [];
@@ -95,7 +102,7 @@ async function main() {
 
     const clean = [];
     for (const candidate of candidates) {
-      const result = isBlocked(candidate);
+      const result = isBlocked(candidate, channel);
       if (result.blocked) {
         removed.push({
           channel: channel.name,
