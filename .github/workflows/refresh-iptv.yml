@@ -1,0 +1,45 @@
+name: Refresh IPTV Candidates
+
+on:
+  schedule:
+    # Rebuild every 6 hours so remote auto-update playlists are re-fetched.
+    - cron: '17 */6 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: refresh-iptv-candidates
+  cancel-in-progress: false
+
+jobs:
+  refresh:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update refresh stamp
+        run: |
+          mkdir -p config
+          {
+            echo "Last refresh: $(date -u +'%Y-%m-%dT%H:%M:%SZ')"
+            echo "Purpose: trigger Cloudflare rebuild so remote IPTV candidate playlists are re-fetched."
+            echo "Remote candidate: https://raw.githubusercontent.com/hujingguang/ChinaIPTV/main/cnTV_AutoUpdate.m3u8"
+          } > config/refresh-stamp.txt
+
+      - name: Commit refresh stamp
+        run: |
+          if git diff --quiet -- config/refresh-stamp.txt; then
+            echo "No refresh stamp change."
+            exit 0
+          fi
+
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add config/refresh-stamp.txt
+          git commit -m "chore: refresh IPTV candidates"
+          git push
