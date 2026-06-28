@@ -6,7 +6,9 @@ const root = process.cwd();
 const m3uDir = path.join(root, 'm3u');
 const blocklistPath = path.join(root, 'config', 'source-blocklist.json');
 const groupPolicyPath = path.join(root, 'config', 'group-source-policy.json');
+const channelValidationPath = path.join(root, 'config', 'channel-validation.json');
 const targetPath = path.join(root, 'config', 'target-channels.json');
+const aliasPath = path.join(root, 'config', 'channel-aliases.json');
 const reportPath = path.join(m3uDir, 'custom-report.json');
 const backupsPath = path.join(m3uDir, 'custom-backups.json');
 const customPath = path.join(m3uDir, 'custom.m3u');
@@ -14,6 +16,16 @@ const customPath = path.join(m3uDir, 'custom.m3u');
 function readJson(file, fallback = {}) {
   if (!fs.existsSync(file)) return fallback;
   return JSON.parse(fs.readFileSync(file, 'utf-8'));
+}
+
+function normalizeName(input = '') {
+  return String(input)
+    .toLowerCase()
+    .replace(/\s+/g, '')
+    .replace(/[\-_—–·•.,，。:：()（）\[\]【】《》「」『』]/g, '')
+    .replace(/高清|超清|蓝光|标清|频道|频道高清|hd|fhd|uhd|4k超高清|源\d+|线路\d+|备用\d*/g, '')
+    .replace(/中央电视台/g, '央视')
+    .trim();
 }
 
 function toRegexList(values = []) {
@@ -24,7 +36,58 @@ function cleanMetaValue(value = '') {
   return String(value).replace(/"/g, '').trim();
 }
 
-function buildMatcher(blocklist, groupPolicy) {
+function buildTargetAliasMap(targetConfig = {}, aliasesConfig = {}, validation = {}) {
+  const broad = new Set((validation.broadAliases || []).map(normalizeName));
+  const minSubstringAliasLength = Number(validation.minSubstringAliasLength || 4);
+  const map = new Map();
+  const allTargets = [];
+
+  for (const group of targetConfig.groups || []) {
+    for (const name of group.channels || []) {
+      const aliases = [name, ...(aliasesConfig[name] || [])]
+        .map((value) => ({ raw: value, normalized: normalizeName(value) }))
+        .filter((item) => item.normalized && !broad.has(item.normalized));
+
+      const strongAliases = aliases.filter((item) => {
+        if (item.normalized === normalizeName(name)) return true;
+        if (/\d|[a-z]/i.test(item.normalized)) return true;
+        return item.normalized.length >= minSubstringAliasLength;
+      });
+
+      map.set(name, strongAliases);
+      allTargets.push({ name, group: group.name, aliases: strongAliases });
+    }
+  }
+
+  return { map, allTargets };
+}
+
+function titleMatchesChannel(candidate = {}, channel = {}, aliasMap) {
+  const title = normalizeName(candidate.title || candidate.sourceTitle || '');
+  if (!title) return false;
+
+  const aliases = aliasMap.get(channel.name) || [];
+  return aliases.some((alias) => title === alias.normalized || title.includes(alias.normalized));
+}
+
+function titleContainsOtherTarget(candidate = {}, channel = {}, allTargets = []) {
+  const title = normalizeName(candidate.title || candidate.sourceTitle || '');
+  if (!title) return null;
+
+  for (const target of allTargets) {
+    if (target.name === channel.name) continue;
+    for (const alias of target.aliases || []) {
+      if (!alias.normalized) continue;
+      if (title === alias.normalized || title.includes(alias.normalized)) {
+        return target.name;
+      }
+    }
+  }
+
+  return null;
+}
+
+function buildMatcher(blocklist, groupPolicy, channelValidation, aliasMap, allTargets) {
   const urlPatterns = toRegexList(blocklist.blockedUrlPatterns || []);
   const sourcePatterns = toRegexList(blocklist.blockedSourcePatterns || []);
   const titlePatterns = toRegexList(blocklist.blockedTitlePatterns || []);
@@ -49,6 +112,17 @@ function buildMatcher(blocklist, groupPolicy) {
 
     const byTitle = titlePatterns.find((reg) => reg.test(title));
     if (byTitle) return { blocked: true, reason: `blocked-title-pattern:${byTitle.source}` };
+
+    if (channelValidation.enabled) {
+      if (channelValidation.rejectIfOtherTargetInTitle) {
+        const otherTarget = titleContainsOtherTarget(item, channel, allTargets);
+        if (otherTarget) return { blocked: true, reason: `channel-mismatch:title-contains:${otherTarget}` };
+      }
+
+      if (channelValidation.strictTitleCheck && !titleMatchesChannel(item, channel, aliasMap)) {
+        return { blocked: true, reason: `channel-mismatch:title-not-match:${channel.name}` };
+      }
+    }
 
     return { blocked: false, reason: '' };
   };
@@ -87,9 +161,12 @@ async function main() {
 
   const blocklist = readJson(blocklistPath, {});
   const groupPolicy = readJson(groupPolicyPath, { groups: {} });
+  const channelValidation = readJson(channelValidationPath, { enabled: false });
   const targetConfig = readJson(targetPath, {});
+  const aliasesConfig = readJson(aliasPath, {});
   const reportJson = readJson(reportPath, { report: [] });
-  const isBlocked = buildMatcher(blocklist, groupPolicy);
+  const { map: aliasMap, allTargets } = buildTargetAliasMap(targetConfig, aliasesConfig, channelValidation);
+  const isBlocked = buildMatcher(blocklist, groupPolicy, channelValidation, aliasMap, allTargets);
   const removed = [];
   const lines = [`#EXTM3U${targetConfig.epgUrl ? ` x-tvg-url="${targetConfig.epgUrl}"` : ''}`];
   const sanitizedReport = [];
