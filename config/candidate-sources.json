@@ -1,5 +1,14 @@
 {
   "includeGeneratedM3u": true,
-  "remoteM3u": [],
-  "notes": "第一版默认从构建生成的 m3u/*.m3u 里自动筛选。后续可以把确认可用的合法公开 M3U 地址加入 remoteM3u。"
+  "remoteM3u": [
+    {
+      "name": "hujingguang/ChinaIPTV cnTV_AutoUpdate",
+      "url": "https://raw.githubusercontent.com/hujingguang/ChinaIPTV/main/cnTV_AutoUpdate.m3u8",
+      "timeoutMs": 12000,
+      "type": "third-party-auto-update",
+      "priority": "candidate",
+      "notes": "第三方自动更新聚合源。只作为候选池参与匹配、测速和排序，不作为官方源；最终写入 custom.m3u 的仍是每个频道测速后选出的主源。"
+    }
+  ],
+  "notes": "默认从构建生成的 m3u/*.m3u 里自动筛选，并额外拉取 remoteM3u 作为候选池。remoteM3u 只进入候选、匹配、测速、去重流程，不等同于官方源。"
 }
