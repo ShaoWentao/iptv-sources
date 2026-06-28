@@ -1,0 +1,180 @@
+{
+  "notes": "IPTV/CDN 分发平台候选源库。这里记录用户提供或后续查到的运营商、平台、短链和第三方备用源，并标注来源类型与建议用法。当前文件只做分类与留档，不会被 build-custom.mjs 自动写入 custom.m3u。",
+  "classificationRules": {
+    "operatorNetworkIptv": "运营商 IPTV/CDN 分发源，通常只在对应运营商、区域或宽带网络下可用。适合做本地网络播放源，云端构建可能无法探测。",
+    "platformRedirect": "第三方短链或跳转入口，真实源需要跟随跳转后再判断。不可直接按官方源处理。",
+    "thirdPartyProxy": "第三方 PHP/API 代理或转发源，稳定性和来源可追溯性较弱，只适合作为低优先级备用。",
+    "unknownRestream": "来路不清的转播或 CDN 备份源，不进入官方源，不建议作为主源。"
+  },
+  "streams": [
+    {
+      "channel": "咪咕视频4K",
+      "title": "咪咕视频4K jdshipin 短链",
+      "url": "http://r.jdshipin.com/ln4xk",
+      "type": "platformRedirect",
+      "providerHint": "jdshipin",
+      "accessScope": "移动网络可用，真实落点需跟随跳转确认",
+      "recommendedUse": "manual-check-only",
+      "mainPlaylist": false,
+      "reason": "短链域名并非 migu.cn / miguvideo.com / 运营商 IPTV 平台域名，不能直接按咪咕官方源处理。"
+    },
+    {
+      "channel": "咪咕视频4K",
+      "title": "咪咕视频4K-2 jdshipin 短链",
+      "url": "http://r.jdshipin.com/Lqdwf",
+      "type": "platformRedirect",
+      "providerHint": "jdshipin",
+      "accessScope": "移动网络可用，真实落点需跟随跳转确认",
+      "recommendedUse": "manual-check-only",
+      "mainPlaylist": false,
+      "reason": "短链源需要确认跳转后的真实 HLS 域名、频道内容和清晰度。"
+    },
+    {
+      "channel": "咪咕4K",
+      "title": "广东移动 PLTV 咪咕4K-1",
+      "url": "http://rrs03.hw.gmcc.net:8088/PLTV/651/224/3221226938/1.m3u8",
+      "type": "operatorNetworkIptv",
+      "providerHint": "广东移动 / GMCC IPTV",
+      "accessScope": "广东移动宽带，部分城市可用",
+      "recommendedUse": "network-scoped-candidate",
+      "mainPlaylist": false,
+      "reason": "gmcc.net + PLTV 路径符合运营商 IPTV/CDN 分发平台特征，云端构建环境大概率无法验证，适合本地网络播放。"
+    },
+    {
+      "channel": "咪咕4K",
+      "title": "广东移动 PLTV 咪咕4K-1 备用",
+      "url": "http://rrs03.hw.gmcc.net:8088/PLTV/651/224/3221226989/1.m3u8",
+      "type": "operatorNetworkIptv",
+      "providerHint": "广东移动 / GMCC IPTV",
+      "accessScope": "广东移动宽带，部分城市可用",
+      "recommendedUse": "network-scoped-candidate",
+      "mainPlaylist": false
+    },
+    {
+      "channel": "咪咕4K",
+      "title": "广东移动 PLTV 咪咕4K-2",
+      "url": "http://rrs03.hw.gmcc.net:8088/PLTV/651/224/3221226991/1.m3u8",
+      "type": "operatorNetworkIptv",
+      "providerHint": "广东移动 / GMCC IPTV",
+      "accessScope": "广东移动宽带，部分城市可用",
+      "recommendedUse": "network-scoped-candidate",
+      "mainPlaylist": false
+    },
+    {
+      "channel": "CCTV5",
+      "title": "广东移动 PLTV CCTV5",
+      "url": "http://rrs03.hw.gmcc.net:8088/PLTV/651/224/3221226731/1.m3u8",
+      "type": "operatorNetworkIptv",
+      "providerHint": "广东移动 / GMCC IPTV",
+      "accessScope": "广东移动宽带，部分城市可用",
+      "recommendedUse": "network-scoped-candidate",
+      "mainPlaylist": false
+    },
+    {
+      "channel": "CCTV5+",
+      "title": "广东移动 PLTV CCTV5+",
+      "url": "http://rrs03.hw.gmcc.net:8088/PLTV/651/224/3221226711/1.m3u8",
+      "type": "operatorNetworkIptv",
+      "providerHint": "广东移动 / GMCC IPTV",
+      "accessScope": "广东移动宽带，部分城市可用",
+      "recommendedUse": "network-scoped-candidate",
+      "mainPlaylist": false
+    },
+    {
+      "channel": "CCTV16",
+      "title": "广东移动 PLTV CCTV16",
+      "url": "http://rrs03.hw.gmcc.net:8088/PLTV/651/224/3221226825/1.m3u8",
+      "type": "operatorNetworkIptv",
+      "providerHint": "广东移动 / GMCC IPTV",
+      "accessScope": "广东移动宽带，部分城市可用",
+      "recommendedUse": "network-scoped-candidate",
+      "mainPlaylist": false
+    },
+    {
+      "channel": "CCTV5",
+      "title": "jdshipin PHP CCTV5",
+      "url": "https://php.jdshipin.com/TVOD/iptv.php?id=cctv5",
+      "type": "thirdPartyProxy",
+      "providerHint": "jdshipin",
+      "accessScope": "公网候选，需验证真实落点",
+      "recommendedUse": "low-priority-backup",
+      "mainPlaylist": false,
+      "reason": "PHP 代理形式，来源和真实 HLS 需进一步确认。"
+    },
+    {
+      "channel": "CCTV5+",
+      "title": "jdshipin PHP CCTV5+",
+      "url": "https://php.jdshipin.com/TVOD/iptv.php?id=cctv5p",
+      "type": "thirdPartyProxy",
+      "providerHint": "jdshipin",
+      "accessScope": "公网候选，需验证真实落点",
+      "recommendedUse": "low-priority-backup",
+      "mainPlaylist": false
+    },
+    {
+      "channel": "CCTV16",
+      "title": "jdshipin PHP CCTV16",
+      "url": "https://php.jdshipin.com/TVOD/iptv.php?id=cctv16",
+      "type": "thirdPartyProxy",
+      "providerHint": "jdshipin",
+      "accessScope": "公网候选，需验证真实落点",
+      "recommendedUse": "low-priority-backup",
+      "mainPlaylist": false
+    },
+    {
+      "channel": "CCTV5",
+      "title": "163189 CCTV5 备用",
+      "url": "https://cdn16.163189.xyz/163189/cctv5-2",
+      "type": "unknownRestream",
+      "providerHint": "163189.xyz",
+      "recommendedUse": "last-resort-only",
+      "mainPlaylist": false
+    },
+    {
+      "channel": "CCTV5+",
+      "title": "163189 CCTV5+ 备用",
+      "url": "https://cdn16.163189.xyz/163189/cctv5p-2",
+      "type": "unknownRestream",
+      "providerHint": "163189.xyz",
+      "recommendedUse": "last-resort-only",
+      "mainPlaylist": false
+    },
+    {
+      "channel": "CCTV16",
+      "title": "163189 CCTV16 备用",
+      "url": "https://cdn16.163189.xyz/163189/cctv16-2",
+      "type": "unknownRestream",
+      "providerHint": "163189.xyz",
+      "recommendedUse": "last-resort-only",
+      "mainPlaylist": false
+    },
+    {
+      "channel": "广东体育",
+      "title": "广东体育 jdshipin 短链",
+      "url": "http://r.jdshipin.com/LiYdg",
+      "type": "platformRedirect",
+      "providerHint": "jdshipin",
+      "accessScope": "真实落点需跟随跳转确认",
+      "recommendedUse": "manual-check-only",
+      "mainPlaylist": false
+    },
+    {
+      "channel": "澳门体育",
+      "title": "澳门体育 163189 备用",
+      "url": "http://cdn6.163189.xyz/163189/amty",
+      "type": "unknownRestream",
+      "providerHint": "163189.xyz",
+      "recommendedUse": "last-resort-only",
+      "mainPlaylist": false
+    },
+    {
+      "channel": "五星体育",
+      "title": "五星体育 163189 备用",
+      "url": "https://cdn15.163189.xyz/163189/wxty",
+      "type": "unknownRestream",
+      "providerHint": "163189.xyz",
+      "recommendedUse": "last-resort-only",
+      "mainPlaylist": false
+    }
+  ]
+}
