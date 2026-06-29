@@ -93,6 +93,11 @@ function buildMatcher(blocklist, groupPolicy, channelValidation, aliasMap, allTa
   const titlePatterns = toRegexList(blocklist.blockedTitlePatterns || []);
 
   return (item = {}, channel = {}) => {
+    if (channelValidation.enabled && channelValidation.rejectIfOtherTargetInTitle) {
+      const otherTarget = titleContainsOtherTarget(item, channel, allTargets);
+      if (otherTarget) return { blocked: true, reason: `channel-mismatch:title-contains:${otherTarget}` };
+    }
+
     const policy = groupPolicy.groups?.[channel.group] || {};
     if (policy.requireOfficial && !(item.official || item.officialForced)) {
       return { blocked: true, reason: `group-policy:${channel.group}:require-official` };
@@ -113,15 +118,8 @@ function buildMatcher(blocklist, groupPolicy, channelValidation, aliasMap, allTa
     const byTitle = titlePatterns.find((reg) => reg.test(title));
     if (byTitle) return { blocked: true, reason: `blocked-title-pattern:${byTitle.source}` };
 
-    if (channelValidation.enabled) {
-      if (channelValidation.rejectIfOtherTargetInTitle) {
-        const otherTarget = titleContainsOtherTarget(item, channel, allTargets);
-        if (otherTarget) return { blocked: true, reason: `channel-mismatch:title-contains:${otherTarget}` };
-      }
-
-      if (channelValidation.strictTitleCheck && !titleMatchesChannel(item, channel, aliasMap)) {
-        return { blocked: true, reason: `channel-mismatch:title-not-match:${channel.name}` };
-      }
+    if (channelValidation.enabled && channelValidation.strictTitleCheck && !titleMatchesChannel(item, channel, aliasMap)) {
+      return { blocked: true, reason: `channel-mismatch:title-not-match:${channel.name}` };
     }
 
     return { blocked: false, reason: '' };
