@@ -7,6 +7,7 @@ const m3uDir = path.join(root, 'm3u');
 const targetPath = path.join(root, 'config', 'target-channels.json');
 const networkPriorityPath = path.join(root, 'config', 'network-priority.json');
 const qualityPolicyPath = path.join(root, 'config', 'quality-policy.json');
+const sourcePreferencePath = path.join(root, 'config', 'source-preference.json');
 const reportPath = path.join(m3uDir, 'custom-report.json');
 const backupsPath = path.join(m3uDir, 'custom-backups.json');
 const customPath = path.join(m3uDir, 'custom.m3u');
@@ -76,6 +77,32 @@ function networkPriority(item = {}, profile) {
   return { score: 0, label: '', matched: '' };
 }
 
+function sourcePreference(item = {}, channel = {}, preferenceConfig = {}) {
+  if (!preferenceConfig.enabled) return { score: 0, label: '', matched: '' };
+
+  const itemText = [item.title, item.sourceName, item.url].filter(Boolean).join(' ');
+  for (const rule of preferenceConfig.rules || []) {
+    const channelRegs = toRegexList(rule.channelNamePatterns || []);
+    const groupRegs = toRegexList(rule.groupPatterns || []);
+    const preferRegs = toRegexList(rule.preferPatterns || []);
+
+    const channelMatched = !channelRegs.length || channelRegs.some((reg) => reg.test(channel.name || ''));
+    const groupMatched = !groupRegs.length || groupRegs.some((reg) => reg.test(channel.group || ''));
+    if (!channelMatched || !groupMatched) continue;
+
+    const preferred = preferRegs.find((reg) => reg.test(itemText));
+    if (!preferred) continue;
+
+    return {
+      score: Number(rule.boost || 0),
+      label: rule.name || 'source-preference',
+      matched: preferred.source,
+    };
+  }
+
+  return { score: 0, label: '', matched: '' };
+}
+
 function qualityRank(item = {}) {
   const label = String(item.qualityLabel || item.resolution || '').toLowerCase();
   const height = Number(String(item.resolution || '').match(/x(\d{3,5})/)?.[1] || 0);
@@ -131,12 +158,13 @@ function latencyMs(item = {}) {
 
 function speedScore(item = {}, profile) {
   const officialBoost = item.official || item.officialForced ? 1000000 : 0;
+  const sourceBoost = Number(item.sourcePreferenceScore || 0);
   const network = networkPriority(item, profile);
   const latency = latencyMs(item);
   const quality = qualityRank(item);
   const bandwidth = Number(item.bandwidth || 0);
 
-  let score = officialBoost + network.score;
+  let score = officialBoost + sourceBoost + network.score;
 
   if (quality >= 7) score += 90000;
   else if (quality === 6) score += 80000;
@@ -149,7 +177,7 @@ function speedScore(item = {}, profile) {
   return score;
 }
 
-function normalizeCandidate(item = {}, profile = null) {
+function normalizeCandidate(item = {}, profile = null, preferenceConfig = {}, channel = {}) {
   const candidate = {
     title: item.title || item.sourceTitle || '',
     sourceName: item.sourceName || '',
@@ -164,12 +192,16 @@ function normalizeCandidate(item = {}, profile = null) {
     url: item.url || '',
   };
   const network = networkPriority(candidate, profile);
+  const preference = sourcePreference(candidate, channel, preferenceConfig);
   return {
     ...candidate,
     detectedHeight: detectedHeight(candidate),
     networkPriority: network.label,
     networkPriorityScore: network.score,
     networkPriorityMatched: network.matched,
+    sourcePreference: preference.label,
+    sourcePreferenceScore: preference.score,
+    sourcePreferenceMatched: preference.matched,
   };
 }
 
@@ -179,8 +211,9 @@ function makeExtinf(target, selected) {
   const quality = selected.qualityLabel ? ` quality="${selected.qualityLabel}"` : '';
   const official = selected.official || selected.officialForced ? ' official="true"' : '';
   const network = selected.networkPriority ? ` network="${cleanMetaValue(selected.networkPriority)}"` : '';
+  const sourcePreferenceTag = selected.sourcePreference ? ` source-preference="${cleanMetaValue(selected.sourcePreference)}"` : '';
   const latency = selected.latencyMs ? ` latency="${selected.latencyMs}ms"` : '';
-  return `#EXTINF:-1 tvg-name="${target.name}" group-title="${target.group}" source-title="${title}"${resolution}${quality}${official}${network}${latency},${target.name}`;
+  return `#EXTINF:-1 tvg-name="${target.name}" group-title="${target.group}" source-title="${title}"${resolution}${quality}${official}${network}${sourcePreferenceTag}${latency},${target.name}`;
 }
 
 async function main() {
@@ -192,6 +225,7 @@ async function main() {
   const targetConfig = readJson(targetPath, {});
   const networkConfig = readJson(networkPriorityPath, {});
   const qualityPolicy = readJson(qualityPolicyPath, { enabled: false });
+  const sourcePreferenceConfig = readJson(sourcePreferencePath, { enabled: false, rules: [] });
   const activeNetworkProfile = getActiveNetworkProfile(networkConfig);
   const reportJson = readJson(reportPath, { report: [] });
   const lines = [`#EXTM3U${targetConfig.epgUrl ? ` x-tvg-url="${targetConfig.epgUrl}"` : ''}`];
@@ -206,11 +240,14 @@ async function main() {
   if (qualityPolicy.enabled) {
     console.log(`[SPEED] Active quality policy: minimum ${qualityPolicy.minHeight || 1080}P`);
   }
+  if (sourcePreferenceConfig.enabled) {
+    console.log(`[SPEED] Active source preference rules: ${(sourcePreferenceConfig.rules || []).length}`);
+  }
 
   for (const channel of reportJson.report || []) {
     const candidates = [];
-    if (channel.selected) candidates.push(normalizeCandidate(channel.selected, activeNetworkProfile));
-    for (const backup of channel.backups || []) candidates.push(normalizeCandidate(backup, activeNetworkProfile));
+    if (channel.selected) candidates.push(normalizeCandidate(channel.selected, activeNetworkProfile, sourcePreferenceConfig, channel));
+    for (const backup of channel.backups || []) candidates.push(normalizeCandidate(backup, activeNetworkProfile, sourcePreferenceConfig, channel));
 
     const unique = [];
     const seen = new Set();
@@ -257,6 +294,8 @@ async function main() {
           resolution: selected.resolution,
           networkPriority: selected.networkPriority,
           networkPriorityMatched: selected.networkPriorityMatched,
+          sourcePreference: selected.sourcePreference,
+          sourcePreferenceMatched: selected.sourcePreferenceMatched,
           url: selected.url,
         },
       });
@@ -277,6 +316,7 @@ async function main() {
       main: selected.url,
       mainOfficial: selected.official || selected.officialForced,
       mainNetworkPriority: selected.networkPriority || '',
+      mainSourcePreference: selected.sourcePreference || '',
       backups: backups.map((item) => item.url),
       sources: [selected, ...backups].map((item, index) => ({
         role: index === 0 ? 'main' : 'backup',
@@ -288,6 +328,9 @@ async function main() {
         networkPriority: item.networkPriority || '',
         networkPriorityScore: item.networkPriorityScore || 0,
         networkPriorityMatched: item.networkPriorityMatched || '',
+        sourcePreference: item.sourcePreference || '',
+        sourcePreferenceScore: item.sourcePreferenceScore || 0,
+        sourcePreferenceMatched: item.sourcePreferenceMatched || '',
         latencyMs: item.latencyMs,
         resolution: item.resolution,
         detectedHeight: item.detectedHeight,
@@ -314,6 +357,7 @@ async function main() {
         generatedAt: new Date().toISOString(),
         activeNetworkProfile: activeNetworkProfile?.name || '',
         qualityPolicy,
+        sourcePreferenceConfig,
         changedCount: changes.length,
         removedByQualityCount: removedByQuality.length,
         changes,
