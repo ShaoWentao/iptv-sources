@@ -13,6 +13,10 @@ function readJson(file, fallback = {}) {
   return JSON.parse(fs.readFileSync(file, 'utf-8'));
 }
 
+function isPlayableUrl(url = '') {
+  return /^(webview:\/\/)?https?:\/\//i.test(String(url || ''));
+}
+
 function tierLabel(tier = '') {
   switch (tier) {
     case 'official':
@@ -90,7 +94,7 @@ async function main() {
   const seen = new Set();
 
   for (const stream of official.directStreams || []) {
-    if (!stream?.channel || !/^https?:\/\//i.test(stream.url || '')) continue;
+    if (!stream?.channel || !isPlayableUrl(stream.url)) continue;
     const key = `${stream.channel}\t${stream.url}`;
     if (seen.has(key)) continue;
     seen.add(key);
@@ -99,7 +103,7 @@ async function main() {
 
   let addedManual = 0;
   for (const stream of verified.streams || []) {
-    if (!stream?.channel || !/^https?:\/\//i.test(stream.url || '')) continue;
+    if (!stream?.channel || !isPlayableUrl(stream.url)) continue;
     const normalized = normalizeStream(stream);
     const key = `${normalized.channel}\t${normalized.url}`;
     if (seen.has(key)) continue;
@@ -110,7 +114,7 @@ async function main() {
 
   let addedAuto = 0;
   for (const stream of autoPromoted) {
-    if (!stream?.channel || !/^https?:\/\//i.test(stream.url || '')) continue;
+    if (!stream?.channel || !isPlayableUrl(stream.url)) continue;
     const normalized = normalizeStream(stream);
     const key = `${normalized.channel}\t${normalized.url}`;
     if (seen.has(key)) continue;
@@ -128,7 +132,7 @@ async function main() {
       mergedManualVerifiedCount: addedManual,
       foundCandidateCount: autoPromoted.length,
       mergedFoundCandidateCount: addedAuto,
-      notes: 'Build-time merge. Manual verified sources and auto-found official/IPTV distribution candidates are promoted into custom build.',
+      notes: 'Build-time merge. Manual verified sources and auto-found official/IPTV distribution candidates are promoted into custom build. WebView sources use webview://https://... scheme.',
     },
   };
 
