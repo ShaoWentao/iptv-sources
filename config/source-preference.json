@@ -1,0 +1,22 @@
+{
+  "enabled": true,
+  "rules": [
+    {
+      "name": "CCTV WebView 优先",
+      "description": "央视 CCTV 频道优先选择来源、标题或 URL 中带 WebView 的源。命中后仍经过可播放、清晰度、CatVod/解析源清理等流程。",
+      "channelNamePatterns": [
+        "^CCTV-"
+      ],
+      "groupPatterns": [
+        "^央视$"
+      ],
+      "preferPatterns": [
+        "WebView",
+        "webview",
+        "web-view",
+        "Web View"
+      ],
+      "boost": 2500000
+    }
+  ]
+}
