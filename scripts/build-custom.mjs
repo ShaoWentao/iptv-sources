@@ -44,9 +44,17 @@ function attr(line, name) {
   return reg.exec(line)?.[1] || '';
 }
 
+function isPlayableUrl(url = '') {
+  return /^(webview:\/\/)?https?:\/\//i.test(String(url || ''));
+}
+
+function unwrapWebViewUrl(url = '') {
+  return String(url || '').replace(/^webview:\/\//i, '');
+}
+
 function getHostname(url = '') {
   try {
-    return new URL(url).hostname.toLowerCase();
+    return new URL(unwrapWebViewUrl(url)).hostname.toLowerCase();
   } catch {
     return '';
   }
@@ -68,7 +76,7 @@ function parseM3u(text, sourceName, officialConfig = {}) {
     const line = lines[i];
     if (!line.startsWith('#EXTINF')) continue;
     const url = lines[i + 1] || '';
-    if (!/^https?:\/\//i.test(url)) continue;
+    if (!isPlayableUrl(url)) continue;
     const commaIndex = line.lastIndexOf(',');
     const displayName = commaIndex >= 0 ? line.slice(commaIndex + 1).trim() : '';
     const tvgName = attr(line, 'tvg-name');
@@ -94,7 +102,7 @@ function parseM3u(text, sourceName, officialConfig = {}) {
 function loadOfficialDirectStreams(officialConfig = {}) {
   const items = [];
   for (const stream of officialConfig.directStreams || []) {
-    if (!stream?.channel || !/^https?:\/\//i.test(stream.url || '')) continue;
+    if (!stream?.channel || !isPlayableUrl(stream.url || '')) continue;
     items.push({
       title: stream.title || stream.channel,
       displayName: stream.channel,
@@ -131,7 +139,7 @@ async function fetchText(url, timeoutMs = 6000) {
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const res = await fetch(url, {
+    const res = await fetch(unwrapWebViewUrl(url), {
       redirect: 'follow',
       signal: controller.signal,
       headers: { 'User-Agent': USER_AGENT },
@@ -282,7 +290,7 @@ async function probeUrl(item, timeoutMs) {
   let sample = '';
 
   try {
-    const res = await fetch(item.url, {
+    const res = await fetch(unwrapWebViewUrl(item.url), {
       method: 'GET',
       redirect: 'follow',
       signal: controller.signal,
@@ -320,6 +328,7 @@ async function probeUrl(item, timeoutMs) {
     const resolution = declaredResolution || detectedResolution;
     const resolutionQuality = qualityFromResolution(resolution);
     const isM3u8 = /mpegurl|m3u8|vnd\.apple/i.test(contentType) || sample.includes('#EXTM3U');
+    const isWebView = /^webview:\/\//i.test(item.url || '');
     const hint = qualityHintScore(
       [
         item.title,
@@ -341,7 +350,7 @@ async function probeUrl(item, timeoutMs) {
       bandwidthScore;
     const score =
       qualityScore * 10 +
-      (isM3u8 ? 6000 : 0) +
+      (isM3u8 || isWebView ? 6000 : 0) +
       Math.min(bytes, 8192) / 4 -
       latencyMs * 3;
 
@@ -354,7 +363,7 @@ async function probeUrl(item, timeoutMs) {
       width: resolutionQuality.width,
       height: resolutionQuality.height,
       pixels: resolutionQuality.pixels,
-      qualityLabel: resolutionQuality.label || item.declaredQuality || '',
+      qualityLabel: resolutionQuality.label || item.declaredQuality || (isWebView ? 'WebView' : ''),
       qualityScore,
       score,
       trustedOfficial: item.trustedOfficial || item.officialForced,
