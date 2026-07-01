@@ -6,6 +6,7 @@ const root = process.cwd();
 const m3uDir = path.join(root, 'm3u');
 const officialPath = path.join(root, 'config', 'official-overrides.json');
 const verifiedPath = path.join(root, 'config', 'verified-sources.json');
+const yangshipinPath = path.join(root, 'config', 'yangshipin-webview-candidates.json');
 const foundReportPath = path.join(m3uDir, 'verified-candidates-report.json');
 
 function readJson(file, fallback = {}) {
@@ -20,6 +21,7 @@ function isPlayableUrl(url = '') {
 function tierLabel(tier = '') {
   switch (tier) {
     case 'official':
+    case 'official-webview':
       return '官方公开源';
     case 'telecom-distribution':
     case 'telecom-distribution-candidate':
@@ -37,6 +39,7 @@ function tierLabel(tier = '') {
 
 function normalizedTier(tier = '') {
   if (tier === 'official') return 'official';
+  if (tier === 'official-webview') return 'official-webview';
   if (tier === 'telecom-distribution-candidate') return 'telecom-distribution';
   if (tier === 'mobile-distribution-candidate') return 'mobile-distribution';
   if (tier === 'unicom-distribution-candidate') return 'unicom-distribution';
@@ -91,6 +94,28 @@ function flattenFoundCandidates(report = {}, enabled = false) {
   return items;
 }
 
+function flattenYangshipinMappings(config = {}) {
+  const enabled = config?.status === 'channel-pid-mappings-confirmed' || config?.mergePolicy?.includeConfirmedMappings === true;
+  if (!enabled) return [];
+
+  const items = [];
+  for (const item of config.confirmedChannelMappings || []) {
+    if (!item?.channel || !item?.pid) continue;
+    const page = item.page || `https://www.yangshipin.cn/tv/home?pid=${item.pid}`;
+    items.push({
+      channel: item.channel,
+      title: item.title || `${item.name || item.channel} 央视频官方 WebView`,
+      provider: item.provider || 'Yangshipin/CMG',
+      tier: 'official-webview',
+      page,
+      url: item.url || `webview://${page}`,
+      quality: 'WebView',
+      notes: item.notes || `央视频官方频道页 pid=${item.pid}。`,
+    });
+  }
+  return items;
+}
+
 function isGeneratedCandidate(stream = {}) {
   const notes = String(stream.notes || '');
   const provider = String(stream.provider || '');
@@ -100,8 +125,10 @@ function isGeneratedCandidate(stream = {}) {
 async function main() {
   const official = readJson(officialPath, { directStreams: [] });
   const verified = readJson(verifiedPath, { streams: [] });
+  const yangshipin = readJson(yangshipinPath, { confirmedChannelMappings: [] });
   const foundReport = readJson(foundReportPath, { byChannel: {} });
   const autoPromoteEnabled = shouldPromoteDiscoveredCandidates(verified);
+  const yangshipinStreams = flattenYangshipinMappings(yangshipin);
   const autoPromoted = flattenFoundCandidates(foundReport, autoPromoteEnabled);
   const merged = [];
   const seen = new Set();
@@ -125,6 +152,17 @@ async function main() {
     addedManual += 1;
   }
 
+  let addedYangshipin = 0;
+  for (const stream of yangshipinStreams) {
+    if (!stream?.channel || !isPlayableUrl(stream.url)) continue;
+    const normalized = normalizeStream(stream);
+    const key = `${normalized.channel}\t${normalized.url}`;
+    if (seen.has(key)) continue;
+    seen.add(key);
+    merged.push(normalized);
+    addedYangshipin += 1;
+  }
+
   let addedAuto = 0;
   for (const stream of autoPromoted) {
     if (!stream?.channel || !isPlayableUrl(stream.url)) continue;
@@ -143,15 +181,17 @@ async function main() {
       generatedAt: new Date().toISOString(),
       manualVerifiedSourceCount: (verified.streams || []).length,
       mergedManualVerifiedCount: addedManual,
+      yangshipinConfirmedMappingCount: yangshipinStreams.length,
+      mergedYangshipinMappingCount: addedYangshipin,
       autoPromoteDiscoveredCandidates: autoPromoteEnabled,
       foundCandidateCount: autoPromoted.length,
       mergedFoundCandidateCount: addedAuto,
-      notes: 'Build-time merge. Default mode only promotes manually verified official sources. Auto-found IPTV/distribution candidates stay in reports unless verified-sources.mergePolicy.autoPromoteDiscoveredCandidates is true. WebView sources use webview://https://... scheme.',
+      notes: 'Build-time merge. Manual official sources and confirmed Yangshipin WebView pid mappings are promoted. Auto-found IPTV/distribution candidates stay in reports unless verified-sources.mergePolicy.autoPromoteDiscoveredCandidates is true. WebView sources use webview://https://... scheme.',
     },
   };
 
   await writeFile(officialPath, JSON.stringify(next, null, 2), 'utf-8');
-  console.log(`[VERIFIED] Merged ${addedManual} manual verified sources and ${addedAuto} auto-found candidates into official directStreams`);
+  console.log(`[VERIFIED] Merged ${addedManual} manual verified sources, ${addedYangshipin} Yangshipin WebView mappings and ${addedAuto} auto-found candidates into official directStreams`);
 }
 
 main().catch((error) => {
