@@ -39,6 +39,15 @@
       "action": "已写入 verified-sources 作为东方卫视官方 WebView 源；继续尝试从页面脚本中提取 HLS。"
     },
     {
+      "channel": "广西卫视",
+      "provider": "广西网络广播电视台 / 广西广播电视台",
+      "status": "official-webview-confirmed",
+      "page": "https://tv.gxtv.cn/channel/channelivePlay_e7a7ab7df9fe11e88bcfe41f13b60c62.html",
+      "webviewUrl": "webview://https://tv.gxtv.cn/channel/channelivePlay_e7a7ab7df9fe11e88bcfe41f13b60c62.html",
+      "evidence": "广西网络广播电视台首页直播菜单下有广西卫视链接，点击进入 tv.gxtv.cn 直播频道页。",
+      "action": "已写入 verified-sources 作为广西卫视官方 WebView 源；继续尝试从页面脚本中提取 HLS。"
+    },
+    {
       "channel": "湖北卫视",
       "provider": "长江云 / 湖北广播电视台",
       "status": "official-webview-confirmed",
