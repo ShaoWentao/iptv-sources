@@ -1,0 +1,60 @@
+{
+  "notes": "官方源候选清单。这里只记录已找到的电视台官网、官方直播页、官方平台或官方 CDN 线索。direct-hls-confirmed 可进入 verified-sources；official-webview-confirmed 可按 webview:// 写入 custom；official-page-needs-channel-url 继续查具体频道页或 HLS。",
+  "updatedAt": "2026-07-01",
+  "candidates": [
+    {
+      "channel": "江苏卫视",
+      "provider": "荔枝网 / 江苏省广播电视总台",
+      "status": "official-webview-confirmed",
+      "page": "https://live.jstv.com/",
+      "webviewUrl": "webview://https://live.jstv.com/",
+      "evidence": "页面标题显示江苏卫视在线观看、江苏电视台直播频道。",
+      "action": "可写入 verified-sources 作为江苏卫视官方 WebView 源；继续尝试从页面脚本中提取 HLS。"
+    },
+    {
+      "channel": "湖南卫视",
+      "provider": "芒果TV / 湖南广电",
+      "status": "official-page-needs-channel-url",
+      "page": "https://www.mgtv.com/live/",
+      "webviewUrl": "webview://https://www.mgtv.com/live/",
+      "evidence": "芒果TV有直播入口，但当前未确认湖南卫视专属频道页或官方 HLS。",
+      "action": "继续查湖南卫视专属 live 页面或官方 HLS，暂不直接并入 custom 主源。"
+    },
+    {
+      "channel": "北京卫视",
+      "provider": "北京时间 / BRTV",
+      "status": "official-page-needs-channel-url",
+      "page": "https://www.btime.com/",
+      "webviewUrl": "webview://https://www.btime.com/",
+      "evidence": "北京时间页面包含看电视、直播入口和北京新媒体/BRTV相关备案信息。",
+      "action": "继续查北京卫视专属看电视页面或官方 HLS，暂不直接并入 custom 主源。"
+    },
+    {
+      "channel": "东方卫视",
+      "provider": "看看新闻 / 上海广播电视台",
+      "status": "official-page-needs-channel-url",
+      "page": "https://live.kankanews.com/",
+      "webviewUrl": "webview://https://live.kankanews.com/",
+      "evidence": "看看新闻页面标题显示为上海广播电视台官方视频新闻平台。",
+      "action": "继续查东方卫视专属频道页或官方 HLS，暂不直接并入 custom 主源。"
+    },
+    {
+      "channel": "山东卫视",
+      "provider": "齐鲁网 / 山东广播电视台",
+      "status": "official-page-needs-channel-url",
+      "page": "https://www.iqilu.com/",
+      "webviewUrl": "webview://https://www.iqilu.com/",
+      "evidence": "齐鲁网为山东广播电视台主办门户，历史资料显示有官方在线直播入口，但当前未确认可用频道页。",
+      "action": "继续查齐鲁网直播入口或山东卫视官方 HLS，暂不直接并入 custom 主源。"
+    },
+    {
+      "channel": "河南卫视",
+      "provider": "大象网 / 河南广播电视台",
+      "status": "official-page-needs-channel-url",
+      "page": "https://www.hntv.tv/",
+      "webviewUrl": "webview://https://www.hntv.tv/",
+      "evidence": "大象网为河南网络电视台/河南电视台官方网站，历史资料显示提供免费频道直播和点播。",
+      "action": "继续查河南卫视专属频道页或官方 HLS，暂不直接并入 custom 主源。"
+    }
+  ]
+}
