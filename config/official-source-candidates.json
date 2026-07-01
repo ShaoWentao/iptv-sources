@@ -48,6 +48,24 @@
       "action": "已写入 verified-sources 作为广西卫视官方 WebView 源；继续尝试从页面脚本中提取 HLS。"
     },
     {
+      "channel": "海南卫视",
+      "provider": "海南网络广播电视台 / 海南广播电视总台",
+      "status": "official-webview-confirmed",
+      "page": "https://www.hnntv.cn/live.html",
+      "webviewUrl": "webview://https://www.hnntv.cn/live.html",
+      "evidence": "海南网络广播电视台首页有直播入口，直播页明确显示海南卫视高清。",
+      "action": "已写入 verified-sources 作为海南卫视官方 WebView 源；继续尝试从页面脚本中提取 HLS。"
+    },
+    {
+      "channel": "宁夏卫视",
+      "provider": "宁夏网络广播电视台 / 宁夏广播电视台",
+      "status": "official-webview-confirmed",
+      "page": "https://www.nxtv.com.cn/19/19kds/dsp/",
+      "webviewUrl": "webview://https://www.nxtv.com.cn/19/19kds/dsp/",
+      "evidence": "宁夏网络广播电视台首页有看电视入口，页面列出宁夏卫视频道。",
+      "action": "已写入 verified-sources 作为宁夏卫视官方 WebView 源；继续尝试从页面脚本中提取 HLS。"
+    },
+    {
       "channel": "湖北卫视",
       "provider": "长江云 / 湖北广播电视台",
       "status": "official-webview-confirmed",
