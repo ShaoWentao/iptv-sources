@@ -3,15 +3,16 @@
   "provider": "央视频 / 中央广播电视总台",
   "officialPage": "https://www.yangshipin.cn/tv/home",
   "webviewUrl": "webview://https://www.yangshipin.cn/tv/home",
-  "status": "channel-pid-mappings-confirmed",
+  "status": "channel-pid-mappings-collected-test-pending",
   "mergePolicy": {
-    "includeConfirmedMappings": true,
-    "notes": "只合并 confirmedChannelMappings 中的频道级 pid WebView，不合并聚合首页，不合并 HLS/token。"
+    "includeConfirmedMappings": false,
+    "notes": "当前只记录用户脚本中的频道级 pid 映射，尚未完成逐频道播放测试，暂不合并 custom.m3u。测试通过后再改为 true。"
   },
   "notes": [
     "央视频直播入口覆盖央视、CGTN、部分数字频道和省级卫视。",
     "本文件根据用户提供的央视频脚本整理频道名称与 pid 映射。",
-    "生成 custom 时只使用频道级 WebView：webview://https://www.yangshipin.cn/tv/home?pid=xxxx。",
+    "测试 URL 形态：webview://https://www.yangshipin.cn/tv/home?pid=xxxx。",
+    "当前尚未完成真实 WebView 播放测试，不进入正式 custom.m3u。",
     "不写入央视频页面中的加密播放接口、临时 HLS token、登录态或会员权限接口。",
     "未出现在 pid 列表中的卫视继续通过官方台站页面或其他官方平台寻找。"
   ],
@@ -20,7 +21,8 @@
       "频道名称与 target-channels.json 精确匹配或可明确映射",
       "频道级 WebView URL 使用稳定 pid 参数",
       "不包含短期 token 或一次性授权参数",
-      "播放器支持 webview:// 页面源"
+      "播放器支持 webview:// 页面源",
+      "至少抽测央视、头部卫视、地方卫视各若干频道，确认打开后直接进入对应频道播放页"
     ],
     "fallbackUsage": "央视频聚合页只保留为人工入口，正式源使用具体 pid 页面。"
   },
