@@ -1,0 +1,61 @@
+{
+  "updatedAt": "2026-07-01",
+  "scope": "央视频道与全国卫视频道官方源一次性梳理",
+  "notes": [
+    "这个文件是官方源排查总表，不直接参与 custom.m3u 生成。",
+    "status=verified-main 的源已进入 verified-sources.json。",
+    "status=official-page-confirmed 表示已找到官方频道页或官方直播页，但未确认可直接稳定播放，不自动入主源。",
+    "status=official-portal 表示已找到官方门户或台方平台，还需要继续定位频道页/HLS。",
+    "status=official-domain-hls-candidate 表示从测试源中发现官方域名 HLS，需人工播放确认后再入主源。",
+    "裸 IP、:9901、:8154、:60901、/tsfile/live/ 这类源不纳入官方源总表。"
+  ],
+  "verifiedMain": [
+    {"channel":"CCTV-1~CCTV-17","type":"official-webview","pagePattern":"https://tv.cctv.com/live/cctv*/","status":"verified-main"},
+    {"channel":"江苏卫视","type":"official-webview","page":"https://live.jstv.com/","status":"verified-main"},
+    {"channel":"东方卫视","type":"official-webview","page":"https://live.kankanews.com/huikan","status":"verified-main"},
+    {"channel":"广西卫视","type":"official-webview","page":"https://tv.gxtv.cn/channel/channelivePlay_e7a7ab7df9fe11e88bcfe41f13b60c62.html","status":"verified-main"},
+    {"channel":"海南卫视","type":"official-webview","page":"https://www.hnntv.cn/live.html","status":"verified-main"},
+    {"channel":"宁夏卫视","type":"official-webview","page":"https://www.nxtv.com.cn/19/19kds/dsp/","status":"verified-main"},
+    {"channel":"浙江卫视","type":"official-hls","page":"https://ztv.cztv.com/live/index.html","status":"verified-main"},
+    {"channel":"CGTN","type":"official-hls","page":"https://www.cgtn.com/tv","status":"verified-main"},
+    {"channel":"CGTN Documentary","type":"official-hls","page":"https://www.cgtn.com/tv","status":"verified-main"},
+    {"channel":"港台电视31","type":"official-hls","page":"https://www.rthk.hk/tv","status":"verified-main"},
+    {"channel":"港台电视32","type":"official-hls","page":"https://www.rthk.hk/tv","status":"verified-main"}
+  ],
+  "officialLeads": [
+    {"channel":"湖南卫视","provider":"芒果TV / 湖南广电","page":"https://www.mgtv.com/live/","status":"official-portal","action":"继续找湖南卫视频道页或官方 HLS"},
+    {"channel":"北京卫视","provider":"北京时间 / BRTV","page":"https://www.btime.com/btv","status":"official-page-confirmed","action":"页面是官方看电视入口，继续找北京卫视频道级直播页或 HLS"},
+    {"channel":"广东卫视","provider":"荔枝网 / 广东广播电视台","page":"https://www.gdtv.cn/","status":"official-portal","action":"继续找广东卫视频道页或官方 HLS"},
+    {"channel":"深圳卫视","provider":"深圳广播电影电视集团 / 第一现场","page":"https://www.sztv.com.cn/","status":"official-portal","action":"继续找深圳卫视频道页或官方 HLS"},
+    {"channel":"安徽卫视","provider":"安徽广播电视台 / 安徽网络电视台","page":"https://www.ahtv.cn/","status":"official-portal","action":"官网抓取超时，继续找直播页或 HLS"},
+    {"channel":"山东卫视","provider":"齐鲁网 / 山东广播电视台","page":"https://www.iqilu.com/","status":"official-portal","action":"继续找山东卫视频道页或官方 HLS"},
+    {"channel":"河南卫视","provider":"大象网 / 河南广播电视台","page":"https://www.hntv.tv/","status":"official-portal","action":"继续找频道直播入口或官方 HLS"},
+    {"channel":"河北卫视","provider":"河北网络广播电视台 / 冀时","page":"https://www.hebtv.com/0/0rmhlm/qy/jswh/index.shtml","status":"official-page-confirmed","action":"页面标题为河北卫视，继续确认是否能 WebView 播放"},
+    {"channel":"湖北卫视","provider":"长江云 / 湖北广播电视台","page":"https://news.hbtv.com.cn/app/tv/431","status":"official-page-confirmed-temporary","action":"频道页存在，但页面提示临时链接，不入主源"},
+    {"channel":"四川卫视","provider":"四川网络广播电视台 / 四川广播电视台","page":"https://www.sctv.com/","status":"official-portal","action":"继续找四川卫视频道页或 HLS"},
+    {"channel":"重庆卫视","provider":"视界网 / 重庆网络广播电视台","page":"https://www.cbg.cn/web/list/4918/1.html","status":"official-page-confirmed","action":"官方看电视入口存在，继续找重庆卫视频道级页或 HLS"},
+    {"channel":"贵州卫视","provider":"贵州网络广播电视台 / 贵州广播电视台","page":"https://www.gzstv.com/tv/ch01","status":"official-page-confirmed","action":"频道页存在，页面提示移动直播，继续确认 PC WebView 或 HLS"},
+    {"channel":"云南卫视","provider":"云南广播电视台","page":"https://www.yntv.cn/","status":"official-portal","action":"继续找云南卫视频道页或 HLS"},
+    {"channel":"江西卫视","provider":"江西网络广播电视台 / 江西广播电视台","page":"https://www.jxntv.cn/","status":"official-portal","action":"官网抓取异常，继续找直播页或 HLS"},
+    {"channel":"东南卫视","provider":"福建省广播影视集团 / 福建电视台","page":"https://www.fjtv.net/","status":"official-portal","action":"官网抓取 403，继续找东南卫视频道页或 HLS"},
+    {"channel":"厦门卫视","provider":"厦门广电 / 台海网络电视台","page":"https://www.xmtv.cn/","status":"official-portal","action":"官网抓取异常，继续找频道页或 HLS"},
+    {"channel":"天津卫视","provider":"天津广播电视台","page":"https://www.tjtv.com.cn/","status":"official-portal","action":"继续找天津卫视频道页或 HLS"},
+    {"channel":"辽宁卫视","provider":"辽宁广播电视台","page":"https://www.lntv.com.cn/","status":"official-portal","action":"继续找辽宁卫视频道页或 HLS"},
+    {"channel":"黑龙江卫视","provider":"黑龙江广播电视台","page":"https://www.hljtv.com/","hlsCandidate":"https://idclive.hljtv.com:4430/live/hljws_own.m3u8","status":"official-domain-hls-candidate","action":"官方域名 HLS 候选，需要播放确认后再入主源"},
+    {"channel":"吉林卫视","provider":"吉林广播电视台","page":"https://www.jlntv.cn/","status":"official-portal","action":"继续找吉林卫视频道页或 HLS"},
+    {"channel":"内蒙古卫视","provider":"内蒙古广播电视台","page":"https://www.nmtv.cn/","status":"official-portal","action":"继续找内蒙古卫视频道页或 HLS"},
+    {"channel":"山西卫视","provider":"山西广播电视台","page":"https://www.sxrtv.com/","status":"official-portal","action":"继续找山西卫视频道页或 HLS"},
+    {"channel":"陕西卫视","provider":"陕西广电融媒体集团","page":"https://www.sxtvs.com/","status":"official-portal","action":"继续找陕西卫视频道页或 HLS"},
+    {"channel":"甘肃卫视","provider":"甘肃省广播电视总台","page":"https://www.gstv.com.cn/","status":"official-portal","action":"继续找甘肃卫视频道页或 HLS"},
+    {"channel":"青海卫视","provider":"青海广播电视台","page":"https://www.qhbtv.com/","status":"official-portal","action":"继续找青海卫视频道页或 HLS"},
+    {"channel":"新疆卫视","provider":"新疆网络广播电视台","page":"https://www.xjtvs.com.cn/","status":"official-portal","action":"继续找新疆卫视频道页或 HLS"},
+    {"channel":"西藏卫视","provider":"西藏广播电视台","page":"https://www.xzrtv.com/","status":"official-portal","action":"继续找西藏卫视频道页或 HLS"},
+    {"channel":"三沙卫视","provider":"三沙卫视 / 海南相关平台","page":"","status":"not-found-official-page","action":"继续找官方频道页或授权分发页面"},
+    {"channel":"兵团卫视","provider":"兵团在线 / 兵团广播电视台","page":"https://www.btzx.com.cn/","status":"official-portal","action":"继续找兵团卫视频道页或 HLS"}
+  ],
+  "notOfficialPools": [
+    {"pattern":"裸 IP + :9901 / :8154 / :60901 / /tsfile/live/","status":"relay-candidate-only"},
+    {"pattern":"Douyu / Huya / GoodIPTV / ffzy / mp4 点播","status":"blocked"},
+    {"pattern":"CCTV 标题下混入 cztv、五星体育、浙江少儿、浙江之江纪录等","status":"blocked-as-mismatch"}
+  ]
+}
