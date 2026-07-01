@@ -1,0 +1,57 @@
+{
+  "updatedAt": "2026-07-01",
+  "provider": "央视频 / 中央广播电视总台",
+  "officialPage": "https://www.yangshipin.cn/tv/home",
+  "webviewUrl": "webview://https://www.yangshipin.cn/tv/home",
+  "status": "official-aggregator-page-confirmed",
+  "notes": [
+    "央视频直播入口覆盖央视与部分省级卫视，适合作为官方聚合 WebView 方向继续排查。",
+    "该文件暂不进入 custom.m3u，也不自动合并 verified-sources.json。",
+    "原因：当前只确认到央视频直播聚合页，尚未整理出每个卫视频道的稳定频道级 URL 或 pid 参数。",
+    "后续需要用浏览器开发者工具或抓取页面初始化数据，提取频道名称、pid、频道页 URL，再逐条映射到 target-channels.json。",
+    "不使用需要登录、会员权限、临时 token、referer 锁定的播放直链。"
+  ],
+  "mappingPolicy": {
+    "requiredBeforeVerified": [
+      "频道名称与 target-channels.json 精确匹配",
+      "频道级 WebView URL 可直接打开并显示对应频道",
+      "无短期 token 或一次性授权参数",
+      "播放器支持 webview:// 页面源"
+    ],
+    "fallbackUsage": "如果无法提取频道级 URL，可保留央视频聚合页作为人工入口候选，不作为具体频道主源。"
+  },
+  "candidateChannelsToCheck": [
+    "湖南卫视",
+    "北京卫视",
+    "广东卫视",
+    "深圳卫视",
+    "安徽卫视",
+    "山东卫视",
+    "河南卫视",
+    "河北卫视",
+    "湖北卫视",
+    "四川卫视",
+    "重庆卫视",
+    "贵州卫视",
+    "江西卫视",
+    "东南卫视",
+    "天津卫视",
+    "辽宁卫视",
+    "黑龙江卫视",
+    "吉林卫视",
+    "内蒙古卫视",
+    "山西卫视",
+    "陕西卫视",
+    "甘肃卫视",
+    "青海卫视",
+    "新疆卫视",
+    "西藏卫视",
+    "兵团卫视"
+  ],
+  "confirmedChannelMappings": [],
+  "blockedUsage": [
+    "不把 https://www.yangshipin.cn/tv/home 直接复制给所有卫视频道作为主源",
+    "不把央视频页面中的加密播放接口或临时 HLS token 写入仓库",
+    "不绕过登录、会员、地区或版权限制"
+  ]
+}
