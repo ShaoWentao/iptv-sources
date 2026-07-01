@@ -1,5 +1,5 @@
 {
-  "includeGeneratedM3u": true,
+  "includeGeneratedM3u": false,
   "remoteM3u": [],
-  "notes": "默认从构建生成的 m3u/*.m3u 里自动筛选。远程自动更新源不在这里直接拉取，先由 scripts/build-remote-candidates.mjs 清洗成 m3u/remote-candidates.m3u，再进入 build-custom 的本地候选池，避免 CatVod、TVBox、点播接口、JSON/JAR/HTML/PHP 代理等不能直接播放的源混入 custom.m3u。"
+  "notes": "当前 custom.m3u 只从 verified-sources / official-overrides 中的确认官方源生成。all.m3u、cn.m3u、youhun.m3u、remote-candidates.m3u 等本地候选池不再进入 custom，避免第三方聚合源、低清源、错配源混入正式播放列表。后续第三方列表只作为人工查找官方源的线索。"
 }
