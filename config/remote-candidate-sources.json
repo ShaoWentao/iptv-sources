@@ -1,5 +1,5 @@
 {
-  "notes": "远程自动更新候选源配置。这里的源会先经过 build-remote-candidates.mjs 清洗，排除 TVBox、点播接口、JSON/JAR/HTML/PHP 代理等不能直接播放的地址，再输出到 m3u/remote-candidates.m3u。build-custom.mjs 只从清洗后的本地文件参与匹配和测速。CatVod 私有 token 源通过 Cloudflare 环境变量 CATVOD_REMOTE_SOURCES 注入，不写入公开仓库。",
+  "notes": "远程自动更新候选源配置。这里的源会先经过 build-remote-candidates.mjs 清洗，排除 TVBox、点播接口、JSON/JAR/HTML/PHP 代理、FreeTV 等不能稳定直接播放的地址，再输出到 m3u/remote-candidates.m3u。build-custom.mjs 只从清洗后的本地文件参与匹配和测速。CatVod 私有 token 源通过 Cloudflare 环境变量 CATVOD_REMOTE_SOURCES 注入，不写入公开仓库。",
   "sources": [
     {
       "name": "hujingguang/ChinaIPTV cnTV_AutoUpdate",
@@ -54,6 +54,8 @@
     ],
     "blockedUrlPatterns": [
       "catvod://",
+      "freetv",
+      "free[-_]?tv",
       "tvbox",
       "drpy",
       "spider",
@@ -79,7 +81,10 @@
       "点播",
       "影视接口",
       "解析",
-      "嗅探"
+      "嗅探",
+      "FreeTV",
+      "Free TV",
+      "free[-_ ]?tv"
     ]
   }
 }
