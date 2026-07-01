@@ -1,9 +1,11 @@
 {
-  "notes": "全局源过滤规则。build-custom.mjs 在匹配和测速前执行，排除 CatVod、TVBox、点播接口、解析接口、HTML/JSON/JAR 等不能直接作为正式直播源使用的地址。official-overrides 中的官方强制源不受影响。",
+  "notes": "全局源过滤规则。build-custom.mjs 在匹配和测速前执行，排除 CatVod、TVBox、点播接口、解析接口、HTML/JSON/JAR、FreeTV 等不能稳定作为正式直播源使用的地址。official-overrides 中的官方强制源不受影响。",
   "blockedUrlPatterns": [
     "catvod",
     "live\\.catvod\\.com",
     "iptv\\.catvod\\.com",
+    "freetv",
+    "free[-_]?tv",
     "tvbox",
     "drpy",
     "spider",
@@ -27,7 +29,11 @@
     "catvod",
     "CatVod",
     "catvod-direct-candidates",
-    "CatVod审计候选"
+    "CatVod审计候选",
+    "freetv",
+    "FreeTV",
+    "Free TV",
+    "free[-_ ]?tv"
   ],
   "blockedTitlePatterns": [
     "CatVod",
@@ -35,6 +41,9 @@
     "点播",
     "影视接口",
     "解析",
-    "嗅探"
+    "嗅探",
+    "FreeTV",
+    "Free TV",
+    "free[-_ ]?tv"
   ]
 }
