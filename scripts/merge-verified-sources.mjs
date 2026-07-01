@@ -63,7 +63,13 @@ function normalizeStream(stream = {}) {
   };
 }
 
-function flattenFoundCandidates(report = {}) {
+function shouldPromoteDiscoveredCandidates(verified = {}) {
+  return verified?.mergePolicy?.autoPromoteDiscoveredCandidates === true;
+}
+
+function flattenFoundCandidates(report = {}, enabled = false) {
+  if (!enabled) return [];
+
   const items = [];
   for (const [channel, list] of Object.entries(report.byChannel || {})) {
     for (const item of list || []) {
@@ -85,16 +91,23 @@ function flattenFoundCandidates(report = {}) {
   return items;
 }
 
+function isGeneratedCandidate(stream = {}) {
+  const notes = String(stream.notes || '');
+  const provider = String(stream.provider || '');
+  return /auto-promoted-from:/i.test(notes) || /verified-candidates/i.test(provider);
+}
+
 async function main() {
   const official = readJson(officialPath, { directStreams: [] });
   const verified = readJson(verifiedPath, { streams: [] });
   const foundReport = readJson(foundReportPath, { byChannel: {} });
-  const autoPromoted = flattenFoundCandidates(foundReport);
+  const autoPromoteEnabled = shouldPromoteDiscoveredCandidates(verified);
+  const autoPromoted = flattenFoundCandidates(foundReport, autoPromoteEnabled);
   const merged = [];
   const seen = new Set();
 
   for (const stream of official.directStreams || []) {
-    if (!stream?.channel || !isPlayableUrl(stream.url)) continue;
+    if (!stream?.channel || !isPlayableUrl(stream.url) || isGeneratedCandidate(stream)) continue;
     const key = `${stream.channel}\t${stream.url}`;
     if (seen.has(key)) continue;
     seen.add(key);
@@ -130,14 +143,15 @@ async function main() {
       generatedAt: new Date().toISOString(),
       manualVerifiedSourceCount: (verified.streams || []).length,
       mergedManualVerifiedCount: addedManual,
+      autoPromoteDiscoveredCandidates: autoPromoteEnabled,
       foundCandidateCount: autoPromoted.length,
       mergedFoundCandidateCount: addedAuto,
-      notes: 'Build-time merge. Manual verified sources and auto-found official/IPTV distribution candidates are promoted into custom build. WebView sources use webview://https://... scheme.',
+      notes: 'Build-time merge. Default mode only promotes manually verified official sources. Auto-found IPTV/distribution candidates stay in reports unless verified-sources.mergePolicy.autoPromoteDiscoveredCandidates is true. WebView sources use webview://https://... scheme.',
     },
   };
 
   await writeFile(officialPath, JSON.stringify(next, null, 2), 'utf-8');
-  console.log(`[VERIFIED] Merged ${addedManual} manual verified sources and ${addedAuto} found official/IPTV candidates into official directStreams`);
+  console.log(`[VERIFIED] Merged ${addedManual} manual verified sources and ${addedAuto} auto-found candidates into official directStreams`);
 }
 
 main().catch((error) => {
