@@ -9,7 +9,7 @@
       "page": "https://live.jstv.com/",
       "webviewUrl": "webview://https://live.jstv.com/",
       "evidence": "页面标题显示江苏卫视在线观看、江苏电视台直播频道。",
-      "action": "可写入 verified-sources 作为江苏卫视官方 WebView 源；继续尝试从页面脚本中提取 HLS。"
+      "action": "已写入 verified-sources 作为江苏卫视官方 WebView 源；继续尝试从页面脚本中提取 HLS。"
     },
     {
       "channel": "湖南卫视",
@@ -17,7 +17,7 @@
       "status": "official-page-needs-channel-url",
       "page": "https://www.mgtv.com/live/",
       "webviewUrl": "webview://https://www.mgtv.com/live/",
-      "evidence": "芒果TV有直播入口，但当前未确认湖南卫视专属频道页或官方 HLS。",
+      "evidence": "芒果TV页面有直播入口，但当前未确认湖南卫视专属频道页或官方 HLS。",
       "action": "继续查湖南卫视专属 live 页面或官方 HLS，暂不直接并入 custom 主源。"
     },
     {
@@ -26,7 +26,7 @@
       "status": "official-page-needs-channel-url",
       "page": "https://www.btime.com/",
       "webviewUrl": "webview://https://www.btime.com/",
-      "evidence": "北京时间页面包含看电视、直播入口和北京新媒体/BRTV相关备案信息。",
+      "evidence": "北京时间页面包含看电视、电视栏目、直播入口，底部为北京新媒体（集团）有限公司，并指向 BRTV。",
       "action": "继续查北京卫视专属看电视页面或官方 HLS，暂不直接并入 custom 主源。"
     },
     {
@@ -35,8 +35,26 @@
       "status": "official-page-needs-channel-url",
       "page": "https://live.kankanews.com/",
       "webviewUrl": "webview://https://live.kankanews.com/",
-      "evidence": "看看新闻页面标题显示为上海广播电视台官方视频新闻平台。",
+      "evidence": "看看新闻页面标题显示为上海广播电视台官方视频新闻平台，页面有直播、看电视入口。",
       "action": "继续查东方卫视专属频道页或官方 HLS，暂不直接并入 custom 主源。"
+    },
+    {
+      "channel": "广东卫视",
+      "provider": "荔枝网 / 广东广播电视台",
+      "status": "official-page-needs-channel-url",
+      "page": "https://www.gdtv.cn/",
+      "webviewUrl": "webview://https://www.gdtv.cn/",
+      "evidence": "gdtv.cn 为荔枝网入口；历史公开资料指向 epg.gdtv.cn 节目表与 v.gdtv.cn 节目一览。当前未确认广东卫视可直接播放频道页或官方 HLS。",
+      "action": "继续查广东卫视专属直播页、节目表入口和官方 HLS，暂不直接并入 custom 主源。"
+    },
+    {
+      "channel": "深圳卫视",
+      "provider": "深圳广播电影电视集团 / 第一现场",
+      "status": "official-page-needs-channel-url",
+      "page": "https://www.sztv.com.cn/",
+      "webviewUrl": "webview://https://www.sztv.com.cn/",
+      "evidence": "第一现场官网页面包含直播入口，底部版权为深圳广播电影电视集团，当前未确认深圳卫视专属频道页或官方 HLS。",
+      "action": "继续查深圳卫视专属直播页、CUTV 频道页或官方 HLS，暂不直接并入 custom 主源。"
     },
     {
       "channel": "山东卫视",
