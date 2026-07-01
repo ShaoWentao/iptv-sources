@@ -32,11 +32,20 @@
     {
       "channel": "东方卫视",
       "provider": "看看新闻 / 上海广播电视台",
-      "status": "official-page-needs-channel-url",
-      "page": "https://live.kankanews.com/",
-      "webviewUrl": "webview://https://live.kankanews.com/",
-      "evidence": "看看新闻页面标题显示为上海广播电视台官方视频新闻平台，页面有直播、看电视入口。",
-      "action": "继续查东方卫视专属频道页或官方 HLS，暂不直接并入 custom 主源。"
+      "status": "official-webview-confirmed",
+      "page": "https://live.kankanews.com/huikan",
+      "webviewUrl": "webview://https://live.kankanews.com/huikan",
+      "evidence": "看看新闻看电视页面列出东方卫视，并显示正在播。",
+      "action": "已写入 verified-sources 作为东方卫视官方 WebView 源；继续尝试从页面脚本中提取 HLS。"
+    },
+    {
+      "channel": "湖北卫视",
+      "provider": "长江云 / 湖北广播电视台",
+      "status": "official-webview-confirmed",
+      "page": "https://news.hbtv.com.cn/app/tv/431",
+      "webviewUrl": "webview://https://news.hbtv.com.cn/app/tv/431",
+      "evidence": "长江云看电视页面列出湖北卫视，并显示正在直播；页面底部标注中国·湖北广播电视台 版权所有。页面同时提示临时链接，后续需继续寻找稳定频道 URL 或 HLS。",
+      "action": "可作为湖北卫视官方 WebView 候选；因页面含临时链接提示，暂不直接并入 verified-sources 主源，继续查稳定入口或 HLS。"
     },
     {
       "channel": "广东卫视",
