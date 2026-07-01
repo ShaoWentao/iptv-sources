@@ -1,0 +1,65 @@
+{
+  "updatedAt": "2026-07-01",
+  "notes": [
+    "官方域名 HLS 候选清单。这里只记录来自电视台官网域名、官方 CDN 域名或官方平台域名的 HLS 线索。",
+    "这些源不会自动进入 custom.m3u，也不会自动合并 verified-sources.json。",
+    "进入 verified-sources 前需要人工确认：可播放、频道内容匹配、清晰度可接受、无短期 token 或临时授权风险。",
+    "裸 IP、:9901、:8154、:60901、/tsfile/live/ 等中转源不放入此文件。"
+  ],
+  "candidates": [
+    {
+      "channel": "湖南卫视",
+      "provider": "芒果TV / 湖南广电",
+      "domain": "hlsal-ldvt.qing.mgtv.com",
+      "url": "http://hlsal-ldvt.qing.mgtv.com/nn_live/nn_x64/dWlwPTEyNy4wLjAuMSZ1aWQ9cWluZy1jbXMmbm5fdGltZXpvbmU9OCZjZG5leF9pZD1hbF9obHNfbGR2dCZ1dWlkPTliODY4NmU5ZTM2YzYwMmMmZT02OTE0NjA0JnY9MSZpZD1ITldTWkdTVCZzPTcwN2RiYTc2YzJjNmJmMTQ4MmUyZGYzOWU2NWM3YWFi/HNWSZGST.m3u8",
+      "status": "official-domain-hls-candidate",
+      "risk": "URL 含明显动态参数，可能会过期；需要测试稳定性后再考虑入主源。",
+      "source": "TXT源.txt"
+    },
+    {
+      "channel": "湖南卫视",
+      "provider": "芒果TV / 湖南广电",
+      "domain": "hlsal-ldvt.qing.mgtv.com",
+      "url": "http://hlsal-ldvt.qing.mgtv.com/nn_live/nn_x64/Y2RuZXhfaWQ9YWxfaGxzX2xkdnQmZT02OTE0NjA0JnY9MSZpZD1ITldTWkdTVCZzPTcwN2RiYTc2YzJjNmJmMTQ4MmUyZGYzOWU2NWM3YWFi/HNWSZGST.m3u8",
+      "status": "official-domain-hls-candidate",
+      "risk": "URL 含明显动态参数，可能会过期；需要测试稳定性后再考虑入主源。",
+      "source": "TXT源.txt"
+    },
+    {
+      "channel": "黑龙江卫视",
+      "provider": "黑龙江广播电视台",
+      "domain": "idclive.hljtv.com",
+      "url": "https://idclive.hljtv.com:4430/live/hljws_own.m3u8",
+      "status": "official-domain-hls-candidate",
+      "risk": "官方域名 HLS 候选，需播放确认频道内容和稳定性。",
+      "source": "TXT源.txt"
+    },
+    {
+      "channel": "CGTN",
+      "provider": "CGTN",
+      "domain": "english-livetx.cgtn.com",
+      "url": "http://english-livetx.cgtn.com/hls/yypdyyctzb_hd.m3u8",
+      "status": "official-domain-hls-candidate",
+      "risk": "已有 news.cgtn.com 官方主源，此条作为备用候选。",
+      "source": "TXT源.txt"
+    },
+    {
+      "channel": "CGTN Русский",
+      "provider": "CGTN",
+      "domain": "russian-livews.cgtn.com",
+      "url": "http://russian-livews.cgtn.com/hls/LSvexABhNipibK5KRuUkvHZ7220802LSTeze9o8tdFXMHsb1VosgoT220802cd.m3u8",
+      "status": "official-domain-hls-candidate",
+      "risk": "官方域名 HLS 候选，需播放确认后再入主源。",
+      "source": "TXT源.txt"
+    },
+    {
+      "channel": "CGTN Español",
+      "provider": "CGTN",
+      "domain": "espanol-liveali.cgtn.com",
+      "url": "http://espanol-liveali.cgtn.com/hls/LSveOGBaBw41Ea7ukkVAUdKQ220802LSTexu6xAuFH8VZNBLE1ZNEa220802cd.m3u8",
+      "status": "official-domain-hls-candidate",
+      "risk": "原 TXT 标题疑似标成 CGTN法语，但域名为 espanol-liveali，需按西语频道核对。",
+      "source": "TXT源.txt"
+    }
+  ]
+}
