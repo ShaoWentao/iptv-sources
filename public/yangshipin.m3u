@@ -1,0 +1,146 @@
+#EXTM3U
+
+#EXTINF:-1 group-title="央视频道" source-title="央视频WebView测试",CCTV-1
+webview://https://www.yangshipin.cn/tv/home?pid=600001859
+#EXTINF:-1 group-title="央视频道" source-title="央视频WebView测试",CCTV-2
+webview://https://www.yangshipin.cn/tv/home?pid=600001800
+#EXTINF:-1 group-title="央视频道" source-title="央视频WebView测试",CCTV-3
+webview://https://www.yangshipin.cn/tv/home?pid=600001801
+#EXTINF:-1 group-title="央视频道" source-title="央视频WebView测试",CCTV-4
+webview://https://www.yangshipin.cn/tv/home?pid=600001814
+#EXTINF:-1 group-title="央视频道" source-title="央视频WebView测试",CCTV-5
+webview://https://www.yangshipin.cn/tv/home?pid=600001818
+#EXTINF:-1 group-title="央视频道" source-title="央视频WebView测试",CCTV-5+
+webview://https://www.yangshipin.cn/tv/home?pid=600001817
+#EXTINF:-1 group-title="央视频道" source-title="央视频WebView测试",CCTV-6
+webview://https://www.yangshipin.cn/tv/home?pid=600108442
+#EXTINF:-1 group-title="央视频道" source-title="央视频WebView测试",CCTV-7
+webview://https://www.yangshipin.cn/tv/home?pid=600004092
+#EXTINF:-1 group-title="央视频道" source-title="央视频WebView测试",CCTV-8
+webview://https://www.yangshipin.cn/tv/home?pid=600001803
+#EXTINF:-1 group-title="央视频道" source-title="央视频WebView测试",CCTV-9
+webview://https://www.yangshipin.cn/tv/home?pid=600004078
+#EXTINF:-1 group-title="央视频道" source-title="央视频WebView测试",CCTV-10
+webview://https://www.yangshipin.cn/tv/home?pid=600001805
+#EXTINF:-1 group-title="央视频道" source-title="央视频WebView测试",CCTV-11
+webview://https://www.yangshipin.cn/tv/home?pid=600001806
+#EXTINF:-1 group-title="央视频道" source-title="央视频WebView测试",CCTV-12
+webview://https://www.yangshipin.cn/tv/home?pid=600001807
+#EXTINF:-1 group-title="央视频道" source-title="央视频WebView测试",CCTV-13
+webview://https://www.yangshipin.cn/tv/home?pid=600001811
+#EXTINF:-1 group-title="央视频道" source-title="央视频WebView测试",CCTV-14
+webview://https://www.yangshipin.cn/tv/home?pid=600001809
+#EXTINF:-1 group-title="央视频道" source-title="央视频WebView测试",CCTV-15
+webview://https://www.yangshipin.cn/tv/home?pid=600001815
+#EXTINF:-1 group-title="央视频道" source-title="央视频WebView测试",CCTV-16
+webview://https://www.yangshipin.cn/tv/home?pid=600098637
+#EXTINF:-1 group-title="央视频道" source-title="央视频WebView测试",CCTV-16 4K
+webview://https://www.yangshipin.cn/tv/home?pid=600099502
+#EXTINF:-1 group-title="央视频道" source-title="央视频WebView测试",CCTV-17
+webview://https://www.yangshipin.cn/tv/home?pid=600001810
+#EXTINF:-1 group-title="央视频道" source-title="央视频WebView测试",CCTV-4K
+webview://https://www.yangshipin.cn/tv/home?pid=600002264
+#EXTINF:-1 group-title="央视频道" source-title="央视频WebView测试",CCTV-8K
+webview://https://www.yangshipin.cn/tv/home?pid=600156816
+#EXTINF:-1 group-title="央视频道" source-title="央视频WebView测试",CGTN
+webview://https://www.yangshipin.cn/tv/home?pid=600014550
+#EXTINF:-1 group-title="央视频道" source-title="央视频WebView测试",CGTN Français
+webview://https://www.yangshipin.cn/tv/home?pid=600084704
+#EXTINF:-1 group-title="央视频道" source-title="央视频WebView测试",CGTN Русский
+webview://https://www.yangshipin.cn/tv/home?pid=600084758
+#EXTINF:-1 group-title="央视频道" source-title="央视频WebView测试",CGTN العربية
+webview://https://www.yangshipin.cn/tv/home?pid=600084782
+#EXTINF:-1 group-title="央视频道" source-title="央视频WebView测试",CGTN Español
+webview://https://www.yangshipin.cn/tv/home?pid=600084744
+#EXTINF:-1 group-title="央视频道" source-title="央视频WebView测试",CGTN Documentary
+webview://https://www.yangshipin.cn/tv/home?pid=600084781
+
+#EXTINF:-1 group-title="数字频道" source-title="央视频WebView测试",风云剧场
+webview://https://www.yangshipin.cn/tv/home?pid=600099658
+#EXTINF:-1 group-title="数字频道" source-title="央视频WebView测试",第一剧场
+webview://https://www.yangshipin.cn/tv/home?pid=600099655
+#EXTINF:-1 group-title="数字频道" source-title="央视频WebView测试",怀旧剧场
+webview://https://www.yangshipin.cn/tv/home?pid=600099620
+#EXTINF:-1 group-title="数字频道" source-title="央视频WebView测试",世界地理
+webview://https://www.yangshipin.cn/tv/home?pid=600099637
+#EXTINF:-1 group-title="数字频道" source-title="央视频WebView测试",风云音乐
+webview://https://www.yangshipin.cn/tv/home?pid=600099660
+#EXTINF:-1 group-title="数字频道" source-title="央视频WebView测试",兵器科技
+webview://https://www.yangshipin.cn/tv/home?pid=600099649
+#EXTINF:-1 group-title="数字频道" source-title="央视频WebView测试",风云足球
+webview://https://www.yangshipin.cn/tv/home?pid=600099636
+#EXTINF:-1 group-title="数字频道" source-title="央视频WebView测试",CCTV-高尔夫
+webview://https://www.yangshipin.cn/tv/home?pid=600099659
+#EXTINF:-1 group-title="数字频道" source-title="央视频WebView测试",CCTV-女性时尚
+webview://https://www.yangshipin.cn/tv/home?pid=600099650
+#EXTINF:-1 group-title="数字频道" source-title="央视频WebView测试",CCTV-文化精品
+webview://https://www.yangshipin.cn/tv/home?pid=600099653
+#EXTINF:-1 group-title="数字频道" source-title="央视频WebView测试",CCTV-台球
+webview://https://www.yangshipin.cn/tv/home?pid=600099652
+#EXTINF:-1 group-title="数字频道" source-title="央视频WebView测试",CCTV-电视指南
+webview://https://www.yangshipin.cn/tv/home?pid=600099656
+#EXTINF:-1 group-title="数字频道" source-title="央视频WebView测试",CCTV-卫生健康
+webview://https://www.yangshipin.cn/tv/home?pid=600099651
+
+#EXTINF:-1 group-title="卫视频道" source-title="央视频WebView测试",北京卫视
+webview://https://www.yangshipin.cn/tv/home?pid=600002309
+#EXTINF:-1 group-title="卫视频道" source-title="央视频WebView测试",江苏卫视
+webview://https://www.yangshipin.cn/tv/home?pid=600002521
+#EXTINF:-1 group-title="卫视频道" source-title="央视频WebView测试",东方卫视
+webview://https://www.yangshipin.cn/tv/home?pid=600002483
+#EXTINF:-1 group-title="卫视频道" source-title="央视频WebView测试",浙江卫视
+webview://https://www.yangshipin.cn/tv/home?pid=600002520
+#EXTINF:-1 group-title="卫视频道" source-title="央视频WebView测试",湖南卫视
+webview://https://www.yangshipin.cn/tv/home?pid=600002475
+#EXTINF:-1 group-title="卫视频道" source-title="央视频WebView测试",湖北卫视
+webview://https://www.yangshipin.cn/tv/home?pid=600002508
+#EXTINF:-1 group-title="卫视频道" source-title="央视频WebView测试",广东卫视
+webview://https://www.yangshipin.cn/tv/home?pid=600002485
+#EXTINF:-1 group-title="卫视频道" source-title="央视频WebView测试",广西卫视
+webview://https://www.yangshipin.cn/tv/home?pid=600002509
+#EXTINF:-1 group-title="卫视频道" source-title="央视频WebView测试",黑龙江卫视
+webview://https://www.yangshipin.cn/tv/home?pid=600002498
+#EXTINF:-1 group-title="卫视频道" source-title="央视频WebView测试",海南卫视
+webview://https://www.yangshipin.cn/tv/home?pid=600002506
+#EXTINF:-1 group-title="卫视频道" source-title="央视频WebView测试",重庆卫视
+webview://https://www.yangshipin.cn/tv/home?pid=600002531
+#EXTINF:-1 group-title="卫视频道" source-title="央视频WebView测试",深圳卫视
+webview://https://www.yangshipin.cn/tv/home?pid=600002481
+#EXTINF:-1 group-title="卫视频道" source-title="央视频WebView测试",四川卫视
+webview://https://www.yangshipin.cn/tv/home?pid=600002516
+#EXTINF:-1 group-title="卫视频道" source-title="央视频WebView测试",河南卫视
+webview://https://www.yangshipin.cn/tv/home?pid=600002525
+#EXTINF:-1 group-title="卫视频道" source-title="央视频WebView测试",东南卫视
+webview://https://www.yangshipin.cn/tv/home?pid=600002484
+#EXTINF:-1 group-title="卫视频道" source-title="央视频WebView测试",贵州卫视
+webview://https://www.yangshipin.cn/tv/home?pid=600002490
+#EXTINF:-1 group-title="卫视频道" source-title="央视频WebView测试",江西卫视
+webview://https://www.yangshipin.cn/tv/home?pid=600002503
+#EXTINF:-1 group-title="卫视频道" source-title="央视频WebView测试",辽宁卫视
+webview://https://www.yangshipin.cn/tv/home?pid=600002505
+#EXTINF:-1 group-title="卫视频道" source-title="央视频WebView测试",安徽卫视
+webview://https://www.yangshipin.cn/tv/home?pid=600002532
+#EXTINF:-1 group-title="卫视频道" source-title="央视频WebView测试",河北卫视
+webview://https://www.yangshipin.cn/tv/home?pid=600002493
+#EXTINF:-1 group-title="卫视频道" source-title="央视频WebView测试",山东卫视
+webview://https://www.yangshipin.cn/tv/home?pid=600002513
+#EXTINF:-1 group-title="卫视频道" source-title="央视频WebView测试",天津卫视
+webview://https://www.yangshipin.cn/tv/home?pid=600152137
+#EXTINF:-1 group-title="卫视频道" source-title="央视频WebView测试",吉林卫视
+webview://https://www.yangshipin.cn/tv/home?pid=600190405
+#EXTINF:-1 group-title="卫视频道" source-title="央视频WebView测试",陕西卫视
+webview://https://www.yangshipin.cn/tv/home?pid=600190400
+#EXTINF:-1 group-title="卫视频道" source-title="央视频WebView测试",宁夏卫视
+webview://https://www.yangshipin.cn/tv/home?pid=600190737
+#EXTINF:-1 group-title="卫视频道" source-title="央视频WebView测试",内蒙古卫视
+webview://https://www.yangshipin.cn/tv/home?pid=600190401
+#EXTINF:-1 group-title="卫视频道" source-title="央视频WebView测试",云南卫视
+webview://https://www.yangshipin.cn/tv/home?pid=600190402
+#EXTINF:-1 group-title="卫视频道" source-title="央视频WebView测试",山西卫视
+webview://https://www.yangshipin.cn/tv/home?pid=600190407
+#EXTINF:-1 group-title="卫视频道" source-title="央视频WebView测试",青海卫视
+webview://https://www.yangshipin.cn/tv/home?pid=600190406
+#EXTINF:-1 group-title="卫视频道" source-title="央视频WebView测试",西藏卫视
+webview://https://www.yangshipin.cn/tv/home?pid=600190403
+#EXTINF:-1 group-title="卫视频道" source-title="央视频WebView测试",新疆卫视
+webview://https://www.yangshipin.cn/tv/home?pid=600152138
