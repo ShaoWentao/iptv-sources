@@ -56,8 +56,9 @@ export function parsePlaylist(text) {
   return entries;
 }
 
-export function filterEntries(entries) {
-  const stats = { cavs: 0, timeshift: 0, nonChannel: 0, invalid: 0, duplicateUrl: 0 };
+export function filterEntries(entries, options = {}) {
+  const stats = { cavs: 0, timeshift: 0, nonChannel: 0, ultraHd: 0, invalid: 0, duplicateUrl: 0 };
+  const excludeUltraHd = options.excludeUltraHd === true;
   const kept = [];
   const seen = new Set();
   for (const entry of entries) {
@@ -65,6 +66,7 @@ export function filterEntries(entries) {
     if (/CAVS/i.test(label)) { stats.cavs += 1; continue; }
     if (/时移|回看/i.test(label)) { stats.timeshift += 1; continue; }
     if (/^\s*Unknown@/i.test(label) || /IPTV广告|测试卡|无节目/i.test(label)) { stats.nonChannel += 1; continue; }
+    if (excludeUltraHd && /8K|4K|UHD|超高清/i.test(label)) { stats.ultraHd += 1; continue; }
     const rtpUrl = entry.rtpUrl || canonicalRtpUrl(entry.url);
     if (!rtpUrl) { stats.invalid += 1; continue; }
     if (seen.has(rtpUrl)) { stats.duplicateUrl += 1; continue; }
