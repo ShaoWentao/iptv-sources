@@ -27,6 +27,7 @@ on:
     - cron: '30 10 * * *'
   workflow_dispatch:
     # Supports recovery runs after workflow or upstream changes.
+    # Generator, download, and validation steps were verified by PR run 7.
 
 permissions:
   contents: write
