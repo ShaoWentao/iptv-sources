@@ -9,6 +9,7 @@ on:
       - 'scripts/lib/gd-telecom.mjs'
       - 'config/udpxy.json'
       - 'tests/build-gd-telecom.test.mjs'
+      - 'package.json'
       - '.github/workflows/update-gd-telecom-iptv.yml'
   schedule:
     # 06:30 and 18:30 China Standard Time (UTC+8)
@@ -26,6 +27,7 @@ concurrency:
 jobs:
   update:
     runs-on: ubuntu-latest
+    timeout-minutes: 20
     steps:
       - name: Checkout repository
         uses: actions/checkout@v4
@@ -77,8 +79,20 @@ jobs:
           test -s m3u/gd-telecom-report.json
           test -s m3u/gd-telecom-epg.xml
           ! grep -Eqi 'CAVS|时移|rtp://' m3u/gd-telecom.m3u
-          grep -q '192.168.5.7:4022/udp/' m3u/gd-telecom.m3u
-          node -e "const r=require('./m3u/gd-telecom-report.json'); if(r.selectedChannels<50||r.inputs.fourK.entries<1||r.inputs.hd.entries<1) process.exit(1)"
+          endpoint="$(node -e "const c=require('./config/udpxy.json'); process.stdout.write(c.protocol+'://'+c.host+':'+c.port+'/udp/')")"
+          grep -Fq "$endpoint" m3u/gd-telecom.m3u
+          node - <<'NODE'
+          const report = require('./m3u/gd-telecom-report.json');
+          if (report.selectedChannels < 50) throw new Error('Too few selected channels');
+          if (report.inputs.fourK.entries < 1) throw new Error('4K evidence list is empty');
+          if (report.inputs.hd.entries < 1) throw new Error('HD evidence list is empty');
+          console.log(JSON.stringify({
+            upstreamSha: report.upstreamSha,
+            selectedChannels: report.selectedChannels,
+            groups: report.groups,
+            qualityEvidence: report.qualityEvidence,
+          }, null, 2));
+          NODE
 
       - name: Commit updated playlist
         shell: bash
