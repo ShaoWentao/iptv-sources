@@ -1,0 +1,45 @@
+{
+  "schemaVersion": 1,
+  "status": "bootstrap-from-user-playlist",
+  "source": "广东电信IPTV-全频道-HTTP.m3u",
+  "upstreamRepository": "Tzwcard/ChinaTelecom-GuangdongIPTV-RTP-List",
+  "udpxy": {
+    "protocol": "http",
+    "host": "192.168.5.7",
+    "port": 4022
+  },
+  "inputEntries": 401,
+  "filtered": {
+    "cavs": 24,
+    "timeshift": 9,
+    "nonChannel": 6
+  },
+  "selectedChannels": 192,
+  "groups": {
+    "央视": 19,
+    "卫视": 28,
+    "广东": 6,
+    "地方": 39,
+    "体育": 13,
+    "少儿": 8,
+    "电影电视剧": 11,
+    "纪录科教": 13,
+    "4K超高清": 14,
+    "其他": 41
+  },
+  "qualityPolicy": [
+    "explicit-8k",
+    "explicit-4k-or-uhd",
+    "upstream-4k-list",
+    "explicit-super-hd",
+    "explicit-hd",
+    "upstream-hd-list",
+    "unmarked",
+    "upstream-sd-list-or-explicit-sd"
+  ],
+  "notes": [
+    "首版由用户上传的全频道 HTTP 播放列表生成。",
+    "定时工作流会读取上游全量、HD、SD、4K列表和EPG，并用正式报告覆盖本文件。",
+    "显式画质标注优先于辅助列表，避免SD列表中出现4K条目时被错误降级。"
+  ]
+}
