@@ -7,8 +7,10 @@ on:
     paths:
       - 'scripts/build-gd-telecom.mjs'
       - 'scripts/lib/gd-telecom.mjs'
+      - 'scripts/lib/git-data-publisher.mjs'
       - 'config/udpxy.json'
       - 'tests/build-gd-telecom.test.mjs'
+      - 'tests/git-data-publisher.test.mjs'
       - 'package.json'
       - '.github/workflows/update-gd-telecom-iptv.yml'
   pull_request:
@@ -17,8 +19,10 @@ on:
     paths:
       - 'scripts/build-gd-telecom.mjs'
       - 'scripts/lib/gd-telecom.mjs'
+      - 'scripts/lib/git-data-publisher.mjs'
       - 'config/udpxy.json'
       - 'tests/build-gd-telecom.test.mjs'
+      - 'tests/git-data-publisher.test.mjs'
       - 'package.json'
       - '.github/workflows/update-gd-telecom-iptv.yml'
   schedule:
@@ -26,8 +30,6 @@ on:
     - cron: '30 22 * * *'
     - cron: '30 10 * * *'
   workflow_dispatch:
-    # Supports recovery runs after workflow or upstream changes.
-    # Generator, download, and validation steps were verified by PR run 7.
 
 permissions:
   contents: write
@@ -51,8 +53,8 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Run generator tests
-        run: node --test tests/build-gd-telecom.test.mjs
+      - name: Run generator and publisher tests
+        run: node --test tests/build-gd-telecom.test.mjs tests/git-data-publisher.test.mjs
 
       - name: Download upstream playlists and EPG
         shell: bash
@@ -98,25 +100,16 @@ jobs:
           if (report.selectedChannels < 50) throw new Error('Too few selected channels');
           if (report.inputs.fourK.entries < 1) throw new Error('4K evidence list is empty');
           if (report.inputs.hd.entries < 1) throw new Error('HD evidence list is empty');
-          console.log(JSON.stringify({
-            upstreamSha: report.upstreamSha,
-            selectedChannels: report.selectedChannels,
-            groups: report.groups,
-            qualityEvidence: report.qualityEvidence,
-          }, null, 2));
           NODE
 
-      - name: Commit updated playlist
-        if: github.event_name != 'pull_request'
+      - name: Publish generated IPTV assets
+        if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
         shell: bash
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          TARGET_BRANCH: ${{ github.event_name == 'pull_request' && github.head_ref || github.ref_name }}
         run: |
           set -euo pipefail
-          if git diff --quiet -- m3u/gd-telecom.m3u m3u/gd-telecom-report.json m3u/gd-telecom-epg.xml; then
-            echo 'No upstream playlist changes.'
-            exit 0
-          fi
-          git config user.name 'github-actions[bot]'
-          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add m3u/gd-telecom.m3u m3u/gd-telecom-report.json m3u/gd-telecom-epg.xml
-          git commit -m 'data: refresh Guangdong Telecom IPTV playlist'
-          git push
+          node scripts/lib/git-data-publisher.mjs \
+            --branch "$TARGET_BRANCH" \
+            --message 'data: refresh Guangdong Telecom IPTV playlist'
