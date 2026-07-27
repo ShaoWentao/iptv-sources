@@ -37,6 +37,14 @@ rtp://239.77.0.194:5146
 rtp://239.77.0.244:5146
 #EXTINF:-1 tvg-name="广东IPTV广告",广东IPTV广告
 rtp://239.77.0.240:5146
+#EXTINF:-1 tvg-name="睛彩",睛彩青少高清
+rtp://239.77.1.22:5146
+#EXTINF:-1 tvg-name="睛彩",睛彩广场舞高清
+rtp://239.77.1.23:5146
+#EXTINF:-1 tvg-name="睛彩",睛彩竞技高清
+rtp://239.77.1.20:5146
+#EXTINF:-1 tvg-name="睛彩",睛彩篮球高清
+rtp://239.77.1.21:5146
 `;
 const hdText = `#EXTM3U
 #EXTINF:-1,广东卫视高清
@@ -62,7 +70,7 @@ const config = { protocol: 'http', host: '192.168.5.7', port: 4022 };
 
 test('parses M3U entries and filters CAVS and time-shift sources', () => {
   const parsed = parseM3u(allText);
-  assert.equal(parsed.length, 10);
+  assert.equal(parsed.length, 14);
   const result = filterEntries(parsed);
   assert.equal(result.stats.cavs, 1);
   assert.equal(result.stats.timeshift, 1);
@@ -76,6 +84,15 @@ test('preserves AVS2 and normalizes channel identities', () => {
   assert.equal(normalizeChannelName(avs2), '广东卫视');
   assert.equal(normalizeChannelName(parsed.find((entry) => entry.tvgName === 'CCTV-4K')), 'CCTV-4K');
   assert.equal(normalizeChannelName(parsed.find((entry) => entry.tvgName === '广东4K')), '广东4K');
+});
+
+test('keeps distinct channels when upstream reuses a generic tvg-name', () => {
+  const filtered = filterEntries(parseM3u(allText)).entries;
+  const selected = selectBestChannels(filtered, new Map());
+  const jingcai = selected.filter((entry) => entry.channel.startsWith('睛彩'));
+  assert.deepEqual(jingcai.map((entry) => entry.channel).sort(), ['睛彩广场舞', '睛彩竞技', '睛彩篮球', '睛彩青少'].sort());
+  const output = renderPlaylist(selected, config);
+  assert.match(output, /tvg-name="睛彩青少"[^\n]*,睛彩青少/);
 });
 
 test('explicit 4K and 4K-list evidence outrank HD even when SD list is contradictory', () => {
@@ -92,11 +109,14 @@ test('explicit 4K and 4K-list evidence outrank HD even when SD list is contradic
 
 test('classifies by content and quality before broadcaster type', () => {
   assert.equal(classifyChannel({ channel: 'CCTV-5', name: 'CCTV-5高清' }), '体育');
+  assert.equal(classifyChannel({ channel: 'CCTV-16', name: 'CCTV-16高清' }), '体育');
   assert.equal(classifyChannel({ channel: 'CCTV-6', name: 'CCTV-6高清' }), '电影电视剧');
   assert.equal(classifyChannel({ channel: 'CCTV-9', name: 'CCTV-9高清' }), '纪录科教');
   assert.equal(classifyChannel({ channel: 'CCTV-14', name: 'CCTV-14高清' }), '少儿');
   assert.equal(classifyChannel({ channel: '广东卫视', name: '广东卫视4K超高清' }), '4K超高清');
   assert.equal(classifyChannel({ channel: '嘉佳卡通', name: '嘉佳卡通高清' }), '少儿');
+  assert.equal(classifyChannel({ channel: '睛彩竞技', name: '睛彩竞技高清' }), '体育');
+  assert.equal(classifyChannel({ channel: '睛彩青少', name: '睛彩青少高清' }), '少儿');
 });
 
 test('renders udpxy URLs and one entry per normalized channel', () => {
