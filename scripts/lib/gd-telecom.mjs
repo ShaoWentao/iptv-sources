@@ -86,7 +86,7 @@ export function buildQualityEvidence(playlists = {}) {
 export function filterEntries(entries) {
   const seenUrls = new Set();
   const kept = [];
-  const stats = { cavs: 0, timeshift: 0, invalid: 0, emptyName: 0, duplicateUrl: 0 };
+  const stats = { cavs: 0, timeshift: 0, nonChannel: 0, invalid: 0, emptyName: 0, duplicateUrl: 0 };
   for (const entry of entries) {
     const label = `${entry.name || ''} ${entry.tvgName || ''}`;
     if (!String(entry.name || entry.tvgName || '').trim()) {
@@ -99,6 +99,10 @@ export function filterEntries(entries) {
     }
     if (/时移专用|时移/i.test(label)) {
       stats.timeshift += 1;
+      continue;
+    }
+    if (/^\s*Unknown@/i.test(label) || /IPTV广告/i.test(label)) {
+      stats.nonChannel += 1;
       continue;
     }
     const rtpUrl = entry.rtpUrl || canonicalRtpUrl(entry.url);
