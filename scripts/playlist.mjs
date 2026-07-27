@@ -57,7 +57,15 @@ export function parsePlaylist(text) {
 }
 
 export function filterEntries(entries, options = {}) {
-  const stats = { cavs: 0, timeshift: 0, nonChannel: 0, ultraHd: 0, invalid: 0, duplicateUrl: 0 };
+  const stats = {
+    cavs: 0,
+    timeshift: 0,
+    nonChannel: 0,
+    duplicateContent: 0,
+    ultraHd: 0,
+    invalid: 0,
+    duplicateUrl: 0,
+  };
   const excludeUltraHd = options.excludeUltraHd === true;
   const kept = [];
   const seen = new Set();
@@ -66,6 +74,11 @@ export function filterEntries(entries, options = {}) {
     if (/CAVS/i.test(label)) { stats.cavs += 1; continue; }
     if (/时移|回看/i.test(label)) { stats.timeshift += 1; continue; }
     if (/^\s*Unknown@/i.test(label) || /IPTV广告|测试卡|无节目/i.test(label)) { stats.nonChannel += 1; continue; }
+    const identities = [entry.name, entry.tvgName].filter(Boolean).map(cleanIdentity);
+    if (identities.includes('央视精品') && !identities.includes('央视文化精品')) {
+      stats.duplicateContent += 1;
+      continue;
+    }
     if (excludeUltraHd && /8K|4K|UHD|超高清/i.test(label)) { stats.ultraHd += 1; continue; }
     const rtpUrl = entry.rtpUrl || canonicalRtpUrl(entry.url);
     if (!rtpUrl) { stats.invalid += 1; continue; }
@@ -176,12 +189,13 @@ export function selectBestEntries(entries, evidence = new Map()) {
 
 export function classifyChannel(entry) {
   const text = `${entry.channel || ''} ${entry.name || ''} ${entry.tvgName || ''}`;
-  if (/8K|4K|UHD|超高清/i.test(text)) return '4K超高清';
-  if (/^CCTV-(?:5(?:\+)?|16)$/i.test(entry.channel || '') || /体育|赛事|足球|篮球|高尔夫|台球|搏击|网球|棋牌|竞技/i.test(text)) return '体育';
-  if (/^CCTV-14$/i.test(entry.channel || '') || /少儿|青少|卡通|动画|动漫|金鹰卡通|嘉佳卡通|优漫/i.test(text)) return '少儿';
-  if (/^CCTV-(?:6|8)$/i.test(entry.channel || '') || /电影|电视剧|剧场|影视|影迷|家庭影院/i.test(text)) return '电影电视剧';
-  if (/^CCTV-(?:9|10)$/i.test(entry.channel || '') || /^CETV-/i.test(entry.channel || '') || /纪录|科教|探索|地理|教育|读书/i.test(text)) return '纪录科教';
   if (/^(?:CCTV|CGTN)/i.test(entry.channel || '') || /央视|中央广播电视总台/.test(text)) return '央视';
+  if (/经济科教/.test(text)) return '广东';
+  if (/8K|4K|UHD|超高清/i.test(text)) return '4K超高清';
+  if (/体育|赛事|足球|篮球|高尔夫|台球|搏击|网球|棋牌|竞技/i.test(text)) return '体育';
+  if (/少儿|青少|卡通|动画|动漫|金鹰卡通|嘉佳卡通|优漫/i.test(text)) return '少儿';
+  if (/电影|电视剧|剧场|影视|影迷|家庭影院/i.test(text)) return '电影电视剧';
+  if (/^CETV-/i.test(entry.channel || '') || /纪录|科教|探索|地理|教育|读书/i.test(text)) return '纪录科教';
   if (/卫视/.test(text)) return '卫视';
   if (/广东|珠江|大湾区|南方|岭南|嘉佳/.test(text)) return '广东';
   if (/广州|深圳|佛山|东莞|惠州|中山|珠海|韶关|湛江|揭阳|汕头|汕尾|潮州|梅州|茂名|肇庆|清远|河源|阳江|云浮|江门/.test(text)) return '地方';
