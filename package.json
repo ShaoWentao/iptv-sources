@@ -1,64 +1,12 @@
 {
-  "name": "iptv-sources",
-  "version": "1.6.6",
-  "main": "index.js",
-  "repository": "https://github.com/whyun-pages/iptv-sources.git",
-  "author": "yunnysunny <yunnysunny@gmail.com>",
+  "name": "guangdong-telecom-iptv-playlist",
+  "private": true,
   "type": "module",
-  "license": "GPL-3.0-only",
   "scripts": {
-    "dev": "cross-env NODE_ENV=development tsup --watch",
-    "build": "node --test tests/build-gd-telecom.test.mjs tests/git-data-publisher.test.mjs",
-    "build:static": "node --test tests/build-gd-telecom.test.mjs tests/git-data-publisher.test.mjs",
-    "m3u": "node --test tests/build-gd-telecom.test.mjs tests/git-data-publisher.test.mjs",
-    "static": "node -e \"console.log('Static IPTV assets are maintained by dedicated workflows.')\"",
-    "gd:test": "node --test tests/build-gd-telecom.test.mjs",
-    "gd:build": "node scripts/build-gd-telecom.mjs",
-    "serve": "node ./dist/serve.js",
-    "serve:dev": "nodemon ./dist/serve.js",
-    "release": "node ./scripts/release.js",
-    "test": "node --test tests/build-gd-telecom.test.mjs tests/git-data-publisher.test.mjs",
-    "lint": "eslint .",
-    "lint:fix": "eslint . --fix",
-    "format": "prettier --write ."
+    "test": "node --test",
+    "generate": "node scripts/generate.mjs"
   },
-  "devDependencies": {
-    "@eslint/js": "^9.15.0",
-    "@rollup/wasm-node": "4.20.0",
-    "@types/koa": "^2.15.0",
-    "@types/koa-router": "^7.4.8",
-    "@types/koa-static": "4.0.4",
-    "@types/markdown-it": "14.1.2",
-    "@types/node": "22.2.0",
-    "@types/opencc-js": "^0.1.3",
-    "@vitest/coverage-v8": "^2.1.0",
-    "cross-env": "^7.0.3",
-    "eslint": "^9.15.0",
-    "eslint-config-prettier": "^9.1.0",
-    "eslint-plugin-prettier": "^5.2.0",
-    "eslint-plugin-vitest": "^0.5.0",
-    "globals": "^15.12.0",
-    "nodemon": "^3.1.4",
-    "prettier": "^3.3.0",
-    "tsup": "8.2.4",
-    "tsx": "^4.21.0",
-    "typescript": "5.5.4",
-    "typescript-eslint": "^8.15.0",
-    "vitest": "^2.1.0"
-  },
-  "dependencies": {
-    "@whyun/tv-tools": "^0.1.4",
-    "dotenv": "^16.4.5",
-    "koa": "2.15.3",
-    "koa-router": "12.0.1",
-    "koa-static": "5.0.0",
-    "markdown-it": "14.1.0",
-    "opencc-js": "1.0.5",
-    "xml2js": "^0.6.2"
-  },
-  "pnpm": {
-    "onlyBuiltDependencies": [
-      "esbuild"
-    ]
+  "engines": {
+    "node": ">=22"
   }
 }
