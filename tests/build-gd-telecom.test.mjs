@@ -35,6 +35,8 @@ rtp://239.77.0.179:5146
 rtp://239.77.0.194:5146
 #EXTINF:-1 tvg-name="广东4K",广东4K超高清
 rtp://239.77.0.244:5146
+#EXTINF:-1 tvg-name="广东IPTV广告",广东IPTV广告
+rtp://239.77.0.240:5146
 `;
 const hdText = `#EXTM3U
 #EXTINF:-1,广东卫视高清
@@ -60,10 +62,11 @@ const config = { protocol: 'http', host: '192.168.5.7', port: 4022 };
 
 test('parses M3U entries and filters CAVS and time-shift sources', () => {
   const parsed = parseM3u(allText);
-  assert.equal(parsed.length, 9);
+  assert.equal(parsed.length, 10);
   const result = filterEntries(parsed);
   assert.equal(result.stats.cavs, 1);
   assert.equal(result.stats.timeshift, 1);
+  assert.equal(result.stats.nonChannel, 1);
   assert.ok(result.entries.every((entry) => !/CAVS|时移/i.test(`${entry.name} ${entry.tvgName}`)));
 });
 
