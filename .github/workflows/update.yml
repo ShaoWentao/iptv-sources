@@ -88,7 +88,7 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if git diff --quiet -- m3u/gd-telecom.m3u m3u/gd-telecom-epg.xml m3u/gd-telecom-report.json; then
+          if [[ -z "$(git status --porcelain -- m3u/gd-telecom.m3u m3u/gd-telecom-epg.xml m3u/gd-telecom-report.json)" ]]; then
             echo 'No data changes.'
             exit 0
           fi
