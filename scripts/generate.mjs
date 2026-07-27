@@ -52,7 +52,7 @@ const allEntries = parsePlaylist(allText);
 if (allEntries.length < 100) throw new Error(`Upstream full playlist has only ${allEntries.length} entries`);
 const hdEntries = parsePlaylist(hdText);
 const fourKEntries = parsePlaylist(fourKText);
-const filtered = filterEntries(allEntries);
+const filtered = filterEntries(allEntries, { excludeUltraHd: config.excludeUltraHd });
 const evidence = buildQualityEvidence({ hd: hdEntries, fourK: fourKEntries });
 const selected = selectBestEntries(filtered.entries, evidence);
 if (selected.length < 50) throw new Error(`Generated playlist has only ${selected.length} channels`);
