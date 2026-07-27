@@ -117,47 +117,53 @@ jobs:
           set -euo pipefail
           node - <<'NODE'
           const fs = require('node:fs');
-          const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
-          const branch = process.env.TARGET_BRANCH;
-          const token = process.env.GITHUB_TOKEN;
-          const paths = ['m3u/gd-telecom.m3u', 'm3u/gd-telecom-report.json'];
 
-          async function request(url, options = {}) {
-            const response = await fetch(url, {
-              ...options,
-              headers: {
-                Accept: 'application/vnd.github+json',
-                Authorization: `Bearer ${token}`,
-                'X-GitHub-Api-Version': '2022-11-28',
-                ...(options.headers || {}),
-              },
-            });
-            if (!response.ok) {
-              throw new Error(`${options.method || 'GET'} ${url} failed: ${response.status} ${await response.text()}`);
-            }
-            return response.status === 204 ? null : response.json();
-          }
+          (async () => {
+            const [owner, repo] = process.env.GITHUB_REPOSITORY.split('/');
+            const branch = process.env.TARGET_BRANCH;
+            const token = process.env.GITHUB_TOKEN;
+            const paths = ['m3u/gd-telecom.m3u', 'm3u/gd-telecom-report.json'];
 
-          for (const path of paths) {
-            const encodedPath = path.split('/').map(encodeURIComponent).join('/');
-            const url = `https://api.github.com/repos/${owner}/${repo}/contents/${encodedPath}`;
-            const current = await request(`${url}?ref=${encodeURIComponent(branch)}`);
-            const local = fs.readFileSync(path);
-            const remote = Buffer.from(String(current.content || '').replace(/\n/g, ''), 'base64');
-            if (local.equals(remote)) {
-              console.log(`${path}: unchanged`);
-              continue;
+            async function request(url, options = {}) {
+              const response = await fetch(url, {
+                ...options,
+                headers: {
+                  Accept: 'application/vnd.github+json',
+                  Authorization: `Bearer ${token}`,
+                  'X-GitHub-Api-Version': '2022-11-28',
+                  ...(options.headers || {}),
+                },
+              });
+              if (!response.ok) {
+                throw new Error(`${options.method || 'GET'} ${url} failed: ${response.status} ${await response.text()}`);
+              }
+              return response.status === 204 ? null : response.json();
             }
-            await request(url, {
-              method: 'PUT',
-              headers: { 'Content-Type': 'application/json' },
-              body: JSON.stringify({
-                message: `data: refresh ${path.split('/').at(-1)}`,
-                content: local.toString('base64'),
-                sha: current.sha,
-                branch,
-              }),
-            });
-            console.log(`${path}: updated`);
-          }
+
+            for (const path of paths) {
+              const encodedPath = path.split('/').map(encodeURIComponent).join('/');
+              const url = `https://api.github.com/repos/${owner}/${repo}/contents/${encodedPath}`;
+              const current = await request(`${url}?ref=${encodeURIComponent(branch)}`);
+              const local = fs.readFileSync(path);
+              const remote = Buffer.from(String(current.content || '').replace(/\n/g, ''), 'base64');
+              if (local.equals(remote)) {
+                console.log(`${path}: unchanged`);
+                continue;
+              }
+              await request(url, {
+                method: 'PUT',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                  message: `data: refresh ${path.split('/').at(-1)}`,
+                  content: local.toString('base64'),
+                  sha: current.sha,
+                  branch,
+                }),
+              });
+              console.log(`${path}: updated`);
+            }
+          })().catch((error) => {
+            console.error(error instanceof Error ? error.stack || error.message : error);
+            process.exit(1);
+          });
           NODE
