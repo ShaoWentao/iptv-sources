@@ -5,22 +5,32 @@
 ## 播放列表
 
 ```text
-https://raw.githubusercontent.com/ShaoWentao/iptv-sources/main/m3u/gd-telecom.m3u
+https://tv.shaowt.com/gd-telecom.m3u
 ```
 
 EPG：
 
 ```text
+https://tv.shaowt.com/gd-telecom-epg.xml
+```
+
+GitHub Raw 备用地址：
+
+```text
+https://raw.githubusercontent.com/ShaoWentao/iptv-sources/main/m3u/gd-telecom.m3u
 https://raw.githubusercontent.com/ShaoWentao/iptv-sources/main/m3u/gd-telecom-epg.xml
 ```
 
 ## 当前规则
 
 - 过滤 CAVS、时移、回看、广告和无效地址。
-- 同一频道只保留一条，按 8K、4K、超高清、超清、高清、未标注、标清的顺序择优。
+- 暂时过滤 8K、4K、UHD 和名称中标注“超高清”的源，减少播放卡顿。
+- 同一频道优先选择剩余候选源中画质最高的版本，超高清版本被过滤后自动退回超清或高清。
 - 上游 4K 与 HD 列表只作为辅助证据，频道名称中的明确画质标注优先。
 - 输出按央视、卫视、广东、地方、体育、少儿、电影电视剧、纪录科教、4K超高清和其他分类。
 - 每天北京时间 06:30 和 18:30 自动检查上游更新。
+
+恢复超高清源时，将 `config/udpxy.json` 中的 `excludeUltraHd` 改为 `false`。
 
 ## udpxy 地址
 
