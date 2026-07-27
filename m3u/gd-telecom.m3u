@@ -12,7 +12,7 @@ http://192.168.5.7:4022/udp/239.77.0.169:5146/
 #EXTINF:-1 tvg-name="CCTV-4" group-title="央视",CCTV-4
 http://192.168.5.7:4022/udp/239.77.1.163:5146/
 #EXTINF:-1 tvg-name="CCTV-7" group-title="央视",CCTV-7
-http://192.168.5.7:4022/udp/239.77.1.159:5146/
+http://192.168.5.7:4022/udp/239.77.1.167:5146/
 #EXTINF:-1 tvg-name="CCTV-11" group-title="央视",CCTV-11
 http://192.168.5.7:4022/udp/239.77.1.108:5146/
 #EXTINF:-1 tvg-name="CCTV-12" group-title="央视",CCTV-12
