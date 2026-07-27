@@ -1,5 +1,6 @@
 {
   "protocol": "http",
   "host": "192.168.5.7",
-  "port": 4022
+  "port": 4022,
+  "excludeUltraHd": true
 }
