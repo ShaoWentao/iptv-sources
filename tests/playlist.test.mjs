@@ -27,18 +27,27 @@ rtp://239.77.1.21:5146
 rtp://239.77.1.20:5146
 #EXTINF:-1 tvg-name="CCTV-4K",CCTV-4K
 rtp://239.77.2.1:5146
+#EXTINF:-1 tvg-name="央视精品",央视精品
+rtp://239.253.43.27:5146
+#EXTINF:-1 tvg-name="央视文化精品",央视文化精品
+rtp://239.253.43.13:5146
+#EXTINF:-1 tvg-name="经济科教",经济科教高清
+rtp://239.77.0.167:5146
 #EXTINF:-1 tvg-name="广东IPTV广告",广东IPTV广告
 rtp://239.77.0.240:5146
 `;
 
 const config = { protocol: 'http', host: '192.168.5.7', port: 4022 };
 
-test('filters CAVS, timeshift and non-channel entries', () => {
+test('filters CAVS, timeshift, non-channel and duplicate-content entries', () => {
   const result = filterEntries(parsePlaylist(source));
   assert.equal(result.stats.cavs, 1);
   assert.equal(result.stats.timeshift, 1);
   assert.equal(result.stats.nonChannel, 1);
+  assert.equal(result.stats.duplicateContent, 1);
   assert.ok(result.entries.every((entry) => !/CAVS|时移|广告/i.test(`${entry.name} ${entry.tvgName}`)));
+  assert.equal(result.entries.some((entry) => entry.name === '央视精品'), false);
+  assert.equal(result.entries.some((entry) => entry.name === '央视文化精品'), true);
 });
 
 test('normalizes channel identity while keeping generic tvg-name channels separate', () => {
@@ -67,8 +76,11 @@ test('filters ultra-HD sources and falls back to HD when configured', () => {
   assert.equal(filtered.stats.ultraHd, 2);
 });
 
-test('classifies content groups before broadcaster groups', () => {
-  assert.equal(classifyChannel({ channel: 'CCTV-5', name: 'CCTV-5高清' }), '体育');
+test('keeps CCTV and CGTN together while applying local channel overrides', () => {
+  for (const channel of ['CCTV-5', 'CCTV-6', 'CCTV-8', 'CCTV-9', 'CCTV-10', 'CCTV-14', 'CCTV-16', 'CCTV-4K', 'CGTN']) {
+    assert.equal(classifyChannel({ channel, name: channel }), '央视');
+  }
+  assert.equal(classifyChannel({ channel: '经济科教', name: '经济科教高清' }), '广东');
   assert.equal(classifyChannel({ channel: '广东卫视', name: '广东卫视4K超高清' }), '4K超高清');
   assert.equal(classifyChannel({ channel: '睛彩篮球', name: '睛彩篮球高清' }), '体育');
 });
@@ -78,6 +90,10 @@ test('renders only configured udpxy URLs and repository EPG URL', () => {
   const output = renderPlaylist(selected, config);
   assert.equal(toUdpxyUrl('rtp://239.77.0.66:5146', config), 'http://192.168.5.7:4022/udp/239.77.0.66:5146/');
   assert.doesNotMatch(output, /CAVS|时移|rtp:\/\//i);
+  assert.doesNotMatch(output, /,央视精品\n/);
+  assert.match(output, /,央视文化精品\n/);
+  assert.match(output, /tvg-name="CCTV-5" group-title="央视",CCTV-5/);
+  assert.match(output, /tvg-name="经济科教" group-title="广东",经济科教/);
   assert.match(output, /raw\.githubusercontent\.com\/ShaoWentao\/iptv-sources\/main\/m3u\/gd-telecom-epg\.xml/);
   const urls = output.split('\n').filter((line) => /^https?:\/\//.test(line));
   assert.ok(urls.every((url) => url.startsWith('http://192.168.5.7:4022/udp/')));
