@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-27T12:21:16.066Z",
+  "generatedAt": "2026-07-27T13:23:23.059Z",
   "upstreamRepository": "Tzwcard/ChinaTelecom-GuangdongIPTV-RTP-List",
   "upstreamSha": "8cc0f9910956a79044a7f3b334efa9e19ea29590",
   "udpxy": {
@@ -31,20 +31,21 @@
     "cavs": 20,
     "timeshift": 9,
     "nonChannel": 5,
+    "duplicateContent": 1,
     "ultraHd": 37,
     "invalid": 0,
     "duplicateUrl": 0
   },
-  "selectedChannels": 191,
+  "selectedChannels": 190,
   "groups": {
-    "央视": 20,
+    "央视": 28,
     "卫视": 37,
-    "广东": 6,
+    "广东": 7,
     "地方": 39,
-    "体育": 16,
-    "少儿": 9,
-    "电影电视剧": 11,
-    "纪录科教": 11,
+    "体育": 12,
+    "少儿": 8,
+    "电影电视剧": 9,
+    "纪录科教": 8,
     "4K超高清": 0,
     "其他": 42
   },
@@ -106,7 +107,7 @@
     },
     {
       "channel": "经济科教",
-      "group": "纪录科教",
+      "group": "广东",
       "sourceName": "经济科教超清",
       "rtpUrl": "rtp://239.77.0.167:5146",
       "quality": "super-hd",
@@ -764,7 +765,7 @@
     },
     {
       "channel": "CCTV-5",
-      "group": "体育",
+      "group": "央视",
       "sourceName": "CCTV-5高清",
       "rtpUrl": "rtp://239.77.0.170:5146",
       "quality": "hd",
@@ -775,7 +776,7 @@
     },
     {
       "channel": "CCTV-5+",
-      "group": "体育",
+      "group": "央视",
       "sourceName": "CCTV-5+高清",
       "rtpUrl": "rtp://239.77.1.31:5146",
       "quality": "hd",
@@ -786,7 +787,7 @@
     },
     {
       "channel": "CCTV-6",
-      "group": "电影电视剧",
+      "group": "央视",
       "sourceName": "CCTV-6高清",
       "rtpUrl": "rtp://239.77.0.171:5146",
       "quality": "hd",
@@ -806,7 +807,7 @@
     },
     {
       "channel": "CCTV-8",
-      "group": "电影电视剧",
+      "group": "央视",
       "sourceName": "CCTV-8高清",
       "rtpUrl": "rtp://239.77.0.172:5146",
       "quality": "hd",
@@ -817,7 +818,7 @@
     },
     {
       "channel": "CCTV-9",
-      "group": "纪录科教",
+      "group": "央视",
       "sourceName": "CCTV-9高清",
       "rtpUrl": "rtp://239.77.1.160:5146",
       "quality": "hd",
@@ -828,7 +829,7 @@
     },
     {
       "channel": "CCTV-10",
-      "group": "纪录科教",
+      "group": "央视",
       "sourceName": "CCTV-10高清",
       "rtpUrl": "rtp://239.77.1.113:5146",
       "quality": "hd",
@@ -872,7 +873,7 @@
     },
     {
       "channel": "CCTV-14",
-      "group": "少儿",
+      "group": "央视",
       "sourceName": "CCTV-14高清",
       "rtpUrl": "rtp://239.77.1.161:5146",
       "quality": "hd",
@@ -894,7 +895,7 @@
     },
     {
       "channel": "CCTV-16",
-      "group": "体育",
+      "group": "央视",
       "sourceName": "CCTV-16高清",
       "rtpUrl": "rtp://239.77.0.165:5146",
       "quality": "hd",
@@ -1377,7 +1378,7 @@
     },
     {
       "channel": "央视台球",
-      "group": "体育",
+      "group": "央视",
       "sourceName": "央视台球高清",
       "rtpUrl": "rtp://239.253.43.11:5146",
       "quality": "hd",
@@ -1446,17 +1447,6 @@
       "group": "央视",
       "sourceName": "央视文化精品高清",
       "rtpUrl": "rtp://239.253.43.13:5146",
-      "quality": "hd",
-      "evidence": [
-        "hd"
-      ],
-      "candidateCount": 1
-    },
-    {
-      "channel": "央视精品",
-      "group": "央视",
-      "sourceName": "央视精品高清",
-      "rtpUrl": "rtp://239.253.43.27:5146",
       "quality": "hd",
       "evidence": [
         "hd"
