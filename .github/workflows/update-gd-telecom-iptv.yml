@@ -1,0 +1,86 @@
+name: Update Guangdong Telecom IPTV
+
+on:
+  schedule:
+    # 06:30 and 18:30 China Standard Time (UTC+8)
+    - cron: '30 22 * * *'
+    - cron: '30 10 * * *'
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+concurrency:
+  group: update-gd-telecom-iptv
+  cancel-in-progress: false
+
+jobs:
+  update:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+
+      - name: Run generator tests
+        run: node --test tests/build-gd-telecom.test.mjs
+
+      - name: Download upstream playlists and EPG
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p .tmp/gd-telecom
+          base='https://raw.githubusercontent.com/Tzwcard/ChinaTelecom-GuangdongIPTV-RTP-List/master'
+          curl --fail --location --retry 3 --connect-timeout 20 -o .tmp/gd-telecom/all.m3u "$base/GuangdongIPTV_rtp_all.m3u"
+          curl --fail --location --retry 3 --connect-timeout 20 -o .tmp/gd-telecom/hd.m3u "$base/GuangdongIPTV_rtp_hd.m3u"
+          curl --fail --location --retry 3 --connect-timeout 20 -o .tmp/gd-telecom/sd.m3u "$base/GuangdongIPTV_rtp_sd.m3u"
+          curl --fail --location --retry 3 --connect-timeout 20 -o .tmp/gd-telecom/4k.m3u "$base/GuangdongIPTV_rtp_4k.m3u"
+          curl --fail --location --retry 3 --connect-timeout 20 -o .tmp/gd-telecom/epg.xml "$base/epg.xml"
+          upstream_sha="$(git ls-remote https://github.com/Tzwcard/ChinaTelecom-GuangdongIPTV-RTP-List.git refs/heads/master | cut -f1)"
+          test -n "$upstream_sha"
+          printf '%s' "$upstream_sha" > .tmp/gd-telecom/upstream-sha.txt
+
+      - name: Generate classified udpxy playlist
+        shell: bash
+        run: |
+          set -euo pipefail
+          node scripts/build-gd-telecom.mjs \
+            --all .tmp/gd-telecom/all.m3u \
+            --hd .tmp/gd-telecom/hd.m3u \
+            --sd .tmp/gd-telecom/sd.m3u \
+            --4k .tmp/gd-telecom/4k.m3u \
+            --epg .tmp/gd-telecom/epg.xml \
+            --config config/udpxy.json \
+            --output-dir m3u \
+            --upstream-sha "$(cat .tmp/gd-telecom/upstream-sha.txt)"
+
+      - name: Validate generated files
+        shell: bash
+        run: |
+          set -euo pipefail
+          test -s m3u/gd-telecom.m3u
+          test -s m3u/gd-telecom-report.json
+          test -s m3u/gd-telecom-epg.xml
+          ! grep -Eqi 'CAVS|时移|rtp://' m3u/gd-telecom.m3u
+          grep -q '192.168.5.7:4022/udp/' m3u/gd-telecom.m3u
+          node -e "const r=require('./m3u/gd-telecom-report.json'); if(r.selectedChannels<50||r.inputs.fourK.entries<1||r.inputs.hd.entries<1) process.exit(1)"
+
+      - name: Commit updated playlist
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git diff --quiet -- m3u/gd-telecom.m3u m3u/gd-telecom-report.json m3u/gd-telecom-epg.xml; then
+            echo 'No upstream playlist changes.'
+            exit 0
+          fi
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add m3u/gd-telecom.m3u m3u/gd-telecom-report.json m3u/gd-telecom-epg.xml
+          git commit -m 'data: refresh Guangdong Telecom IPTV playlist'
+          git push
