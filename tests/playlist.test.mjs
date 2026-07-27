@@ -25,6 +25,8 @@ rtp://239.77.0.105:5146
 rtp://239.77.1.21:5146
 #EXTINF:-1 tvg-name="睛彩",睛彩竞技高清
 rtp://239.77.1.20:5146
+#EXTINF:-1 tvg-name="CCTV-4K",CCTV-4K
+rtp://239.77.2.1:5146
 #EXTINF:-1 tvg-name="广东IPTV广告",广东IPTV广告
 rtp://239.77.0.240:5146
 `;
@@ -53,6 +55,16 @@ test('selects explicit 4K over HD for the same channel', () => {
   const selected = selectBestEntries(filterEntries(parsePlaylist(source)).entries, new Map());
   const gd = selected.find((entry) => entry.channel === '广东卫视');
   assert.match(gd.name, /4K/i);
+});
+
+test('filters ultra-HD sources and falls back to HD when configured', () => {
+  const filtered = filterEntries(parsePlaylist(source), { excludeUltraHd: true });
+  const selected = selectBestEntries(filtered.entries, new Map());
+  const gd = selected.find((entry) => entry.channel === '广东卫视');
+  assert.match(gd.name, /高清/);
+  assert.doesNotMatch(gd.name, /8K|4K|UHD|超高清/i);
+  assert.equal(selected.some((entry) => entry.channel === 'CCTV-4K'), false);
+  assert.equal(filtered.stats.ultraHd, 2);
 });
 
 test('classifies content groups before broadcaster groups', () => {
