@@ -15,6 +15,7 @@ export const GROUP_ORDER = [
 
 const MULTICAST_RE = /^(?:rtp|udp):\/\/((?:\d{1,3}\.){3}\d{1,3}):(\d{1,5})\/?$/i;
 const UDPXY_RE = /^https?:\/\/[^/]+\/udp\/((?:\d{1,3}\.){3}\d{1,3}):(\d{1,5})\/?$/i;
+const GENERIC_TVG_NAMES = new Set(['睛彩']);
 
 function parseAttributes(line) {
   const attrs = {};
@@ -97,7 +98,7 @@ export function filterEntries(entries) {
       stats.cavs += 1;
       continue;
     }
-    if (/时移专用|时移/i.test(label)) {
+    if (/时移专用|时移|回看/i.test(label)) {
       stats.timeshift += 1;
       continue;
     }
@@ -121,53 +122,62 @@ export function filterEntries(entries) {
 }
 
 function normalizePunctuation(value) {
-  return value
-    .replace(/[（]/g, '(')
-    .replace(/[）]/g, ')')
+  return String(value || '')
+    .normalize('NFKC')
     .replace(/[—–－_]+/g, '-')
     .replace(/\s+/g, ' ')
     .trim();
 }
 
 function preserveDedicatedQualityChannel(value) {
-  const compact = value.replace(/\s+/g, '').toUpperCase();
+  const compact = String(value || '').replace(/\s+/g, '').toUpperCase();
   if (/^CCTV-?4K$/.test(compact)) return 'CCTV-4K';
   if (/^CCTV-?8K$/.test(compact)) return 'CCTV-8K';
   if (/^广东4K$/.test(compact)) return '广东4K';
   return null;
 }
 
-export function normalizeChannelName(entry) {
-  const rawTvg = normalizePunctuation(entry.tvgName || '');
-  const rawName = normalizePunctuation(entry.name || '');
-  const source = rawTvg || rawName;
-  const dedicated = preserveDedicatedQualityChannel(source) || preserveDedicatedQualityChannel(rawName);
+function cleanChannelIdentity(value) {
+  let result = normalizePunctuation(value);
+  const dedicated = preserveDedicatedQualityChannel(result);
   if (dedicated) return dedicated;
 
-  let value = source || rawName;
-  value = value.replace(/\([^)]*\)/g, ' ');
-  value = value.replace(/(?:8K|4K)(?:超)?|UHD|超高清|超清|高清|\bHD\b|标清|\bSD\b/gi, ' ');
-  value = value.replace(/\b(?:AVS2|AVS\+?|HEVC|H\.265|H\.264|MPEG-?2|MPEG-?4)\b/gi, ' ');
-  value = value.replace(/\b(?:25|30|50|60)P\b/gi, ' ');
-  value = value.replace(/(?:宽色域|窄色域|开机|测试|备用|主用|信号)/gi, ' ');
-  value = value.replace(/(?<=卫视)超$/g, '');
-  value = value.replace(/(?:频道)+$/g, '频道');
-  value = value.replace(/[\s-]+$/g, '').replace(/^[-\s]+/g, '').replace(/\s+/g, ' ').trim();
+  result = result.replace(/\([^)]*\)/g, ' ');
+  result = result.replace(/(?:8K|4K)(?:超高清|超清|高清|超)?|UHD|超高清|超清|高清|\bHD\b|标清|\bSD\b/gi, ' ');
+  result = result.replace(/\b(?:AVS2|AVS\+?|HEVC|H\.265|H\.264|MPEG-?2|MPEG-?4)\b/gi, ' ');
+  result = result.replace(/(?:25|30|50|60)P/gi, ' ');
+  result = result.replace(/(?:宽色域|窄色域|开机|测试|备用|主用|信号)/gi, ' ');
+  result = result.replace(/(?<=卫视)超$/g, '');
+  result = result.replace(/(?:频道)+$/g, '频道');
+  result = result.replace(/[\s-]+$/g, '').replace(/^[-\s]+/g, '').replace(/\s+/g, ' ').trim();
 
-  value = value.replace(/^CCTV\s*-?\s*(\d{1,2})(\+)?(?:\s*频道)?$/i, (_, n, plus = '') => `CCTV-${Number(n)}${plus}`);
-  value = value.replace(/^CCTV\s*-?\s*(\d{1,2})(\+)?(.+)$/i, (_, n, plus = '', suffix) => {
+  result = result.replace(/^CCTV\s*-?\s*(\d{1,2})(\+)?(?:\s*频道)?$/i, (_, n, plus = '') => `CCTV-${Number(n)}${plus}`);
+  result = result.replace(/^CCTV\s*-?\s*(\d{1,2})(\+)?(.+)$/i, (_, n, plus = '', suffix) => {
     const cleanSuffix = String(suffix).replace(/^[\s-]+/, '').trim();
-    if (!cleanSuffix || /^(综合|财经|综艺|中文国际|体育|电影|国防军事|电视剧|纪录|科教|戏曲|社会与法|新闻|少儿|音乐|奥林匹克|农业农村)$/.test(cleanSuffix)) {
+    if (!cleanSuffix || /^(综合|财经|综艺|中文国际|体育|电影|国防军事|电视剧|纪录|科教|戏曲|社会与法|新闻|少儿|音乐|奥林匹克|农业农村|农业)$/.test(cleanSuffix)) {
       return `CCTV-${Number(n)}${plus}`;
     }
     return `CCTV-${Number(n)}${plus}${cleanSuffix}`;
   });
-  value = value.replace(/^CCTV(\d{1,2})(\+)?$/i, (_, n, plus = '') => `CCTV-${Number(n)}${plus}`);
-  value = value.replace(/^CETV\s*-?\s*(\d+)$/i, (_, n) => `CETV-${Number(n)}`);
-  value = value.replace(/英文记录/g, '英文纪录');
-  value = value.replace(/\s+/g, '');
+  result = result.replace(/^CCTV(\d{1,2})(\+)?$/i, (_, n, plus = '') => `CCTV-${Number(n)}${plus}`);
+  result = result.replace(/^CETV\s*-?\s*(\d+)$/i, (_, n) => `CETV-${Number(n)}`);
+  result = result.replace(/英文记录/g, '英文纪录');
+  return result.replace(/\s+/g, '') || normalizePunctuation(value);
+}
 
-  return value || rawName || rawTvg;
+export function normalizeChannelName(entry) {
+  const rawTvg = normalizePunctuation(entry.tvgName || '');
+  const rawName = normalizePunctuation(entry.name || '');
+  const dedicated = preserveDedicatedQualityChannel(rawTvg) || preserveDedicatedQualityChannel(rawName);
+  if (dedicated) return dedicated;
+
+  if (GENERIC_TVG_NAMES.has(rawTvg)) {
+    const displayIdentity = cleanChannelIdentity(rawName);
+    if (displayIdentity.startsWith(rawTvg) && displayIdentity.length > rawTvg.length) return displayIdentity;
+  }
+
+  const source = rawTvg || rawName;
+  return cleanChannelIdentity(source || rawName);
 }
 
 export function detectExplicitQuality(entry) {
@@ -184,7 +194,7 @@ export function detectExplicitQuality(entry) {
 function annotationPenalty(entry) {
   const text = `${entry.name || ''} ${entry.tvgName || ''}`;
   let penalty = 0;
-  if (/\b(?:25|30|50|60)P\b/i.test(text)) penalty += 12;
+  if (/(?:25|30|50|60)P/i.test(text)) penalty += 12;
   if (/窄色域|宽色域/i.test(text)) penalty += 8;
   if (/AVS2/i.test(text)) penalty += 4;
   if (/备用|测试|开机/i.test(text)) penalty += 20;
@@ -256,8 +266,8 @@ export function selectBestChannels(entries, evidence = new Map()) {
 export function classifyChannel(entry) {
   const text = `${entry.channel || ''} ${entry.name || ''} ${entry.tvgName || ''}`;
   if (/8K|4K|UHD|超高清/i.test(text)) return '4K超高清';
-  if (/^CCTV-5(?:\+)?$/i.test(entry.channel || '') || /体育|赛事|足球|篮球|高尔夫|台球|搏击|网球|棋牌/i.test(text)) return '体育';
-  if (/^CCTV-14$/i.test(entry.channel || '') || /少儿|卡通|动画|动漫|金鹰卡通|嘉佳卡通|优漫/i.test(text)) return '少儿';
+  if (/^CCTV-(?:5(?:\+)?|16)$/i.test(entry.channel || '') || /体育|赛事|足球|篮球|高尔夫|台球|搏击|网球|棋牌|竞技/i.test(text)) return '体育';
+  if (/^CCTV-14$/i.test(entry.channel || '') || /少儿|青少|卡通|动画|动漫|金鹰卡通|嘉佳卡通|优漫/i.test(text)) return '少儿';
   if (/^CCTV-(?:6|8)$/i.test(entry.channel || '') || /电影|电视剧|剧场|影视|影迷|动作电影|家庭影院/i.test(text)) return '电影电视剧';
   if (/^CCTV-(?:9|10)$/i.test(entry.channel || '') || /^CETV-/i.test(entry.channel || '') || /纪录|科教|探索|地理|兵器科技|世界地理|教育|读书/i.test(text)) return '纪录科教';
   if (/^(?:CCTV|CGTN)/i.test(entry.channel || '') || /中央广播电视总台|央视/.test(text)) return '央视';
@@ -289,7 +299,7 @@ export function renderPlaylist(channels, config, options = {}) {
     .sort((a, b) => GROUP_ORDER.indexOf(a.outputGroup) - GROUP_ORDER.indexOf(b.outputGroup) || collator.compare(a.channel, b.channel));
   const lines = [`#EXTM3U name="广东电信IPTV" url-tvg="${urlTvg}"`];
   for (const item of ordered) {
-    const tvgName = item.tvgName || item.channel;
+    const tvgName = GENERIC_TVG_NAMES.has(item.tvgName) ? item.channel : (item.tvgName || item.channel);
     const logo = item.tvgLogo ? ` tvg-logo="${escapeAttr(item.tvgLogo)}"` : '';
     lines.push(`#EXTINF:-1 tvg-name="${escapeAttr(tvgName)}"${logo} group-title="${item.outputGroup}",${item.channel}`);
     lines.push(toUdpxyUrl(item.rtpUrl, config));
