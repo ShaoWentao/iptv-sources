@@ -41,16 +41,22 @@ http://192.168.5.7:4022/udp/239.77.0.221:5146/
 http://192.168.5.7:4022/udp/239.253.43.122:5146/
 #EXTINF:-1 tvg-name="安徽卫视" group-title="卫视",安徽卫视
 http://192.168.5.7:4022/udp/239.77.1.92:5146/
+#EXTINF:-1 tvg-name="北京卫视" group-title="卫视",北京卫视
+http://192.168.5.7:4022/udp/239.77.1.151:5146/
 #EXTINF:-1 tvg-name="兵团卫视" group-title="卫视",兵团卫视
 http://192.168.5.7:4022/udp/239.77.1.29:5146/
 #EXTINF:-1 tvg-name="重庆卫视" group-title="卫视",重庆卫视
 http://192.168.5.7:4022/udp/239.77.1.162:5146/
 #EXTINF:-1 tvg-name="大湾区卫视" group-title="卫视",大湾区卫视
 http://192.168.5.7:4022/udp/239.77.0.215:5146/
+#EXTINF:-1 tvg-name="东方卫视" group-title="卫视",东方卫视
+http://192.168.5.7:4022/udp/239.77.0.5:5146/
 #EXTINF:-1 tvg-name="东南卫视" group-title="卫视",东南卫视
 http://192.168.5.7:4022/udp/239.77.1.104:5146/
 #EXTINF:-1 tvg-name="甘肃卫视" group-title="卫视",甘肃卫视
 http://192.168.5.7:4022/udp/239.77.0.189:5146/
+#EXTINF:-1 tvg-name="广东卫视" group-title="卫视",广东卫视
+http://192.168.5.7:4022/udp/239.77.0.166:5146/
 #EXTINF:-1 tvg-name="广西卫视" group-title="卫视",广西卫视
 http://192.168.5.7:4022/udp/239.253.43.36:5146/
 #EXTINF:-1 tvg-name="贵州卫视" group-title="卫视",贵州卫视
@@ -65,8 +71,12 @@ http://192.168.5.7:4022/udp/239.77.1.229:5146/
 http://192.168.5.7:4022/udp/239.77.0.124:5146/
 #EXTINF:-1 tvg-name="湖北卫视" group-title="卫视",湖北卫视
 http://192.168.5.7:4022/udp/239.77.0.128:5146/
+#EXTINF:-1 tvg-name="湖南卫视" group-title="卫视",湖南卫视
+http://192.168.5.7:4022/udp/239.77.0.6:5146/
 #EXTINF:-1 tvg-name="吉林卫视" group-title="卫视",吉林卫视
 http://192.168.5.7:4022/udp/239.77.1.111:5146/
+#EXTINF:-1 tvg-name="江苏卫视" group-title="卫视",江苏卫视
+http://192.168.5.7:4022/udp/239.77.0.7:5146/
 #EXTINF:-1 tvg-name="江西卫视" group-title="卫视",江西卫视
 http://192.168.5.7:4022/udp/239.77.1.219:5146/
 #EXTINF:-1 tvg-name="辽宁卫视" group-title="卫视",辽宁卫视
@@ -81,10 +91,16 @@ http://192.168.5.7:4022/udp/239.253.43.125:5146/
 http://192.168.5.7:4022/udp/239.253.43.113:5146/
 #EXTINF:-1 tvg-name="厦门卫视" group-title="卫视",厦门卫视
 http://192.168.5.7:4022/udp/239.77.0.96:5146/
+#EXTINF:-1 tvg-name="山东卫视" group-title="卫视",山东卫视
+http://192.168.5.7:4022/udp/239.77.0.8:5146/
 #EXTINF:-1 tvg-name="山西卫视" group-title="卫视",山西卫视
 http://192.168.5.7:4022/udp/239.77.0.69:5146/
 #EXTINF:-1 tvg-name="陕西卫视" group-title="卫视",陕西卫视
 http://192.168.5.7:4022/udp/239.77.0.13:5146/
+#EXTINF:-1 tvg-name="深圳卫视" group-title="卫视",深圳卫视
+http://192.168.5.7:4022/udp/239.77.0.130:5146/
+#EXTINF:-1 tvg-name="四川卫视" group-title="卫视",四川卫视
+http://192.168.5.7:4022/udp/239.77.0.11:5146/
 #EXTINF:-1 tvg-name="天津卫视" group-title="卫视",天津卫视
 http://192.168.5.7:4022/udp/239.77.1.141:5146/
 #EXTINF:-1 tvg-name="西藏卫视" group-title="卫视",西藏卫视
@@ -95,6 +111,8 @@ http://192.168.5.7:4022/udp/239.253.43.202:5146/
 http://192.168.5.7:4022/udp/239.77.0.10:5146/
 #EXTINF:-1 tvg-name="云南卫视" group-title="卫视",云南卫视
 http://192.168.5.7:4022/udp/239.253.43.37:5146/
+#EXTINF:-1 tvg-name="浙江卫视" group-title="卫视",浙江卫视
+http://192.168.5.7:4022/udp/239.77.0.12:5146/
 #EXTINF:-1 tvg-name="广东民生" group-title="广东",广东民生
 http://192.168.5.7:4022/udp/239.77.0.225:5146/
 #EXTINF:-1 tvg-name="广东新闻" group-title="广东",广东新闻
@@ -213,6 +231,8 @@ http://192.168.5.7:4022/udp/239.253.43.11:5146/
 http://192.168.5.7:4022/udp/239.77.0.170:5146/
 #EXTINF:-1 tvg-name="CCTV-5+" group-title="体育",CCTV-5+
 http://192.168.5.7:4022/udp/239.77.1.31:5146/
+#EXTINF:-1 tvg-name="CCTV-16" group-title="体育",CCTV-16
+http://192.168.5.7:4022/udp/239.77.0.165:5146/
 #EXTINF:-1 tvg-name="IPTV爱体育" group-title="体育",IPTV爱体育
 http://192.168.5.7:4022/udp/239.77.1.116:5146/
 #EXTINF:-1 tvg-name="广东少儿" group-title="少儿",广东少儿
@@ -277,34 +297,6 @@ http://192.168.5.7:4022/udp/239.77.1.222:5146/
 http://192.168.5.7:4022/udp/239.77.0.28:5146/
 #EXTINF:-1 tvg-name="CETV-4" group-title="纪录科教",CETV-4
 http://192.168.5.7:4022/udp/239.253.43.40:5146/
-#EXTINF:-1 tvg-name="北京卫视" group-title="4K超高清",北京卫视
-http://192.168.5.7:4022/udp/239.77.0.2:5146/
-#EXTINF:-1 tvg-name="东方卫视" group-title="4K超高清",东方卫视
-http://192.168.5.7:4022/udp/239.77.0.59:5146/
-#EXTINF:-1 tvg-name="广东4K" group-title="4K超高清",广东4K
-http://192.168.5.7:4022/udp/239.77.0.244:5146/
-#EXTINF:-1 tvg-name="广东卫视" group-title="4K超高清",广东卫视
-http://192.168.5.7:4022/udp/239.77.0.66:5146/
-#EXTINF:-1 tvg-name="湖南卫视" group-title="4K超高清",湖南卫视
-http://192.168.5.7:4022/udp/239.77.0.56:5146/
-#EXTINF:-1 tvg-name="江苏卫视" group-title="4K超高清",江苏卫视
-http://192.168.5.7:4022/udp/239.77.0.57:5146/
-#EXTINF:-1 tvg-name="精选频道3" group-title="4K超高清",精选频道3
-http://192.168.5.7:4022/udp/239.77.0.153:5146/
-#EXTINF:-1 tvg-name="南国都市" group-title="4K超高清",南国都市
-http://192.168.5.7:4022/udp/239.253.43.99:5146/
-#EXTINF:-1 tvg-name="山东卫视" group-title="4K超高清",山东卫视
-http://192.168.5.7:4022/udp/239.77.0.61:5146/
-#EXTINF:-1 tvg-name="深圳卫视4k超" group-title="4K超高清",深圳卫视
-http://192.168.5.7:4022/udp/239.77.0.67:5146/
-#EXTINF:-1 tvg-name="四川卫视" group-title="4K超高清",四川卫视
-http://192.168.5.7:4022/udp/239.77.0.60:5146/
-#EXTINF:-1 tvg-name="浙江卫视" group-title="4K超高清",浙江卫视
-http://192.168.5.7:4022/udp/239.77.0.58:5146/
-#EXTINF:-1 tvg-name="CCTV-4K" group-title="4K超高清",CCTV-4K
-http://192.168.5.7:4022/udp/239.77.1.180:5146/
-#EXTINF:-1 tvg-name="CCTV-16" group-title="4K超高清",CCTV-16
-http://192.168.5.7:4022/udp/239.77.0.18:5146/
 #EXTINF:-1 tvg-name="兵器科技" group-title="其他",兵器科技
 http://192.168.5.7:4022/udp/239.253.43.9:5146/
 #EXTINF:-1 tvg-name="财富天下" group-title="其他",财富天下
