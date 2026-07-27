@@ -11,6 +11,16 @@ on:
       - 'tests/build-gd-telecom.test.mjs'
       - 'package.json'
       - '.github/workflows/update-gd-telecom-iptv.yml'
+  pull_request:
+    branches:
+      - main
+    paths:
+      - 'scripts/build-gd-telecom.mjs'
+      - 'scripts/lib/gd-telecom.mjs'
+      - 'config/udpxy.json'
+      - 'tests/build-gd-telecom.test.mjs'
+      - 'package.json'
+      - '.github/workflows/update-gd-telecom-iptv.yml'
   schedule:
     # 06:30 and 18:30 China Standard Time (UTC+8)
     - cron: '30 22 * * *'
@@ -96,6 +106,7 @@ jobs:
           NODE
 
       - name: Commit updated playlist
+        if: github.event_name != 'pull_request'
         shell: bash
         run: |
           set -euo pipefail
