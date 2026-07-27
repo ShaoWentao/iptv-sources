@@ -7,8 +7,10 @@ on:
     paths:
       - 'scripts/build-gd-telecom.mjs'
       - 'scripts/lib/gd-telecom.mjs'
+      - 'scripts/lib/git-data-publisher.mjs'
       - 'config/udpxy.json'
       - 'tests/build-gd-telecom.test.mjs'
+      - 'tests/git-data-publisher.test.mjs'
       - 'package.json'
       - '.github/workflows/update-gd-telecom-iptv.yml'
   pull_request:
@@ -17,8 +19,10 @@ on:
     paths:
       - 'scripts/build-gd-telecom.mjs'
       - 'scripts/lib/gd-telecom.mjs'
+      - 'scripts/lib/git-data-publisher.mjs'
       - 'config/udpxy.json'
       - 'tests/build-gd-telecom.test.mjs'
+      - 'tests/git-data-publisher.test.mjs'
       - 'package.json'
       - '.github/workflows/update-gd-telecom-iptv.yml'
   schedule:
@@ -26,8 +30,6 @@ on:
     - cron: '30 22 * * *'
     - cron: '30 10 * * *'
   workflow_dispatch:
-    # Supports recovery runs after workflow or upstream changes.
-    # Generator, download, and validation steps were verified by PR run 7.
 
 permissions:
   contents: write
@@ -51,8 +53,8 @@ jobs:
         with:
           node-version: '22'
 
-      - name: Run generator tests
-        run: node --test tests/build-gd-telecom.test.mjs
+      - name: Run generator and publisher tests
+        run: node --test tests/build-gd-telecom.test.mjs tests/git-data-publisher.test.mjs
 
       - name: Download upstream playlists and EPG
         shell: bash
@@ -98,12 +100,6 @@ jobs:
           if (report.selectedChannels < 50) throw new Error('Too few selected channels');
           if (report.inputs.fourK.entries < 1) throw new Error('4K evidence list is empty');
           if (report.inputs.hd.entries < 1) throw new Error('HD evidence list is empty');
-          console.log(JSON.stringify({
-            upstreamSha: report.upstreamSha,
-            selectedChannels: report.selectedChannels,
-            groups: report.groups,
-            qualityEvidence: report.qualityEvidence,
-          }, null, 2));
           NODE
 
       - name: Commit updated playlist
