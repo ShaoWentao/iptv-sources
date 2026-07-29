@@ -51,7 +51,7 @@ jobs:
           test -s .tmp/all.m3u
           test -s .tmp/upstream-sha
 
-      - name: Generate playlist
+      - name: Generate playlists
         run: |
           node scripts/generate.mjs \
             --all .tmp/all.m3u \
@@ -67,18 +67,23 @@ jobs:
         run: |
           set -euo pipefail
           test -s m3u/gd-telecom.m3u
+          test -s m3u/gd-telecom-4k.m3u
           test -s m3u/gd-telecom-report.json
           test -s m3u/gd-telecom-epg.xml
+          grep -q '^#EXTINF:' m3u/gd-telecom-4k.m3u
           ! grep -Eqi 'CAVS|时移|回看|rtp://' m3u/gd-telecom.m3u
+          ! grep -Eqi 'CAVS|时移|回看|rtp://' m3u/gd-telecom-4k.m3u
           node - <<'NODE'
           const report = require('./m3u/gd-telecom-report.json');
           if (report.schemaVersion !== 2) throw new Error('Unexpected report schema');
-          if (report.selectedChannels < 50) throw new Error('Too few channels');
+          if (report.selectedChannels < 50) throw new Error('Too few standard channels');
+          if (report.ultraHdSelectedChannels < 1) throw new Error('No ultra-HD channels generated');
           if (report.inputs.all.entries < 100) throw new Error('Upstream playlist is incomplete');
           console.log(JSON.stringify({
             generatedAt: report.generatedAt,
             upstreamSha: report.upstreamSha,
             selectedChannels: report.selectedChannels,
+            ultraHdSelectedChannels: report.ultraHdSelectedChannels,
             filtered: report.filtered,
             groups: report.groups,
           }, null, 2));
@@ -88,12 +93,18 @@ jobs:
         shell: bash
         run: |
           set -euo pipefail
-          if [[ -z "$(git status --porcelain -- m3u/gd-telecom.m3u m3u/gd-telecom-epg.xml m3u/gd-telecom-report.json)" ]]; then
+          files=(
+            m3u/gd-telecom.m3u
+            m3u/gd-telecom-4k.m3u
+            m3u/gd-telecom-epg.xml
+            m3u/gd-telecom-report.json
+          )
+          if [[ -z "$(git status --porcelain -- "${files[@]}")" ]]; then
             echo 'No data changes.'
             exit 0
           fi
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add m3u/gd-telecom.m3u m3u/gd-telecom-epg.xml m3u/gd-telecom-report.json
-          git commit -m 'data: refresh Guangdong Telecom IPTV playlist'
+          git add "${files[@]}"
+          git commit -m 'data: refresh Guangdong Telecom IPTV playlists'
           git push
