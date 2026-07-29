@@ -52,13 +52,25 @@ const allEntries = parsePlaylist(allText);
 if (allEntries.length < 100) throw new Error(`Upstream full playlist has only ${allEntries.length} entries`);
 const hdEntries = parsePlaylist(hdText);
 const fourKEntries = parsePlaylist(fourKText);
-const filtered = filterEntries(allEntries, { excludeUltraHd: config.excludeUltraHd });
 const evidence = buildQualityEvidence({ hd: hdEntries, fourK: fourKEntries });
+
+const filtered = filterEntries(allEntries, { excludeUltraHd: config.excludeUltraHd });
 const selected = selectBestEntries(filtered.entries, evidence);
 if (selected.length < 50) throw new Error(`Generated playlist has only ${selected.length} channels`);
 
 const playlist = renderPlaylist(selected, config);
 if (/CAVS|时移|rtp:\/\//i.test(playlist)) throw new Error('Blocked source leaked into output');
+
+const ultraHdFiltered = filterEntries([...allEntries, ...fourKEntries]);
+const ultraHdCandidates = ultraHdFiltered.entries.filter((entry) => {
+  const label = `${entry.name || ''} ${entry.tvgName || ''}`;
+  return /8K|4K|UHD|超高清/i.test(label) || evidence.get(entry.rtpUrl)?.has('4k');
+});
+const ultraHdSelected = selectBestEntries(ultraHdCandidates, evidence);
+const ultraHdPlaylist = renderPlaylist(ultraHdSelected, config)
+  .replace('name="广东电信IPTV"', 'name="广东电信IPTV 4K"');
+if (/CAVS|时移|回看|rtp:\/\//i.test(ultraHdPlaylist)) throw new Error('Blocked source leaked into 4K output');
+
 const groups = Object.fromEntries(GROUP_ORDER.map((group) => [group, 0]));
 for (const entry of selected) groups[classifyChannel(entry)] += 1;
 const report = {
@@ -75,6 +87,7 @@ const report = {
   },
   filtered: filtered.stats,
   selectedChannels: selected.length,
+  ultraHdSelectedChannels: ultraHdSelected.length,
   groups,
   selections: selected.map((entry) => ({
     channel: entry.channel,
@@ -88,6 +101,7 @@ const report = {
 };
 
 writeAtomic(path.join(outputDir, 'gd-telecom.m3u'), playlist);
+writeAtomic(path.join(outputDir, 'gd-telecom-4k.m3u'), ultraHdPlaylist);
 writeAtomic(path.join(outputDir, 'gd-telecom-report.json'), `${JSON.stringify(report, null, 2)}\n`);
 if (epgText.trim()) writeAtomic(path.join(outputDir, 'gd-telecom-epg.xml'), epgText);
-console.log(`Generated ${selected.length} channels`);
+console.log(`Generated ${selected.length} standard channels and ${ultraHdSelected.length} ultra-HD channels`);
