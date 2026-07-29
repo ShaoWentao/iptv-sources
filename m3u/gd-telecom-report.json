@@ -1,6 +1,6 @@
 {
   "schemaVersion": 2,
-  "generatedAt": "2026-07-29T12:26:23.679Z",
+  "generatedAt": "2026-07-29T13:21:39.153Z",
   "upstreamRepository": "Tzwcard/ChinaTelecom-GuangdongIPTV-RTP-List",
   "upstreamSha": "a502f8fca8c1dac67734016fdb252a5d9c2a0c3c",
   "udpxy": {
@@ -37,6 +37,7 @@
     "duplicateUrl": 0
   },
   "selectedChannels": 190,
+  "ultraHdSelectedChannels": 14,
   "groups": {
     "央视": 28,
     "卫视": 37,
