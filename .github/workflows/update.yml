@@ -1,4 +1,4 @@
-name: Update Guangdong Telecom IPTV
+name: Update Guangdong IPTV
 
 on:
   push:
@@ -18,7 +18,7 @@ permissions:
   contents: write
 
 concurrency:
-  group: update-guangdong-telecom-iptv
+  group: update-guangdong-iptv
   cancel-in-progress: false
 
 jobs:
@@ -42,14 +42,22 @@ jobs:
         run: |
           set -euo pipefail
           mkdir -p .tmp
-          base='https://raw.githubusercontent.com/Tzwcard/ChinaTelecom-GuangdongIPTV-RTP-List/master'
-          curl --fail --location --retry 3 --connect-timeout 20 -o .tmp/all.m3u "$base/GuangdongIPTV_rtp_all.m3u"
-          curl --fail --location --retry 3 --connect-timeout 20 -o .tmp/hd.m3u "$base/GuangdongIPTV_rtp_hd.m3u"
-          curl --fail --location --retry 3 --connect-timeout 20 -o .tmp/4k.m3u "$base/GuangdongIPTV_rtp_4k.m3u"
-          curl --fail --location --retry 3 --connect-timeout 20 -o .tmp/epg.xml "$base/epg.xml"
-          git ls-remote https://github.com/Tzwcard/ChinaTelecom-GuangdongIPTV-RTP-List.git refs/heads/master | cut -f1 > .tmp/upstream-sha
+
+          telecom='https://raw.githubusercontent.com/Tzwcard/ChinaTelecom-GuangdongIPTV-RTP-List/master'
+          curl --fail --location --retry 3 --connect-timeout 20 -o .tmp/all.m3u "$telecom/GuangdongIPTV_rtp_all.m3u"
+          curl --fail --location --retry 3 --connect-timeout 20 -o .tmp/hd.m3u "$telecom/GuangdongIPTV_rtp_hd.m3u"
+          curl --fail --location --retry 3 --connect-timeout 20 -o .tmp/4k.m3u "$telecom/GuangdongIPTV_rtp_4k.m3u"
+          curl --fail --location --retry 3 --connect-timeout 20 -o .tmp/epg.xml "$telecom/epg.xml"
+          git ls-remote https://github.com/Tzwcard/ChinaTelecom-GuangdongIPTV-RTP-List.git refs/heads/master | cut -f1 > .tmp/telecom-upstream-sha
+
+          unicom='https://raw.githubusercontent.com/xisohi/CHINA-IPTV/main/Unicast/guangdong/unicom.txt'
+          curl --fail --location --retry 3 --connect-timeout 20 -o .tmp/gd-unicom.txt "$unicom"
+          git ls-remote https://github.com/xisohi/CHINA-IPTV.git refs/heads/main | cut -f1 > .tmp/unicom-upstream-sha
+
           test -s .tmp/all.m3u
-          test -s .tmp/upstream-sha
+          test -s .tmp/telecom-upstream-sha
+          test -s .tmp/gd-unicom.txt
+          test -s .tmp/unicom-upstream-sha
 
       - name: Generate playlists
         run: |
@@ -60,7 +68,12 @@ jobs:
             --epg .tmp/epg.xml \
             --config config/udpxy.json \
             --output m3u \
-            --upstream-sha "$(cat .tmp/upstream-sha)"
+            --upstream-sha "$(cat .tmp/telecom-upstream-sha)"
+
+          node scripts/generate-unicom.mjs \
+            --input .tmp/gd-unicom.txt \
+            --output m3u \
+            --upstream-sha "$(cat .tmp/unicom-upstream-sha)"
 
       - name: Validate output
         shell: bash
@@ -73,20 +86,27 @@ jobs:
           grep -q '^#EXTINF:' m3u/gd-telecom-4k.m3u
           ! grep -Eqi 'CAVS|时移|回看|rtp://' m3u/gd-telecom.m3u
           ! grep -Eqi 'CAVS|时移|回看|rtp://' m3u/gd-telecom-4k.m3u
+
+          test -s m3u/gd-unicom.m3u
+          test -s m3u/gd-unicom-all.m3u
+          test -s m3u/gd-unicom-report.json
+          grep -q '^#EXTINF:' m3u/gd-unicom.m3u
+          grep -q '120\.87\.19\.109' m3u/gd-unicom.m3u
+          ! grep -Eqi 'rtp://|udp://' m3u/gd-unicom.m3u
+
           node - <<'NODE'
-          const report = require('./m3u/gd-telecom-report.json');
-          if (report.schemaVersion !== 2) throw new Error('Unexpected report schema');
-          if (report.selectedChannels < 50) throw new Error('Too few standard channels');
-          if (report.ultraHdSelectedChannels < 1) throw new Error('No ultra-HD channels generated');
-          if (report.inputs.all.entries < 100) throw new Error('Upstream playlist is incomplete');
-          console.log(JSON.stringify({
-            generatedAt: report.generatedAt,
-            upstreamSha: report.upstreamSha,
-            selectedChannels: report.selectedChannels,
-            ultraHdSelectedChannels: report.ultraHdSelectedChannels,
-            filtered: report.filtered,
-            groups: report.groups,
-          }, null, 2));
+          const telecom = require('./m3u/gd-telecom-report.json');
+          if (telecom.schemaVersion !== 2) throw new Error('Unexpected Telecom report schema');
+          if (telecom.selectedChannels < 50) throw new Error('Too few Telecom standard channels');
+          if (telecom.ultraHdSelectedChannels < 1) throw new Error('No Telecom ultra-HD channels generated');
+          if (telecom.inputs.all.entries < 100) throw new Error('Telecom upstream playlist is incomplete');
+
+          const unicom = require('./m3u/gd-unicom-report.json');
+          if (unicom.schemaVersion !== 1) throw new Error('Unexpected Unicom report schema');
+          if (unicom.selectedChannels < 20) throw new Error('Too few Unicom channels');
+          if (unicom.upstreamEntries < unicom.selectedChannels) throw new Error('Invalid Unicom entry counts');
+
+          console.log(JSON.stringify({ telecom, unicom }, null, 2));
           NODE
 
       - name: Commit generated files
@@ -98,6 +118,9 @@ jobs:
             m3u/gd-telecom-4k.m3u
             m3u/gd-telecom-epg.xml
             m3u/gd-telecom-report.json
+            m3u/gd-unicom.m3u
+            m3u/gd-unicom-all.m3u
+            m3u/gd-unicom-report.json
           )
           if [[ -z "$(git status --porcelain -- "${files[@]}")" ]]; then
             echo 'No data changes.'
@@ -106,5 +129,5 @@ jobs:
           git config user.name 'github-actions[bot]'
           git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
           git add "${files[@]}"
-          git commit -m 'data: refresh Guangdong Telecom IPTV playlists'
+          git commit -m 'data: refresh Guangdong IPTV playlists'
           git push
