@@ -45,9 +45,6 @@ if (entries.length < 20) {
   throw new Error(`Upstream Guangdong Unicom list looks incomplete: ${entries.length} playable entries`);
 }
 
-// The upstream frequently contains multiple URLs for one channel.
-// The first URL is used as the primary playlist to avoid duplicate channels in players.
-// A second playlist keeps all alternates for troubleshooting/manual switching.
 const seen = new Set();
 const primary = [];
 for (const entry of entries) {
@@ -64,7 +61,7 @@ function esc(value) {
 function render(items) {
   const out = [
     '#EXTM3U',
-    `# Generated from xisohi/CHINA-IPTV Guangdong Unicom unicast source`,
+    '# Generated from xisohi/CHINA-IPTV Guangdong Unicom unicast source',
     `# Upstream commit: ${upstreamSha}`,
   ];
   for (const item of items) {
@@ -83,7 +80,6 @@ for (const item of primary) groups[item.group] = (groups[item.group] || 0) + 1;
 
 const report = {
   schemaVersion: 1,
-  generatedAt: new Date().toISOString(),
   upstream: 'xisohi/CHINA-IPTV',
   upstreamFile: 'Unicast/guangdong/unicom.txt',
   upstreamSha,
