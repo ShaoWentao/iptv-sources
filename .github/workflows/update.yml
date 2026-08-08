@@ -88,13 +88,14 @@ jobs:
           ! grep -Eqi 'CAVS|时移|回看|rtp://' m3u/gd-telecom-4k.m3u
 
           test -s m3u/gd-unicom.m3u
-          test -s m3u/gd-unicom-all.m3u
+          test -s m3u/gd-unicom-simple.m3u
           test -s m3u/gd-unicom-report.json
           grep -q '^#EXTINF:' m3u/gd-unicom.m3u
           grep -q '120\.87\.19\.109' m3u/gd-unicom.m3u
           ! grep -Eqi 'rtp://|udp://' m3u/gd-unicom.m3u
 
           node - <<'NODE'
+          const fs = require('node:fs');
           const telecom = require('./m3u/gd-telecom-report.json');
           if (telecom.schemaVersion !== 2) throw new Error('Unexpected Telecom report schema');
           if (telecom.selectedChannels < 50) throw new Error('Too few Telecom standard channels');
@@ -102,11 +103,19 @@ jobs:
           if (telecom.inputs.all.entries < 100) throw new Error('Telecom upstream playlist is incomplete');
 
           const unicom = require('./m3u/gd-unicom-report.json');
-          if (unicom.schemaVersion !== 1) throw new Error('Unexpected Unicom report schema');
+          if (unicom.schemaVersion !== 2) throw new Error('Unexpected Unicom report schema');
           if (unicom.selectedChannels < 20) throw new Error('Too few Unicom channels');
           if (unicom.upstreamEntries < unicom.selectedChannels) throw new Error('Invalid Unicom entry counts');
+          if (unicom.primaryPlaylistMode !== 'all-lines-for-aptv') throw new Error('Unexpected Unicom primary mode');
 
-          console.log(JSON.stringify({ telecom, unicom }, null, 2));
+          const primary = fs.readFileSync('./m3u/gd-unicom.m3u', 'utf8');
+          const simple = fs.readFileSync('./m3u/gd-unicom-simple.m3u', 'utf8');
+          const primaryCctv13 = (primary.match(/,CCTV13\n/g) || []).length;
+          const simpleCctv13 = (simple.match(/,CCTV13\n/g) || []).length;
+          if (primaryCctv13 < 2) throw new Error('CCTV13 alternates missing from APTV playlist');
+          if (simpleCctv13 !== 1) throw new Error('CCTV13 simple playlist should contain one line');
+
+          console.log(JSON.stringify({ telecom, unicom, primaryCctv13, simpleCctv13 }, null, 2));
           NODE
 
       - name: Commit generated files
@@ -119,7 +128,7 @@ jobs:
             m3u/gd-telecom-epg.xml
             m3u/gd-telecom-report.json
             m3u/gd-unicom.m3u
-            m3u/gd-unicom-all.m3u
+            m3u/gd-unicom-simple.m3u
             m3u/gd-unicom-report.json
           )
           if [[ -z "$(git status --porcelain -- "${files[@]}")" ]]; then
