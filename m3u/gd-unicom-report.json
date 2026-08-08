@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "upstream": "xisohi/CHINA-IPTV",
   "upstreamFile": "Unicast/guangdong/unicom.txt",
   "upstreamSha": "5712922601571be35d38094506f2889b3319fae5",
@@ -13,5 +13,7 @@
     "教育": 4,
     "其它": 42
   },
+  "primaryPlaylistMode": "all-lines-for-aptv",
+  "simplePlaylistMode": "first-line-per-channel",
   "note": "Stream reachability is network-dependent and is not tested by GitHub Actions."
 }
