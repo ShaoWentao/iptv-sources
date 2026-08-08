@@ -45,13 +45,16 @@ if (entries.length < 20) {
   throw new Error(`Upstream Guangdong Unicom list looks incomplete: ${entries.length} playable entries`);
 }
 
+// The primary playlist is APTV-oriented: keep all upstream lines so channels
+// with multiple URLs retain their alternate streams. The simple playlist keeps
+// only the first URL for each group + channel name pair for broader compatibility.
 const seen = new Set();
-const primary = [];
+const simple = [];
 for (const entry of entries) {
   const key = `${entry.group}\u0000${entry.name}`;
   if (seen.has(key)) continue;
   seen.add(key);
-  primary.push(entry);
+  simple.push(entry);
 }
 
 function esc(value) {
@@ -72,21 +75,23 @@ function render(items) {
 }
 
 fs.mkdirSync(outputDir, { recursive: true });
-fs.writeFileSync(path.join(outputDir, 'gd-unicom.m3u'), render(primary));
-fs.writeFileSync(path.join(outputDir, 'gd-unicom-all.m3u'), render(entries));
+fs.writeFileSync(path.join(outputDir, 'gd-unicom.m3u'), render(entries));
+fs.writeFileSync(path.join(outputDir, 'gd-unicom-simple.m3u'), render(simple));
 
 const groups = {};
-for (const item of primary) groups[item.group] = (groups[item.group] || 0) + 1;
+for (const item of simple) groups[item.group] = (groups[item.group] || 0) + 1;
 
 const report = {
-  schemaVersion: 1,
+  schemaVersion: 2,
   upstream: 'xisohi/CHINA-IPTV',
   upstreamFile: 'Unicast/guangdong/unicom.txt',
   upstreamSha,
   upstreamEntries: entries.length,
-  selectedChannels: primary.length,
-  alternateEntries: entries.length - primary.length,
+  selectedChannels: simple.length,
+  alternateEntries: entries.length - simple.length,
   groups,
+  primaryPlaylistMode: 'all-lines-for-aptv',
+  simplePlaylistMode: 'first-line-per-channel',
   note: 'Stream reachability is network-dependent and is not tested by GitHub Actions.',
 };
 fs.writeFileSync(path.join(outputDir, 'gd-unicom-report.json'), `${JSON.stringify(report, null, 2)}\n`);
