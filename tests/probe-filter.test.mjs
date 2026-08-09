@@ -13,10 +13,12 @@ function makePlaylist(count) {
   }
   lines.push('#EXTINF:-1 tvg-name="测试频道1",测试频道1高清备用');
   lines.push('rtp://239.91.0.2:7002');
+  lines.push('#EXTINF:-1 tvg-name="测试频道1",测试频道1 4K备用');
+  lines.push('rtp://239.91.0.3:7003');
   return `${lines.join('\n')}\n`;
 }
 
-test('generator removes probe-detected CAVS lines even when channel names do not mention CAVS', () => {
+test('generator removes probe-detected CAVS and AVS2 lines while keeping supported video codecs', () => {
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'iptv-probe-'));
   const all = path.join(temp, 'all.m3u');
   const hd = path.join(temp, 'hd.m3u');
@@ -31,6 +33,7 @@ test('generator removes probe-detected CAVS lines even when channel names do not
   fs.writeFileSync(probe, [
     '239.88.0.2:5001\tHD (V: h264; A: mp2@2ch)',
     '239.91.0.2:7002\tHD (V: cavs; A: ac3@6ch)',
+    '239.91.0.3:7003\t4K (V: avs2; A: ac3@6ch)',
   ].join('\n'));
   fs.writeFileSync(epg, '<?xml version="1.0"?><tv></tv>');
 
@@ -44,9 +47,10 @@ test('generator removes probe-detected CAVS lines even when channel names do not
   const backup = fs.readFileSync(path.join(output, 'gd-telecom-udpxy.m3u'), 'utf8');
   const report = JSON.parse(fs.readFileSync(path.join(output, 'gd-telecom-report.json'), 'utf8'));
 
-  assert.doesNotMatch(main, /239\.91\.0\.2:7002/);
-  assert.doesNotMatch(backup, /239\.91\.0\.2:7002/);
+  assert.doesNotMatch(main, /239\.91\.0\.[23]:70(?:02|03)/);
+  assert.doesNotMatch(backup, /239\.91\.0\.[23]:70(?:02|03)/);
   assert.match(main, /239\.88\.0\.2:5001/);
-  assert.equal(report.filtered.cavsProbe, 1);
-  assert.equal(report.inputs.probe.cavsUrls, 1);
+  assert.equal(report.filtered.unsupportedVideoProbe, 2);
+  assert.equal(report.inputs.probe.unsupportedVideoUrls, 2);
+  assert.deepEqual(report.inputs.probe.blockedVideoCodecs, ['avs2', 'cavs']);
 });
