@@ -6,9 +6,11 @@ import {
   parsePlaylist,
   filterEntries,
   buildQualityEvidence,
+  selectAllEntries,
   selectBestEntries,
   classifyChannel,
   renderPlaylist,
+  renderRtpPlaylist,
   sha256,
 } from './playlist.mjs';
 
@@ -39,6 +41,12 @@ function writeAtomic(filename, content) {
   fs.renameSync(temp, filename);
 }
 
+function countLinesByChannel(entries) {
+  const counts = new Map();
+  for (const entry of entries) counts.set(entry.channel, (counts.get(entry.channel) || 0) + 1);
+  return counts;
+}
+
 const args = argsFrom(process.argv.slice(2));
 const allText = read(args.all, true);
 const hdText = read(args.hd);
@@ -54,27 +62,37 @@ const hdEntries = parsePlaylist(hdText);
 const fourKEntries = parsePlaylist(fourKText);
 const evidence = buildQualityEvidence({ hd: hdEntries, fourK: fourKEntries });
 
-const filtered = filterEntries(allEntries, { excludeUltraHd: config.excludeUltraHd });
-const selected = selectBestEntries(filtered.entries, evidence);
-if (selected.length < 50) throw new Error(`Generated playlist has only ${selected.length} channels`);
+const combinedEntries = [...allEntries, ...hdEntries, ...fourKEntries]
+  .map((entry, index) => ({ ...entry, index }));
+const filtered = filterEntries(combinedEntries, { excludeUltraHd: false });
+const allRanked = selectAllEntries(filtered.entries, evidence);
+const best = selectBestEntries(filtered.entries, evidence);
+if (best.length < 50) throw new Error(`Generated playlist has only ${best.length} channels`);
 
-const playlist = renderPlaylist(selected, config);
-if (/CAVS|时移|rtp:\/\//i.test(playlist)) throw new Error('Blocked source leaked into output');
+const playlist = renderRtpPlaylist(allRanked, { name: '广东电信IPTV' });
+if (/CAVS|时移|回看/i.test(playlist)) throw new Error('Blocked source leaked into RTP primary output');
+if (/https?:\/\/[^\n]*\/udp\//i.test(playlist)) throw new Error('udpxy URL leaked into RTP primary output');
 
-const ultraHdFiltered = filterEntries([...allEntries, ...fourKEntries]);
-const ultraHdCandidates = ultraHdFiltered.entries.filter((entry) => {
+const udpxyPlaylist = renderPlaylist(best, config);
+if (/CAVS|时移|回看|rtp:\/\//i.test(udpxyPlaylist)) throw new Error('Blocked source leaked into udpxy backup output');
+
+const ultraHdCandidates = filtered.entries.filter((entry) => {
   const label = `${entry.name || ''} ${entry.tvgName || ''}`;
   return /8K|4K|UHD|超高清/i.test(label) || evidence.get(entry.rtpUrl)?.has('4k');
 });
-const ultraHdSelected = selectBestEntries(ultraHdCandidates, evidence);
-const ultraHdPlaylist = renderPlaylist(ultraHdSelected, config)
-  .replace('name="广东电信IPTV"', 'name="广东电信IPTV 4K"');
-if (/CAVS|时移|回看|rtp:\/\//i.test(ultraHdPlaylist)) throw new Error('Blocked source leaked into 4K output');
+const ultraHdRanked = selectAllEntries(ultraHdCandidates, evidence);
+const ultraHdPlaylist = renderRtpPlaylist(ultraHdRanked, { name: '广东电信IPTV 4K' });
+if (/CAVS|时移|回看/i.test(ultraHdPlaylist)) throw new Error('Blocked source leaked into 4K output');
+if (/https?:\/\/[^\n]*\/udp\//i.test(ultraHdPlaylist)) throw new Error('udpxy URL leaked into 4K output');
 
 const groups = Object.fromEntries(GROUP_ORDER.map((group) => [group, 0]));
-for (const entry of selected) groups[classifyChannel(entry)] += 1;
+for (const entry of best) groups[classifyChannel({ ...entry, name: entry.channel, tvgName: entry.channel })] += 1;
+
+const lineCounts = countLinesByChannel(allRanked);
+const multiLineChannels = [...lineCounts.values()].filter((count) => count > 1).length;
+const maxLinesPerChannel = lineCounts.size ? Math.max(...lineCounts.values()) : 0;
 const report = {
-  schemaVersion: 2,
+  schemaVersion: 3,
   generatedAt: new Date().toISOString(),
   upstreamRepository: 'Tzwcard/ChinaTelecom-GuangdongIPTV-RTP-List',
   upstreamSha,
@@ -86,12 +104,16 @@ const report = {
     epg: { bytes: Buffer.byteLength(epgText), sha256: sha256(epgText) },
   },
   filtered: filtered.stats,
-  selectedChannels: selected.length,
-  ultraHdSelectedChannels: ultraHdSelected.length,
+  selectedChannels: best.length,
+  selectedLines: allRanked.length,
+  multiLineChannels,
+  maxLinesPerChannel,
+  ultraHdSelectedChannels: new Set(ultraHdRanked.map((entry) => entry.channel)).size,
+  ultraHdSelectedLines: ultraHdRanked.length,
   groups,
-  selections: selected.map((entry) => ({
+  selections: best.map((entry) => ({
     channel: entry.channel,
-    group: classifyChannel(entry),
+    group: classifyChannel({ ...entry, name: entry.channel, tvgName: entry.channel }),
     sourceName: entry.name,
     rtpUrl: entry.rtpUrl,
     quality: entry.selection.quality,
@@ -101,7 +123,8 @@ const report = {
 };
 
 writeAtomic(path.join(outputDir, 'gd-telecom.m3u'), playlist);
+writeAtomic(path.join(outputDir, 'gd-telecom-udpxy.m3u'), udpxyPlaylist);
 writeAtomic(path.join(outputDir, 'gd-telecom-4k.m3u'), ultraHdPlaylist);
 writeAtomic(path.join(outputDir, 'gd-telecom-report.json'), `${JSON.stringify(report, null, 2)}\n`);
 if (epgText.trim()) writeAtomic(path.join(outputDir, 'gd-telecom-epg.xml'), epgText);
-console.log(`Generated ${selected.length} standard channels and ${ultraHdSelected.length} ultra-HD channels`);
+console.log(`Generated ${best.length} channels / ${allRanked.length} RTP lines; ${ultraHdRanked.length} ultra-HD lines`);

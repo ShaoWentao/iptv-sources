@@ -4,10 +4,12 @@ import {
   parsePlaylist,
   filterEntries,
   selectBestEntries,
+  selectAllEntries,
   normalizeChannelName,
   classifyChannel,
   toUdpxyUrl,
   renderPlaylist,
+  renderRtpPlaylist,
 } from '../scripts/playlist.mjs';
 
 const source = `#EXTM3U
@@ -15,6 +17,10 @@ const source = `#EXTM3U
 rtp://239.77.0.84:5146
 #EXTINF:-1 tvg-name="广东卫视",广东卫视高清
 rtp://239.77.0.4:5146
+#EXTINF:-1 tvg-name="广东卫视",广东卫视超清
+rtp://239.77.0.5:5146
+#EXTINF:-1 tvg-name="广东卫视",广东卫视高清备用
+rtp://239.77.0.6:5146
 #EXTINF:-1 tvg-name="广东卫视",广东卫视4K超高清
 rtp://239.77.0.66:5146
 #EXTINF:-1 tvg-name="广东卫视",广东卫视4K(CAVS)
@@ -33,6 +39,8 @@ rtp://239.253.43.27:5146
 rtp://239.253.43.13:5146
 #EXTINF:-1 tvg-name="经济科教",经济科教高清
 rtp://239.77.0.167:5146
+#EXTINF:-1 tvg-name="广东4K",广东4K
+rtp://239.77.0.244:5146
 #EXTINF:-1 tvg-name="广东IPTV广告",广东IPTV广告
 rtp://239.77.0.240:5146
 `;
@@ -70,10 +78,10 @@ test('filters ultra-HD sources and falls back to HD when configured', () => {
   const filtered = filterEntries(parsePlaylist(source), { excludeUltraHd: true });
   const selected = selectBestEntries(filtered.entries, new Map());
   const gd = selected.find((entry) => entry.channel === '广东卫视');
-  assert.match(gd.name, /高清/);
+  assert.match(gd.name, /超清|高清/);
   assert.doesNotMatch(gd.name, /8K|4K|UHD|超高清/i);
   assert.equal(selected.some((entry) => entry.channel === 'CCTV-4K'), false);
-  assert.equal(filtered.stats.ultraHd, 2);
+  assert.equal(filtered.stats.ultraHd, 3);
 });
 
 test('keeps CCTV and CGTN together while applying local channel overrides', () => {
@@ -81,8 +89,35 @@ test('keeps CCTV and CGTN together while applying local channel overrides', () =
     assert.equal(classifyChannel({ channel, name: channel }), '央视');
   }
   assert.equal(classifyChannel({ channel: '经济科教', name: '经济科教高清' }), '广东');
-  assert.equal(classifyChannel({ channel: '广东卫视', name: '广东卫视4K超高清' }), '4K超高清');
+  assert.equal(classifyChannel({ channel: '广东卫视', name: '广东卫视4K超高清' }), '卫视');
+  assert.equal(classifyChannel({ channel: '广东4K', name: '广东4K' }), '广东');
   assert.equal(classifyChannel({ channel: '睛彩篮球', name: '睛彩篮球高清' }), '体育');
+});
+
+test('keeps all RTP alternatives sorted by quality and stability', () => {
+  const ranked = selectAllEntries(filterEntries(parsePlaylist(source)).entries, new Map());
+  const gd = ranked.filter((entry) => entry.channel === '广东卫视');
+  assert.deepEqual(gd.map((entry) => entry.selection.quality), ['4k', 'super-hd', 'hd', 'hd']);
+  assert.match(gd[3].name, /备用/);
+  assert.deepEqual(gd.map((entry) => entry.lineIndex), [0, 1, 2, 3]);
+});
+
+test('renders RTP alternatives with identical channel metadata', () => {
+  const ranked = selectAllEntries(filterEntries(parsePlaylist(source)).entries, new Map());
+  const output = renderRtpPlaylist(ranked, { name: '广东电信IPTV' });
+  const lines = output.split('\n');
+  const gdInfo = lines.filter((line) => line.includes(',广东卫视'));
+  const gdUrls = lines.filter((line) => /^rtp:\/\/239\.77\.0\.(?:66|5|4|6):5146$/.test(line));
+  assert.equal(gdInfo.length, 4);
+  assert.equal(new Set(gdInfo.map((line) => line.match(/tvg-name="([^"]+)"/)?.[1])).size, 1);
+  assert.ok(gdInfo.every((line) => line.includes('group-title="卫视"')));
+  assert.deepEqual(gdUrls, [
+    'rtp://239.77.0.66:5146',
+    'rtp://239.77.0.5:5146',
+    'rtp://239.77.0.4:5146',
+    'rtp://239.77.0.6:5146',
+  ]);
+  assert.doesNotMatch(output, /192\.168\.5\.7:4022/);
 });
 
 test('renders only configured udpxy URLs and repository EPG URL', () => {

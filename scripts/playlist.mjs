@@ -1,7 +1,7 @@
 import crypto from 'node:crypto';
 
 export const GROUP_ORDER = [
-  '央视', '卫视', '广东', '地方', '体育', '少儿', '电影电视剧', '纪录科教', '4K超高清', '其他',
+  '央视', '卫视', '广东', '地方', '体育', '少儿', '电影电视剧', '纪录科教', '其他',
 ];
 
 const MULTICAST_RE = /^(?:rtp|udp):\/\/((?:\d{1,3}\.){3}\d{1,3}):(\d{1,5})\/?$/i;
@@ -152,8 +152,8 @@ function qualityScore(entry, evidence) {
   let score = 200;
   let quality = 'unmarked';
   if (/8K/i.test(text)) { score = 800; quality = '8k'; }
-  else if (/4K|UHD/i.test(text)) { score = 700; quality = '4k'; }
-  else if (/超高清/i.test(text)) { score = 650; quality = 'uhd'; }
+  else if (/4K/i.test(text)) { score = 700; quality = '4k'; }
+  else if (/UHD|超高清/i.test(text)) { score = 650; quality = 'uhd'; }
   else if (/超清/i.test(text)) { score = 500; quality = 'super-hd'; }
   else if (/高清|\bHD\b/i.test(text)) { score = 400; quality = 'hd'; }
   else if (/标清|\bSD\b/i.test(text)) { score = 100; quality = 'sd'; }
@@ -167,7 +167,14 @@ function qualityScore(entry, evidence) {
   return { score, quality, evidence: [...tags].sort(), penalty };
 }
 
-export function selectBestEntries(entries, evidence = new Map()) {
+function compareCandidates(a, b) {
+  return b.selection.score - a.selection.score
+    || a.selection.penalty - b.selection.penalty
+    || a.index - b.index
+    || a.rtpUrl.localeCompare(b.rtpUrl);
+}
+
+function groupCandidates(entries, evidence) {
   const grouped = new Map();
   for (const entry of entries) {
     const channel = normalizeChannelName(entry);
@@ -176,12 +183,36 @@ export function selectBestEntries(entries, evidence = new Map()) {
     if (!grouped.has(channel)) grouped.set(channel, []);
     grouped.get(channel).push(candidate);
   }
+  for (const candidates of grouped.values()) candidates.sort(compareCandidates);
+  return grouped;
+}
+
+export function selectAllEntries(entries, evidence = new Map()) {
   const selected = [];
-  for (const [channel, candidates] of grouped) {
-    candidates.sort((a, b) => b.selection.score - a.selection.score
-      || a.selection.penalty - b.selection.penalty
-      || a.index - b.index
-      || a.rtpUrl.localeCompare(b.rtpUrl));
+  for (const [channel, candidates] of groupCandidates(entries, evidence)) {
+    const representative = candidates[0];
+    const canonicalTvgId = representative.tvgId || channel;
+    const canonicalTvgName = GENERIC_TVG_NAMES.has(representative.tvgName)
+      ? channel
+      : (representative.tvgName || channel);
+    for (let lineIndex = 0; lineIndex < candidates.length; lineIndex += 1) {
+      selected.push({
+        ...candidates[lineIndex],
+        channel,
+        candidateCount: candidates.length,
+        lineIndex,
+        canonicalTvgId,
+        canonicalTvgName,
+        canonicalLogoUrl: representative.tvgLogo || '',
+      });
+    }
+  }
+  return selected;
+}
+
+export function selectBestEntries(entries, evidence = new Map()) {
+  const selected = [];
+  for (const [channel, candidates] of groupCandidates(entries, evidence)) {
     selected.push({ ...candidates[0], channel, candidateCount: candidates.length });
   }
   return selected;
@@ -191,13 +222,12 @@ export function classifyChannel(entry) {
   const text = `${entry.channel || ''} ${entry.name || ''} ${entry.tvgName || ''}`;
   if (/^(?:CCTV|CGTN)/i.test(entry.channel || '') || /央视|中央广播电视总台/.test(text)) return '央视';
   if (/经济科教/.test(text)) return '广东';
-  if (/8K|4K|UHD|超高清/i.test(text)) return '4K超高清';
+  if (/卫视/.test(text)) return '卫视';
+  if (/广东|珠江|大湾区|南方|岭南|嘉佳/.test(text)) return '广东';
   if (/体育|赛事|足球|篮球|高尔夫|台球|搏击|网球|棋牌|竞技/i.test(text)) return '体育';
   if (/少儿|青少|卡通|动画|动漫|金鹰卡通|嘉佳卡通|优漫/i.test(text)) return '少儿';
   if (/电影|电视剧|剧场|影视|影迷|家庭影院/i.test(text)) return '电影电视剧';
   if (/^CETV-/i.test(entry.channel || '') || /纪录|科教|探索|地理|教育|读书/i.test(text)) return '纪录科教';
-  if (/卫视/.test(text)) return '卫视';
-  if (/广东|珠江|大湾区|南方|岭南|嘉佳/.test(text)) return '广东';
   if (/广州|深圳|佛山|东莞|惠州|中山|珠海|韶关|湛江|揭阳|汕头|汕尾|潮州|梅州|茂名|肇庆|清远|河源|阳江|云浮|江门/.test(text)) return '地方';
   return '其他';
 }
@@ -214,17 +244,49 @@ export function toUdpxyUrl(rtpUrl, config) {
 
 function escapeAttr(value) { return String(value || '').replace(/"/g, "'"); }
 
+function channelGroup(entry) {
+  return classifyChannel({
+    channel: entry.channel,
+    name: entry.channel,
+    tvgName: entry.canonicalTvgName || entry.tvgName || entry.channel,
+  });
+}
+
+function orderedEntries(entries) {
+  const collator = new Intl.Collator('zh-CN', { numeric: true, sensitivity: 'base' });
+  return entries.map((entry) => ({ ...entry, group: channelGroup(entry) }))
+    .sort((a, b) => GROUP_ORDER.indexOf(a.group) - GROUP_ORDER.indexOf(b.group)
+      || collator.compare(a.channel, b.channel)
+      || (a.lineIndex ?? 0) - (b.lineIndex ?? 0));
+}
+
+function extinfLine(entry) {
+  const tvgId = entry.canonicalTvgId || entry.tvgId || entry.channel;
+  const tvgName = entry.canonicalTvgName
+    || (GENERIC_TVG_NAMES.has(entry.tvgName) ? entry.channel : (entry.tvgName || entry.channel));
+  const logoUrl = entry.canonicalLogoUrl || entry.tvgLogo || '';
+  const id = tvgId ? ` tvg-id="${escapeAttr(tvgId)}"` : '';
+  const logo = logoUrl ? ` tvg-logo="${escapeAttr(logoUrl)}"` : '';
+  return `#EXTINF:-1${id} tvg-name="${escapeAttr(tvgName)}"${logo} group-title="${entry.group}",${entry.channel}`;
+}
+
 export function renderPlaylist(entries, config) {
   const epg = 'https://raw.githubusercontent.com/ShaoWentao/iptv-sources/main/m3u/gd-telecom-epg.xml';
-  const collator = new Intl.Collator('zh-CN', { numeric: true, sensitivity: 'base' });
-  const ordered = entries.map((entry) => ({ ...entry, group: classifyChannel(entry) }))
-    .sort((a, b) => GROUP_ORDER.indexOf(a.group) - GROUP_ORDER.indexOf(b.group) || collator.compare(a.channel, b.channel));
   const lines = [`#EXTM3U name="广东电信IPTV" url-tvg="${epg}"`];
-  for (const entry of ordered) {
-    const tvgName = GENERIC_TVG_NAMES.has(entry.tvgName) ? entry.channel : (entry.tvgName || entry.channel);
-    const logo = entry.tvgLogo ? ` tvg-logo="${escapeAttr(entry.tvgLogo)}"` : '';
-    lines.push(`#EXTINF:-1 tvg-name="${escapeAttr(tvgName)}"${logo} group-title="${entry.group}",${entry.channel}`);
+  for (const entry of orderedEntries(entries)) {
+    lines.push(extinfLine(entry));
     lines.push(toUdpxyUrl(entry.rtpUrl, config));
+  }
+  return `${lines.join('\n')}\n`;
+}
+
+export function renderRtpPlaylist(entries, options = {}) {
+  const epg = options.epg || 'https://raw.githubusercontent.com/ShaoWentao/iptv-sources/main/m3u/gd-telecom-epg.xml';
+  const name = options.name || '广东电信IPTV';
+  const lines = [`#EXTM3U name="${escapeAttr(name)}" url-tvg="${escapeAttr(epg)}"`];
+  for (const entry of orderedEntries(entries)) {
+    lines.push(extinfLine(entry));
+    lines.push(entry.rtpUrl);
   }
   return `${lines.join('\n')}\n`;
 }
