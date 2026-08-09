@@ -115,17 +115,24 @@ jobs:
           if (telecom.ultraHdSelectedLines < 1) throw new Error('No Telecom ultra-HD lines generated');
           if (telecom.inputs.all.entries < 100) throw new Error('Telecom upstream playlist is incomplete');
           if (!telecom.inputs.probe || telecom.inputs.probe.bytes < 1) throw new Error('Telecom probe data missing');
+          if (!Array.isArray(telecom.inputs.probe.blockedVideoCodecs)) throw new Error('Probe blocked codec list missing');
 
+          const blockedCodecs = new Set(['avs2', 'cavs']);
           const probe = fs.readFileSync('./.tmp/probe.txt', 'utf8');
-          const cavsAddresses = [...probe.matchAll(/^\s*((?:\d{1,3}\.){3}\d{1,3}:\d{1,5}).*\bV:\s*cavs\b/gim)]
-            .map((match) => match[1]);
+          const blockedAddresses = [];
+          for (const raw of probe.split(/\r?\n/)) {
+            const codec = raw.match(/\bV:\s*([a-z0-9.]+)/i)?.[1]?.toLowerCase();
+            if (!codec || !blockedCodecs.has(codec)) continue;
+            const address = raw.match(/^\s*((?:\d{1,3}\.){3}\d{1,3}:\d{1,5})\b/)?.[1];
+            if (address) blockedAddresses.push(address);
+          }
           const telecomOutputs = [
             fs.readFileSync('./m3u/gd-telecom.m3u', 'utf8'),
             fs.readFileSync('./m3u/gd-telecom-udpxy.m3u', 'utf8'),
             fs.readFileSync('./m3u/gd-telecom-4k.m3u', 'utf8'),
           ].join('\n');
-          for (const address of cavsAddresses) {
-            if (telecomOutputs.includes(address)) throw new Error(`Probe-detected CAVS line leaked into output: ${address}`);
+          for (const address of blockedAddresses) {
+            if (telecomOutputs.includes(address)) throw new Error(`Probe-blocked video line leaked into output: ${address}`);
           }
 
           const unicom = require('./m3u/gd-unicom-report.json');
@@ -141,7 +148,7 @@ jobs:
           if (primaryCctv13 < 2) throw new Error('CCTV13 alternates missing from APTV playlist');
           if (simpleCctv13 !== 1) throw new Error('CCTV13 simple playlist should contain one line');
 
-          console.log(JSON.stringify({ telecom, cavsProbeEntries: cavsAddresses.length, unicom, primaryCctv13, simpleCctv13 }, null, 2));
+          console.log(JSON.stringify({ telecom, blockedProbeEntries: blockedAddresses.length, unicom, primaryCctv13, simpleCctv13 }, null, 2));
           NODE
 
       - name: Commit generated files
