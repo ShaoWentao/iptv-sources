@@ -11,6 +11,8 @@ function makePlaylist() {
     lines.push(`#EXTINF:-1 tvg-name="测试频道${i}",测试频道${i}高清`);
     lines.push(`rtp://239.88.${Math.floor(i / 250)}.${(i % 250) + 1}:${5000 + i}`);
   }
+  lines.push('#EXTINF:-1 tvg-name="广东卫视",广东卫视高清');
+  lines.push('rtp://239.90.0.4:6004');
   lines.push('#EXTINF:-1 tvg-name="广东卫视",广东卫视4K超高清');
   lines.push('rtp://239.90.0.1:6001');
   lines.push('#EXTINF:-1 tvg-name="证据频道",证据频道高清');
@@ -24,7 +26,7 @@ function makeFourKPlaylist() {
   return `#EXTM3U\n#EXTINF:-1 tvg-name="证据频道",证据频道高清\nrtp://239.90.0.2:6002\n`;
 }
 
-test('generator keeps the main playlist HD-only and writes a dedicated 4K playlist', () => {
+test('generator puts 4K back in RTP primary and keeps dedicated RTP 4K playlist', () => {
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'iptv-4k-'));
   const all = path.join(temp, 'all.m3u');
   const hd = path.join(temp, 'hd.m3u');
@@ -43,13 +45,17 @@ test('generator keeps the main playlist HD-only and writes a dedicated 4K playli
 
   assert.equal(result.status, 0, result.stderr || result.stdout);
   const main = fs.readFileSync(path.join(output, 'gd-telecom.m3u'), 'utf8');
+  const backup = fs.readFileSync(path.join(output, 'gd-telecom-udpxy.m3u'), 'utf8');
   const ultraHd = fs.readFileSync(path.join(output, 'gd-telecom-4k.m3u'), 'utf8');
   const report = JSON.parse(fs.readFileSync(path.join(output, 'gd-telecom-report.json'), 'utf8'));
 
-  assert.doesNotMatch(main, /4K|UHD|超高清/i);
+  assert.match(main, /广东卫视/);
+  assert.match(main, /rtp:\/\/239\.90\.0\.1:6001/);
+  assert.ok(main.indexOf('rtp://239.90.0.1:6001') < main.indexOf('rtp://239.90.0.4:6004'));
+  assert.match(backup, /http:\/\/192\.168\.5\.7:4022\/udp\/239\.90\.0\.1:6001\//);
   assert.match(ultraHd, /^#EXTM3U name="广东电信IPTV 4K"/);
-  assert.match(ultraHd, /广东卫视/);
-  assert.match(ultraHd, /证据频道/);
-  assert.doesNotMatch(ultraHd, /CAVS|时移|回看|rtp:\/\//i);
-  assert.equal(report.ultraHdSelectedChannels, 2);
+  assert.match(ultraHd, /rtp:\/\/239\.90\.0\.1:6001/);
+  assert.match(ultraHd, /rtp:\/\/239\.90\.0\.2:6002/);
+  assert.doesNotMatch(ultraHd, /CAVS|时移|回看|192\.168\.5\.7:4022/i);
+  assert.equal(report.ultraHdSelectedLines, 2);
 });
