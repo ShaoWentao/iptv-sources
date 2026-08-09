@@ -7,6 +7,10 @@ export const GROUP_ORDER = [
 const MULTICAST_RE = /^(?:rtp|udp):\/\/((?:\d{1,3}\.){3}\d{1,3}):(\d{1,5})\/?$/i;
 const UDPXY_RE = /^https?:\/\/[^/]+\/udp\/((?:\d{1,3}\.){3}\d{1,3}):(\d{1,5})\/?$/i;
 const GENERIC_TVG_NAMES = new Set(['睛彩']);
+const PINNED_OTHER_CHANNELS = new Map([
+  ['惠州新闻综合', 0],
+  ['惠州公共生活', 1],
+]);
 
 function parseAttributes(line) {
   const attrs = {};
@@ -117,6 +121,9 @@ function cleanIdentity(value) {
   text = text.replace(/^CCTV\s*-?\s*(\d{1,2})(\+)?(?:\s*频道)?$/i, (_, n, plus = '') => `CCTV-${Number(n)}${plus}`);
   text = text.replace(/^CCTV(\d{1,2})(\+)?$/i, (_, n, plus = '') => `CCTV-${Number(n)}${plus}`);
   text = text.replace(/^CETV\s*-?\s*(\d+)$/i, (_, n) => `CETV-${Number(n)}`);
+  const compact = text.replace(/\s+/g, '').toUpperCase();
+  if (/^HZTV-?1$/.test(compact)) return '惠州新闻综合';
+  if (/^HZTV-?2$/.test(compact)) return '惠州公共生活';
   return text.replace(/\s+/g, '') || normalizeText(value);
 }
 
@@ -221,6 +228,7 @@ export function selectBestEntries(entries, evidence = new Map()) {
 export function classifyChannel(entry) {
   const text = `${entry.channel || ''} ${entry.name || ''} ${entry.tvgName || ''}`;
   if (/^(?:CCTV|CGTN)/i.test(entry.channel || '') || /央视|中央广播电视总台/.test(text)) return '央视';
+  if (/^(?:惠州新闻综合|惠州公共生活)$/.test(entry.channel || '') || /\bHZTV-?[12]\b/i.test(text)) return '其他';
   if (/经济科教/.test(text)) return '广东';
   if (/卫视/.test(text)) return '卫视';
   if (/广东|珠江|大湾区|南方|岭南|嘉佳/.test(text)) return '广东';
@@ -252,18 +260,26 @@ function channelGroup(entry) {
   });
 }
 
+function pinnedChannelRank(entry) {
+  if (entry.group !== '其他') return Number.MAX_SAFE_INTEGER;
+  return PINNED_OTHER_CHANNELS.get(entry.channel) ?? Number.MAX_SAFE_INTEGER;
+}
+
 function orderedEntries(entries) {
   const collator = new Intl.Collator('zh-CN', { numeric: true, sensitivity: 'base' });
   return entries.map((entry) => ({ ...entry, group: channelGroup(entry) }))
     .sort((a, b) => GROUP_ORDER.indexOf(a.group) - GROUP_ORDER.indexOf(b.group)
+      || pinnedChannelRank(a) - pinnedChannelRank(b)
       || collator.compare(a.channel, b.channel)
       || (a.lineIndex ?? 0) - (b.lineIndex ?? 0));
 }
 
 function extinfLine(entry) {
   const tvgId = entry.canonicalTvgId || entry.tvgId || entry.channel;
-  const tvgName = entry.canonicalTvgName
-    || (GENERIC_TVG_NAMES.has(entry.tvgName) ? entry.channel : (entry.tvgName || entry.channel));
+  const tvgName = PINNED_OTHER_CHANNELS.has(entry.channel)
+    ? entry.channel
+    : (entry.canonicalTvgName
+      || (GENERIC_TVG_NAMES.has(entry.tvgName) ? entry.channel : (entry.tvgName || entry.channel)));
   const logoUrl = entry.canonicalLogoUrl || entry.tvgLogo || '';
   const id = tvgId ? ` tvg-id="${escapeAttr(tvgId)}"` : '';
   const logo = logoUrl ? ` tvg-logo="${escapeAttr(logoUrl)}"` : '';
