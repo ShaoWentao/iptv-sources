@@ -1,13 +1,13 @@
 {
-  "schemaVersion": 2,
-  "generatedAt": "2026-08-08T22:59:07.946Z",
+  "schemaVersion": 3,
+  "generatedAt": "2026-08-09T01:55:22.454Z",
   "upstreamRepository": "Tzwcard/ChinaTelecom-GuangdongIPTV-RTP-List",
   "upstreamSha": "b80087112019e11fb5fee52d64fc855ab855a3fe",
   "udpxy": {
     "protocol": "http",
     "host": "192.168.5.7",
     "port": 4022,
-    "excludeUltraHd": true
+    "excludeUltraHd": false
   },
   "inputs": {
     "all": {
@@ -28,39 +28,42 @@
     }
   },
   "filtered": {
-    "cavs": 24,
-    "timeshift": 9,
-    "nonChannel": 6,
-    "duplicateContent": 1,
-    "ultraHd": 37,
+    "cavs": 48,
+    "timeshift": 18,
+    "nonChannel": 7,
+    "duplicateContent": 2,
+    "ultraHd": 0,
     "invalid": 0,
-    "duplicateUrl": 0
+    "duplicateUrl": 259
   },
-  "selectedChannels": 190,
+  "selectedChannels": 194,
+  "selectedLines": 361,
+  "multiLineChannels": 95,
+  "maxLinesPerChannel": 11,
   "ultraHdSelectedChannels": 14,
+  "ultraHdSelectedLines": 37,
   "groups": {
-    "央视": 28,
+    "央视": 29,
     "卫视": 37,
-    "广东": 7,
+    "广东": 12,
     "地方": 39,
-    "体育": 12,
-    "少儿": 8,
-    "电影电视剧": 9,
+    "体育": 11,
+    "少儿": 6,
+    "电影电视剧": 8,
     "纪录科教": 8,
-    "4K超高清": 0,
-    "其他": 42
+    "其他": 44
   },
   "selections": [
     {
       "channel": "广东卫视",
       "group": "卫视",
-      "sourceName": "广东卫视超清",
-      "rtpUrl": "rtp://239.77.0.166:5146",
-      "quality": "super-hd",
+      "sourceName": "广东卫视4k超高清",
+      "rtpUrl": "rtp://239.77.0.66:5146",
+      "quality": "4k",
       "evidence": [
-        "hd"
+        "4k"
       ],
-      "candidateCount": 4
+      "candidateCount": 9
     },
     {
       "channel": "广东珠江",
@@ -97,7 +100,7 @@
     },
     {
       "channel": "广东体育",
-      "group": "体育",
+      "group": "广东",
       "sourceName": "广东体育超清",
       "rtpUrl": "rtp://239.77.0.168:5146",
       "quality": "super-hd",
@@ -130,7 +133,7 @@
     },
     {
       "channel": "广东影视",
-      "group": "电影电视剧",
+      "group": "广东",
       "sourceName": "广东影视",
       "rtpUrl": "rtp://239.77.0.217:5146",
       "quality": "unmarked",
@@ -141,7 +144,7 @@
     },
     {
       "channel": "广东少儿",
-      "group": "少儿",
+      "group": "广东",
       "sourceName": "广东少儿",
       "rtpUrl": "rtp://239.77.0.250:5146",
       "quality": "unmarked",
@@ -152,7 +155,7 @@
     },
     {
       "channel": "嘉佳卡通",
-      "group": "少儿",
+      "group": "广东",
       "sourceName": "嘉佳卡通",
       "rtpUrl": "rtp://239.77.0.179:5146",
       "quality": "unmarked",
@@ -202,6 +205,17 @@
       "candidateCount": 1
     },
     {
+      "channel": "广东4K",
+      "group": "广东",
+      "sourceName": "广东4K超高清",
+      "rtpUrl": "rtp://239.77.0.244:5146",
+      "quality": "4k",
+      "evidence": [
+        "4k"
+      ],
+      "candidateCount": 4
+    },
+    {
       "channel": "广州综合",
       "group": "地方",
       "sourceName": "广州综合高清",
@@ -224,15 +238,26 @@
       "candidateCount": 1
     },
     {
+      "channel": "南国都市",
+      "group": "其他",
+      "sourceName": "南国都市4K",
+      "rtpUrl": "rtp://239.253.43.99:5146",
+      "quality": "4k",
+      "evidence": [
+        "4k"
+      ],
+      "candidateCount": 1
+    },
+    {
       "channel": "深圳卫视",
       "group": "卫视",
-      "sourceName": "深圳卫视超清",
-      "rtpUrl": "rtp://239.77.0.130:5146",
-      "quality": "super-hd",
+      "sourceName": "深圳卫视4k超高清",
+      "rtpUrl": "rtp://239.77.0.67:5146",
+      "quality": "4k",
       "evidence": [
-        "hd"
+        "4k"
       ],
-      "candidateCount": 6
+      "candidateCount": 11
     },
     {
       "channel": "深圳都市频道",
@@ -897,13 +922,13 @@
     {
       "channel": "CCTV-16",
       "group": "央视",
-      "sourceName": "CCTV-16高清",
-      "rtpUrl": "rtp://239.77.0.165:5146",
-      "quality": "hd",
+      "sourceName": "CCTV-16 4K",
+      "rtpUrl": "rtp://239.77.0.18:5146",
+      "quality": "4k",
       "evidence": [
-        "hd"
+        "4k"
       ],
-      "candidateCount": 1
+      "candidateCount": 3
     },
     {
       "channel": "CCTV-17",
@@ -914,6 +939,15 @@
       "evidence": [
         "hd"
       ],
+      "candidateCount": 3
+    },
+    {
+      "channel": "CCTV-4K",
+      "group": "央视",
+      "sourceName": "CCTV-4K 4K",
+      "rtpUrl": "rtp://239.77.1.180:5146",
+      "quality": "4k",
+      "evidence": [],
       "candidateCount": 3
     },
     {
@@ -985,46 +1019,46 @@
     {
       "channel": "湖南卫视",
       "group": "卫视",
-      "sourceName": "湖南卫视高清",
-      "rtpUrl": "rtp://239.77.0.6:5146",
-      "quality": "hd",
+      "sourceName": "湖南卫视4k超高清",
+      "rtpUrl": "rtp://239.77.0.56:5146",
+      "quality": "4k",
       "evidence": [
-        "hd"
+        "4k"
       ],
-      "candidateCount": 2
+      "candidateCount": 4
     },
     {
       "channel": "浙江卫视",
       "group": "卫视",
-      "sourceName": "浙江卫视高清",
-      "rtpUrl": "rtp://239.77.0.12:5146",
-      "quality": "hd",
+      "sourceName": "浙江卫视4k超高清",
+      "rtpUrl": "rtp://239.77.0.58:5146",
+      "quality": "4k",
       "evidence": [
-        "hd"
+        "4k"
       ],
-      "candidateCount": 3
+      "candidateCount": 5
     },
     {
       "channel": "江苏卫视",
       "group": "卫视",
-      "sourceName": "江苏卫视高清",
-      "rtpUrl": "rtp://239.77.0.7:5146",
-      "quality": "hd",
+      "sourceName": "江苏卫视4k超高清",
+      "rtpUrl": "rtp://239.77.0.57:5146",
+      "quality": "4k",
       "evidence": [
-        "hd"
+        "4k"
       ],
-      "candidateCount": 2
+      "candidateCount": 4
     },
     {
       "channel": "东方卫视",
       "group": "卫视",
-      "sourceName": "东方卫视高清",
-      "rtpUrl": "rtp://239.77.0.5:5146",
-      "quality": "hd",
+      "sourceName": "东方卫视4k超高清",
+      "rtpUrl": "rtp://239.77.0.59:5146",
+      "quality": "4k",
       "evidence": [
-        "hd"
+        "4k"
       ],
-      "candidateCount": 2
+      "candidateCount": 4
     },
     {
       "channel": "安徽卫视",
@@ -1040,13 +1074,13 @@
     {
       "channel": "北京卫视",
       "group": "卫视",
-      "sourceName": "北京卫视高清",
-      "rtpUrl": "rtp://239.77.1.151:5146",
-      "quality": "hd",
+      "sourceName": "北京卫视4K超高清",
+      "rtpUrl": "rtp://239.77.0.2:5146",
+      "quality": "4k",
       "evidence": [
-        "hd"
+        "4k"
       ],
-      "candidateCount": 3
+      "candidateCount": 7
     },
     {
       "channel": "天津卫视",
@@ -1062,13 +1096,13 @@
     {
       "channel": "山东卫视",
       "group": "卫视",
-      "sourceName": "山东卫视高清",
-      "rtpUrl": "rtp://239.77.0.8:5146",
-      "quality": "hd",
+      "sourceName": "山东卫视4k超高清",
+      "rtpUrl": "rtp://239.77.0.61:5146",
+      "quality": "4k",
       "evidence": [
-        "hd"
+        "4k"
       ],
-      "candidateCount": 2
+      "candidateCount": 4
     },
     {
       "channel": "江西卫视",
@@ -1128,13 +1162,13 @@
     {
       "channel": "四川卫视",
       "group": "卫视",
-      "sourceName": "四川卫视高清",
-      "rtpUrl": "rtp://239.77.0.11:5146",
-      "quality": "hd",
+      "sourceName": "四川卫视4k超高清",
+      "rtpUrl": "rtp://239.77.0.60:5146",
+      "quality": "4k",
       "evidence": [
-        "hd"
+        "4k"
       ],
-      "candidateCount": 2
+      "candidateCount": 4
     },
     {
       "channel": "河南卫视",
@@ -2033,6 +2067,17 @@
       "rtpUrl": "rtp://239.253.43.119:5146",
       "quality": "unmarked",
       "evidence": [],
+      "candidateCount": 1
+    },
+    {
+      "channel": "精选频道3",
+      "group": "其他",
+      "sourceName": "精选4k频道3",
+      "rtpUrl": "rtp://239.77.0.153:5146",
+      "quality": "4k",
+      "evidence": [
+        "hd"
+      ],
       "candidateCount": 1
     },
     {
