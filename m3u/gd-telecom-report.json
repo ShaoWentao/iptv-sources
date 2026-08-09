@@ -1,6 +1,6 @@
 {
   "schemaVersion": 3,
-  "generatedAt": "2026-08-09T11:24:50.592Z",
+  "generatedAt": "2026-08-09T11:27:08.108Z",
   "upstreamRepository": "Tzwcard/ChinaTelecom-GuangdongIPTV-RTP-List",
   "upstreamSha": "b80087112019e11fb5fee52d64fc855ab855a3fe",
   "udpxy": {
@@ -25,7 +25,11 @@
     "probe": {
       "bytes": 15546,
       "sha256": "c896b7d7e158ea0a49c35a58acfd2bbd90be7926add1184dfc91b33aef96e225",
-      "cavsUrls": 24
+      "unsupportedVideoUrls": 32,
+      "blockedVideoCodecs": [
+        "avs2",
+        "cavs"
+      ]
     },
     "epg": {
       "bytes": 1388285,
@@ -40,14 +44,14 @@
     "ultraHd": 0,
     "invalid": 0,
     "duplicateUrl": 259,
-    "cavsProbe": 0
+    "unsupportedVideoProbe": 8
   },
   "selectedChannels": 194,
-  "selectedLines": 361,
+  "selectedLines": 353,
   "multiLineChannels": 95,
-  "maxLinesPerChannel": 11,
+  "maxLinesPerChannel": 9,
   "ultraHdSelectedChannels": 14,
-  "ultraHdSelectedLines": 37,
+  "ultraHdSelectedLines": 29,
   "groups": {
     "央视": 29,
     "卫视": 37,
@@ -69,7 +73,7 @@
       "evidence": [
         "4k"
       ],
-      "candidateCount": 9
+      "candidateCount": 8
     },
     {
       "channel": "广东珠江",
@@ -263,7 +267,7 @@
       "evidence": [
         "4k"
       ],
-      "candidateCount": 11
+      "candidateCount": 9
     },
     {
       "channel": "深圳都市频道",
@@ -1031,7 +1035,7 @@
       "evidence": [
         "4k"
       ],
-      "candidateCount": 4
+      "candidateCount": 3
     },
     {
       "channel": "浙江卫视",
@@ -1053,7 +1057,7 @@
       "evidence": [
         "4k"
       ],
-      "candidateCount": 4
+      "candidateCount": 3
     },
     {
       "channel": "东方卫视",
@@ -1064,7 +1068,7 @@
       "evidence": [
         "4k"
       ],
-      "candidateCount": 4
+      "candidateCount": 3
     },
     {
       "channel": "安徽卫视",
@@ -1108,7 +1112,7 @@
       "evidence": [
         "4k"
       ],
-      "candidateCount": 4
+      "candidateCount": 3
     },
     {
       "channel": "江西卫视",
@@ -1174,7 +1178,7 @@
       "evidence": [
         "4k"
       ],
-      "candidateCount": 4
+      "candidateCount": 3
     },
     {
       "channel": "河南卫视",
