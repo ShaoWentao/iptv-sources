@@ -41,6 +41,12 @@ rtp://239.253.43.13:5146
 rtp://239.77.0.167:5146
 #EXTINF:-1 tvg-name="广东4K",广东4K
 rtp://239.77.0.244:5146
+#EXTINF:-1 tvg-id="HZTV-1" tvg-name="HZTV-1",HZTV-1高清
+rtp://239.77.3.1:5146
+#EXTINF:-1 tvg-id="HZTV-2" tvg-name="HZTV-2",HZTV-2高清
+rtp://239.77.3.2:5146
+#EXTINF:-1 tvg-name="AAA频道",AAA频道
+rtp://239.77.3.3:5146
 #EXTINF:-1 tvg-name="广东IPTV广告",广东IPTV广告
 rtp://239.77.0.240:5146
 `;
@@ -66,6 +72,20 @@ test('normalizes channel identity while keeping generic tvg-name channels separa
     selected.filter((entry) => entry.channel.startsWith('睛彩')).map((entry) => entry.channel).sort(),
     ['睛彩篮球', '睛彩竞技'].sort(),
   );
+});
+
+test('uses official Huizhou channel names and pins them first in the Other group', () => {
+  const entries = filterEntries(parsePlaylist(source)).entries;
+  assert.equal(normalizeChannelName(entries.find((entry) => entry.tvgId === 'HZTV-1')), '惠州新闻综合');
+  assert.equal(normalizeChannelName(entries.find((entry) => entry.tvgId === 'HZTV-2')), '惠州公共生活');
+  assert.equal(classifyChannel({ channel: '惠州新闻综合', name: '惠州新闻综合' }), '其他');
+  assert.equal(classifyChannel({ channel: '惠州公共生活', name: '惠州公共生活' }), '其他');
+
+  const ranked = selectAllEntries(entries, new Map());
+  const output = renderRtpPlaylist(ranked);
+  const otherInfo = output.split('\n').filter((line) => line.startsWith('#EXTINF:') && line.includes('group-title="其他"'));
+  assert.match(otherInfo[0], /tvg-id="HZTV-1" tvg-name="惠州新闻综合".*?,惠州新闻综合$/);
+  assert.match(otherInfo[1], /tvg-id="HZTV-2" tvg-name="惠州公共生活".*?,惠州公共生活$/);
 });
 
 test('selects explicit 4K over HD for the same channel', () => {
