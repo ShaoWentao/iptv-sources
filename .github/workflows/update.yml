@@ -80,12 +80,20 @@ jobs:
         run: |
           set -euo pipefail
           test -s m3u/gd-telecom.m3u
+          test -s m3u/gd-telecom-udpxy.m3u
           test -s m3u/gd-telecom-4k.m3u
           test -s m3u/gd-telecom-report.json
           test -s m3u/gd-telecom-epg.xml
+
+          grep -q '^rtp://' m3u/gd-telecom.m3u
+          ! grep -Eqi 'CAVS|时移|回看|192\.168\.5\.7:4022/udp/' m3u/gd-telecom.m3u
+
+          grep -q '^http://192\.168\.5\.7:4022/udp/' m3u/gd-telecom-udpxy.m3u
+          ! grep -Eqi 'CAVS|时移|回看|^rtp://' m3u/gd-telecom-udpxy.m3u
+
           grep -q '^#EXTINF:' m3u/gd-telecom-4k.m3u
-          ! grep -Eqi 'CAVS|时移|回看|rtp://' m3u/gd-telecom.m3u
-          ! grep -Eqi 'CAVS|时移|回看|rtp://' m3u/gd-telecom-4k.m3u
+          grep -q '^rtp://' m3u/gd-telecom-4k.m3u
+          ! grep -Eqi 'CAVS|时移|回看|192\.168\.5\.7:4022/udp/' m3u/gd-telecom-4k.m3u
 
           test -s m3u/gd-unicom.m3u
           test -s m3u/gd-unicom-simple.m3u
@@ -97,9 +105,11 @@ jobs:
           node - <<'NODE'
           const fs = require('node:fs');
           const telecom = require('./m3u/gd-telecom-report.json');
-          if (telecom.schemaVersion !== 2) throw new Error('Unexpected Telecom report schema');
-          if (telecom.selectedChannels < 50) throw new Error('Too few Telecom standard channels');
-          if (telecom.ultraHdSelectedChannels < 1) throw new Error('No Telecom ultra-HD channels generated');
+          if (telecom.schemaVersion !== 3) throw new Error('Unexpected Telecom report schema');
+          if (telecom.selectedChannels < 50) throw new Error('Too few Telecom channels');
+          if (telecom.selectedLines <= telecom.selectedChannels) throw new Error('No alternate Telecom RTP lines generated');
+          if (telecom.multiLineChannels < 1) throw new Error('No multi-line Telecom channels generated');
+          if (telecom.ultraHdSelectedLines < 1) throw new Error('No Telecom ultra-HD lines generated');
           if (telecom.inputs.all.entries < 100) throw new Error('Telecom upstream playlist is incomplete');
 
           const unicom = require('./m3u/gd-unicom-report.json');
@@ -124,6 +134,7 @@ jobs:
           set -euo pipefail
           files=(
             m3u/gd-telecom.m3u
+            m3u/gd-telecom-udpxy.m3u
             m3u/gd-telecom-4k.m3u
             m3u/gd-telecom-epg.xml
             m3u/gd-telecom-report.json
