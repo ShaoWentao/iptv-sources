@@ -15,6 +15,8 @@ import {
   sha256,
 } from './playlist.mjs';
 
+const BLOCKED_PROBE_VIDEO_CODECS = new Set(['avs2', 'cavs']);
+
 function argsFrom(argv) {
   const args = {};
   for (let i = 0; i < argv.length; i += 1) {
@@ -48,13 +50,16 @@ function countLinesByChannel(entries) {
   return counts;
 }
 
-function cavsUrlsFromProbe(text) {
+function unsupportedVideoUrlsFromProbe(text) {
   const urls = new Set();
   for (const raw of String(text || '').split(/\r?\n/)) {
-    if (!/\bV:\s*cavs\b/i.test(raw)) continue;
-    const match = raw.match(/^\s*((?:\d{1,3}\.){3}\d{1,3}:\d{1,5})\b/);
-    if (!match) continue;
-    const url = canonicalRtpUrl(`rtp://${match[1]}`);
+    const codecMatch = raw.match(/\bV:\s*([a-z0-9.]+)/i);
+    if (!codecMatch) continue;
+    const codec = codecMatch[1].toLowerCase();
+    if (!BLOCKED_PROBE_VIDEO_CODECS.has(codec)) continue;
+    const addressMatch = raw.match(/^\s*((?:\d{1,3}\.){3}\d{1,3}:\d{1,5})\b/);
+    if (!addressMatch) continue;
+    const url = canonicalRtpUrl(`rtp://${addressMatch[1]}`);
     if (url) urls.add(url);
   }
   return urls;
@@ -75,20 +80,20 @@ if (allEntries.length < 100) throw new Error(`Upstream full playlist has only ${
 const hdEntries = parsePlaylist(hdText);
 const fourKEntries = parsePlaylist(fourKText);
 const evidence = buildQualityEvidence({ hd: hdEntries, fourK: fourKEntries });
-const cavsProbeUrls = cavsUrlsFromProbe(probeText);
+const unsupportedVideoUrls = unsupportedVideoUrlsFromProbe(probeText);
 
 const combinedEntries = [...allEntries, ...hdEntries, ...fourKEntries]
   .map((entry, index) => ({ ...entry, index }));
 const baseFiltered = filterEntries(combinedEntries, { excludeUltraHd: false });
-let cavsProbe = 0;
+let unsupportedVideoProbe = 0;
 const probeFilteredEntries = baseFiltered.entries.filter((entry) => {
-  if (!cavsProbeUrls.has(entry.rtpUrl)) return true;
-  cavsProbe += 1;
+  if (!unsupportedVideoUrls.has(entry.rtpUrl)) return true;
+  unsupportedVideoProbe += 1;
   return false;
 });
 const filtered = {
   entries: probeFilteredEntries,
-  stats: { ...baseFiltered.stats, cavsProbe },
+  stats: { ...baseFiltered.stats, unsupportedVideoProbe },
 };
 const allRanked = selectAllEntries(filtered.entries, evidence);
 const best = selectBestEntries(filtered.entries, evidence);
@@ -126,7 +131,12 @@ const report = {
     all: { entries: allEntries.length, sha256: sha256(allText) },
     hd: { entries: hdEntries.length, sha256: sha256(hdText) },
     fourK: { entries: fourKEntries.length, sha256: sha256(fourKText) },
-    probe: { bytes: Buffer.byteLength(probeText), sha256: sha256(probeText), cavsUrls: cavsProbeUrls.size },
+    probe: {
+      bytes: Buffer.byteLength(probeText),
+      sha256: sha256(probeText),
+      unsupportedVideoUrls: unsupportedVideoUrls.size,
+      blockedVideoCodecs: [...BLOCKED_PROBE_VIDEO_CODECS].sort(),
+    },
     epg: { bytes: Buffer.byteLength(epgText), sha256: sha256(epgText) },
   },
   filtered: filtered.stats,
@@ -153,4 +163,4 @@ writeAtomic(path.join(outputDir, 'gd-telecom-udpxy.m3u'), udpxyPlaylist);
 writeAtomic(path.join(outputDir, 'gd-telecom-4k.m3u'), ultraHdPlaylist);
 writeAtomic(path.join(outputDir, 'gd-telecom-report.json'), `${JSON.stringify(report, null, 2)}\n`);
 if (epgText.trim()) writeAtomic(path.join(outputDir, 'gd-telecom-epg.xml'), epgText);
-console.log(`Generated ${best.length} channels / ${allRanked.length} RTP lines; ${ultraHdRanked.length} ultra-HD lines; removed ${cavsProbe} probe-detected CAVS lines`);
+console.log(`Generated ${best.length} channels / ${allRanked.length} RTP lines; ${ultraHdRanked.length} ultra-HD lines; removed ${unsupportedVideoProbe} probe-blocked video lines`);
