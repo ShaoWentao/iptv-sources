@@ -1,6 +1,6 @@
 {
   "schemaVersion": 3,
-  "generatedAt": "2026-08-09T01:55:22.454Z",
+  "generatedAt": "2026-08-09T08:34:12.436Z",
   "upstreamRepository": "Tzwcard/ChinaTelecom-GuangdongIPTV-RTP-List",
   "upstreamSha": "b80087112019e11fb5fee52d64fc855ab855a3fe",
   "udpxy": {
@@ -422,7 +422,7 @@
       "candidateCount": 1
     },
     {
-      "channel": "HZTV-1",
+      "channel": "惠州新闻综合",
       "group": "其他",
       "sourceName": "HZTV-1高清",
       "rtpUrl": "rtp://239.77.1.232:5146",
@@ -433,7 +433,7 @@
       "candidateCount": 1
     },
     {
-      "channel": "HZTV-2",
+      "channel": "惠州公共生活",
       "group": "其他",
       "sourceName": "HZTV-2高清",
       "rtpUrl": "rtp://239.77.1.233:5146",

@@ -299,6 +299,10 @@ http://192.168.5.7:4022/udp/239.77.1.222:5146/
 http://192.168.5.7:4022/udp/239.77.0.28:5146/
 #EXTINF:-1 tvg-id="CETV-4" tvg-name="CETV-4" group-title="纪录科教",CETV-4
 http://192.168.5.7:4022/udp/239.253.43.40:5146/
+#EXTINF:-1 tvg-id="惠州新闻综合" tvg-name="惠州新闻综合" group-title="其他",惠州新闻综合
+http://192.168.5.7:4022/udp/239.77.1.232:5146/
+#EXTINF:-1 tvg-id="惠州公共生活" tvg-name="惠州公共生活" group-title="其他",惠州公共生活
+http://192.168.5.7:4022/udp/239.77.1.233:5146/
 #EXTINF:-1 tvg-id="兵器科技" tvg-name="兵器科技" group-title="其他",兵器科技
 http://192.168.5.7:4022/udp/239.253.43.9:5146/
 #EXTINF:-1 tvg-id="财富天下" tvg-name="财富天下" group-title="其他",财富天下
@@ -353,10 +357,6 @@ http://192.168.5.7:4022/udp/239.77.1.2:5146/
 http://192.168.5.7:4022/udp/239.77.1.195:5146/
 #EXTINF:-1 tvg-id="EBU" tvg-name="EBU" group-title="其他",EBU
 http://192.168.5.7:4022/udp/239.253.43.165:5146/
-#EXTINF:-1 tvg-id="HZTV-1" tvg-name="HZTV-1" group-title="其他",HZTV-1
-http://192.168.5.7:4022/udp/239.77.1.232:5146/
-#EXTINF:-1 tvg-id="HZTV-2" tvg-name="HZTV-2" group-title="其他",HZTV-2
-http://192.168.5.7:4022/udp/239.77.1.233:5146/
 #EXTINF:-1 tvg-id="IPTV1" tvg-name="IPTV1" group-title="其他",IPTV1
 http://192.168.5.7:4022/udp/239.77.1.7:5146/
 #EXTINF:-1 tvg-id="IPTV2" tvg-name="IPTV2" group-title="其他",IPTV2
