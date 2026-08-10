@@ -1,8 +1,8 @@
 {
   "schemaVersion": 3,
-  "generatedAt": "2026-08-10T11:28:59.975Z",
+  "generatedAt": "2026-08-10T23:08:28.357Z",
   "upstreamRepository": "Tzwcard/ChinaTelecom-GuangdongIPTV-RTP-List",
-  "upstreamSha": "9476605b5039cabdeb44b6d5b53ccd37afe896ed",
+  "upstreamSha": "7c5403fab07ed04aa89732add9c2a7ecd08f2144",
   "udpxy": {
     "protocol": "http",
     "host": "192.168.5.7",
@@ -12,28 +12,28 @@
   "inputs": {
     "all": {
       "entries": 401,
-      "sha256": "057f119749207cc7789948e0f1839df0ff41a03f08b9c80505e3de38a45e6a1f"
+      "sha256": "02ac7e23c7ffdad9ecadda94f21ffb0cb32738aa4dea602902f3293e2cf96c64"
     },
     "hd": {
-      "entries": 262,
-      "sha256": "f03e64ae1c545b07715b9df984d985b8795c6fe2523edd263467ccadb8951583"
+      "entries": 258,
+      "sha256": "d98d20b90a3c81725bb3a6f683943f44bd94c9b1b52cacf35880623d06c603e2"
     },
     "fourK": {
-      "entries": 30,
-      "sha256": "2fcbaa0580131756d674476b3152a47677f552f9f3d317a2c3da45baf3cddc38"
+      "entries": 27,
+      "sha256": "1badc3e1776f00964c36836f4fa004b4418b07a249eea380211d29b89944994f"
     },
     "probe": {
-      "bytes": 15473,
-      "sha256": "ee3b81a8a4f9e3c3f6e164cab64bcf4d3ac162f6405795db6104ede5ed3360e7",
-      "unsupportedVideoUrls": 32,
+      "bytes": 15072,
+      "sha256": "64b6b4073a82e2ca7890354461c468e21c0cc2086a3bbb836d01b0698ded1de5",
+      "unsupportedVideoUrls": 29,
       "blockedVideoCodecs": [
         "avs2",
         "cavs"
       ]
     },
     "epg": {
-      "bytes": 1602411,
-      "sha256": "748fe591a6f8f39eea54c6a95e53652928596645d462eff05741c8ebe0ce961e"
+      "bytes": 1630057,
+      "sha256": "5725e45ef16075143b3a0d21150b7da92efb0b15f26b09b5f90cdb1a9ec768a4"
     }
   },
   "filtered": {
@@ -43,15 +43,15 @@
     "duplicateContent": 2,
     "ultraHd": 0,
     "invalid": 0,
-    "duplicateUrl": 258,
-    "unsupportedVideoProbe": 9
+    "duplicateUrl": 251,
+    "unsupportedVideoProbe": 6
   },
   "selectedChannels": 194,
-  "selectedLines": 353,
+  "selectedLines": 356,
   "multiLineChannels": 95,
-  "maxLinesPerChannel": 10,
+  "maxLinesPerChannel": 11,
   "ultraHdSelectedChannels": 14,
-  "ultraHdSelectedLines": 28,
+  "ultraHdSelectedLines": 31,
   "groups": {
     "央视": 29,
     "卫视": 37,
@@ -253,7 +253,9 @@
       "sourceName": "南国都市4K",
       "rtpUrl": "rtp://239.253.43.99:5146",
       "quality": "4k",
-      "evidence": [],
+      "evidence": [
+        "4k"
+      ],
       "candidateCount": 1
     },
     {
@@ -265,7 +267,7 @@
       "evidence": [
         "4k"
       ],
-      "candidateCount": 10
+      "candidateCount": 11
     },
     {
       "channel": "深圳都市频道",
@@ -311,9 +313,7 @@
       "sourceName": "深圳少儿频道高清",
       "rtpUrl": "rtp://239.77.1.244:5146",
       "quality": "hd",
-      "evidence": [
-        "hd"
-      ],
+      "evidence": [],
       "candidateCount": 1
     },
     {
@@ -342,9 +342,7 @@
       "sourceName": "深圳宜和购物高清",
       "rtpUrl": "rtp://239.77.1.87:5146",
       "quality": "hd",
-      "evidence": [
-        "hd"
-      ],
+      "evidence": [],
       "candidateCount": 1
     },
     {
@@ -446,7 +444,9 @@
       "sourceName": "HZTV-2高清",
       "rtpUrl": "rtp://239.77.1.233:5146",
       "quality": "hd",
-      "evidence": [],
+      "evidence": [
+        "hd"
+      ],
       "candidateCount": 1
     },
     {
@@ -810,9 +810,7 @@
       "sourceName": "CCTV-5+高清",
       "rtpUrl": "rtp://239.77.1.31:5146",
       "quality": "hd",
-      "evidence": [
-        "hd"
-      ],
+      "evidence": [],
       "candidateCount": 2
     },
     {
@@ -868,7 +866,7 @@
       "evidence": [
         "hd"
       ],
-      "candidateCount": 3
+      "candidateCount": 4
     },
     {
       "channel": "CCTV-11",
@@ -890,7 +888,7 @@
       "evidence": [
         "hd"
       ],
-      "candidateCount": 4
+      "candidateCount": 3
     },
     {
       "channel": "CCTV-13",
@@ -942,9 +940,7 @@
       "sourceName": "CCTV-17高清",
       "rtpUrl": "rtp://239.77.1.121:5146",
       "quality": "hd",
-      "evidence": [
-        "hd"
-      ],
+      "evidence": [],
       "candidateCount": 3
     },
     {
@@ -1044,7 +1040,7 @@
       "evidence": [
         "4k"
       ],
-      "candidateCount": 3
+      "candidateCount": 5
     },
     {
       "channel": "江苏卫视",
@@ -1066,7 +1062,7 @@
       "evidence": [
         "4k"
       ],
-      "candidateCount": 4
+      "candidateCount": 3
     },
     {
       "channel": "安徽卫视",
@@ -1096,9 +1092,7 @@
       "sourceName": "天津卫视高清",
       "rtpUrl": "rtp://239.77.1.141:5146",
       "quality": "hd",
-      "evidence": [
-        "hd"
-      ],
+      "evidence": [],
       "candidateCount": 2
     },
     {
@@ -1110,7 +1104,7 @@
       "evidence": [
         "4k"
       ],
-      "candidateCount": 3
+      "candidateCount": 4
     },
     {
       "channel": "江西卫视",
@@ -1184,9 +1178,7 @@
       "sourceName": "河南卫视高清",
       "rtpUrl": "rtp://239.77.1.229:5146",
       "quality": "hd",
-      "evidence": [
-        "hd"
-      ],
+      "evidence": [],
       "candidateCount": 2
     },
     {
@@ -1248,7 +1240,9 @@
       "sourceName": "吉林卫视高清",
       "rtpUrl": "rtp://239.77.1.111:5146",
       "quality": "hd",
-      "evidence": [],
+      "evidence": [
+        "hd"
+      ],
       "candidateCount": 2
     },
     {
@@ -1354,7 +1348,9 @@
       "sourceName": "兵团卫视高清",
       "rtpUrl": "rtp://239.77.1.29:5146",
       "quality": "hd",
-      "evidence": [],
+      "evidence": [
+        "hd"
+      ],
       "candidateCount": 3
     },
     {
@@ -1600,7 +1596,9 @@
       "sourceName": "CETV-1高清",
       "rtpUrl": "rtp://239.77.1.222:5146",
       "quality": "hd",
-      "evidence": [],
+      "evidence": [
+        "hd"
+      ],
       "candidateCount": 2
     },
     {
@@ -1629,9 +1627,7 @@
       "sourceName": "早期教育高清",
       "rtpUrl": "rtp://239.77.1.122:5146",
       "quality": "hd",
-      "evidence": [
-        "hd"
-      ],
+      "evidence": [],
       "candidateCount": 3
     },
     {
@@ -1769,7 +1765,9 @@
       "sourceName": "睛彩广场舞高清",
       "rtpUrl": "rtp://239.77.1.23:5146",
       "quality": "hd",
-      "evidence": [],
+      "evidence": [
+        "hd"
+      ],
       "candidateCount": 1
     },
     {
@@ -1800,9 +1798,7 @@
       "sourceName": "IPTV1高清",
       "rtpUrl": "rtp://239.77.1.7:5146",
       "quality": "hd",
-      "evidence": [
-        "hd"
-      ],
+      "evidence": [],
       "candidateCount": 1
     },
     {
