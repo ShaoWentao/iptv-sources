@@ -2,7 +2,7 @@
   "schemaVersion": 2,
   "upstream": "xisohi/CHINA-IPTV",
   "upstreamFile": "Unicast/guangdong/unicom.txt",
-  "upstreamSha": "9a9e55ed15a2f901ff3c02782fc7b0dd17627998",
+  "upstreamSha": "8c504068a68ab5e53c7aba3badf612bde17c0459",
   "upstreamEntries": 191,
   "selectedChannels": 114,
   "alternateEntries": 77,
