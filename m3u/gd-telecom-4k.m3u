@@ -31,10 +31,10 @@ rtp://239.77.0.56:5146
 rtp://239.77.0.57:5146
 #EXTINF:-1 tvg-id="山东卫视" tvg-name="山东卫视" group-title="卫视",山东卫视
 rtp://239.77.0.61:5146
+#EXTINF:-1 tvg-id="山东卫视" tvg-name="山东卫视" group-title="卫视",山东卫视
+rtp://239.77.1.37:5146
 #EXTINF:-1 tvg-id="深圳卫视" tvg-name="深圳卫视4k超" group-title="卫视",深圳卫视
 rtp://239.77.0.67:5146
-#EXTINF:-1 tvg-id="深圳卫视" tvg-name="深圳卫视4k超" group-title="卫视",深圳卫视
-rtp://239.77.1.24:5146
 #EXTINF:-1 tvg-id="深圳卫视" tvg-name="深圳卫视4k超" group-title="卫视",深圳卫视
 rtp://239.77.1.191:5146
 #EXTINF:-1 tvg-id="深圳卫视" tvg-name="深圳卫视4k超" group-title="卫视",深圳卫视
