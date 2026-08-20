@@ -20,7 +20,7 @@ http://192.168.5.7:4022/udp/239.77.1.31:5146/
 #EXTINF:-1 tvg-id="CCTV-6" tvg-name="CCTV-6" group-title="央视",CCTV-6
 http://192.168.5.7:4022/udp/239.77.0.171:5146/
 #EXTINF:-1 tvg-id="CCTV-7" tvg-name="CCTV-7" group-title="央视",CCTV-7
-http://192.168.5.7:4022/udp/239.77.1.159:5146/
+http://192.168.5.7:4022/udp/239.77.1.167:5146/
 #EXTINF:-1 tvg-id="CCTV-8" tvg-name="CCTV-8" group-title="央视",CCTV-8
 http://192.168.5.7:4022/udp/239.77.0.172:5146/
 #EXTINF:-1 tvg-id="CCTV-9" tvg-name="CCTV-9" group-title="央视",CCTV-9
@@ -120,7 +120,7 @@ http://192.168.5.7:4022/udp/239.77.0.67:5146/
 #EXTINF:-1 tvg-id="四川卫视" tvg-name="四川卫视" group-title="卫视",四川卫视
 http://192.168.5.7:4022/udp/239.77.0.60:5146/
 #EXTINF:-1 tvg-id="天津卫视" tvg-name="天津卫视" group-title="卫视",天津卫视
-http://192.168.5.7:4022/udp/239.77.1.182:5146/
+http://192.168.5.7:4022/udp/239.77.1.141:5146/
 #EXTINF:-1 tvg-id="西藏卫视" tvg-name="西藏卫视" group-title="卫视",西藏卫视
 http://192.168.5.7:4022/udp/239.77.1.26:5146/
 #EXTINF:-1 tvg-id="新疆卫视" tvg-name="新疆卫视" group-title="卫视",新疆卫视
