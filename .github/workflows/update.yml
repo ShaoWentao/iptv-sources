@@ -2,7 +2,7 @@ name: Update Guangdong IPTV
 
 on:
   push:
-    branches: [main, 'feature/unicom-merged-multisource-4k']
+    branches: [main]
     paths:
       - 'config/**'
       - 'scripts/**'
