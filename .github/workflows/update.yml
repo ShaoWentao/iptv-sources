@@ -55,11 +55,17 @@ jobs:
           curl --fail --location --retry 3 --connect-timeout 20 -o .tmp/gd-unicom.txt "$unicom"
           git ls-remote https://github.com/xisohi/CHINA-IPTV.git refs/heads/main | cut -f1 > .tmp/unicom-upstream-sha
 
+          unicom_secondary='https://raw.githubusercontent.com/lu791758-hub/GDIPTV/main/tv.m3u'
+          curl --fail --location --retry 3 --connect-timeout 20 -o .tmp/gd-unicom-secondary.m3u "$unicom_secondary"
+          git ls-remote https://github.com/lu791758-hub/GDIPTV.git refs/heads/main | cut -f1 > .tmp/unicom-secondary-sha
+
           test -s .tmp/all.m3u
           test -s .tmp/probe.txt
           test -s .tmp/telecom-upstream-sha
           test -s .tmp/gd-unicom.txt
           test -s .tmp/unicom-upstream-sha
+          test -s .tmp/gd-unicom-secondary.m3u
+          test -s .tmp/unicom-secondary-sha
 
       - name: Generate playlists
         run: |
@@ -75,8 +81,10 @@ jobs:
 
           node scripts/generate-unicom.mjs \
             --input .tmp/gd-unicom.txt \
+            --input-secondary .tmp/gd-unicom-secondary.m3u \
             --output m3u \
-            --upstream-sha "$(cat .tmp/unicom-upstream-sha)"
+            --upstream-sha "$(cat .tmp/unicom-upstream-sha)" \
+            --secondary-sha "$(cat .tmp/unicom-secondary-sha)"
 
       - name: Validate output
         shell: bash
@@ -102,8 +110,9 @@ jobs:
           test -s m3u/gd-unicom-simple.m3u
           test -s m3u/gd-unicom-report.json
           grep -q '^#EXTINF:' m3u/gd-unicom.m3u
+          grep -q 'group-title="4K超高清"' m3u/gd-unicom.m3u
           grep -q '120\.87\.19\.109' m3u/gd-unicom.m3u
-          ! grep -Eqi 'rtp://|udp://' m3u/gd-unicom.m3u
+          ! grep -Eqi 'rtp://|udp://|sttv-hls|192\.168\.5\.6|kwimgs\.com|iesdouyin\.com' m3u/gd-unicom.m3u
 
           node - <<'NODE'
           const fs = require('node:fs');
@@ -136,17 +145,34 @@ jobs:
           }
 
           const unicom = require('./m3u/gd-unicom-report.json');
-          if (unicom.schemaVersion !== 2) throw new Error('Unexpected Unicom report schema');
+          if (unicom.schemaVersion !== 3) throw new Error('Unexpected Unicom report schema');
+          if (!Array.isArray(unicom.upstreams) || unicom.upstreams.length !== 2) throw new Error('Unicom upstream merge is incomplete');
           if (unicom.selectedChannels < 20) throw new Error('Too few Unicom channels');
-          if (unicom.upstreamEntries < unicom.selectedChannels) throw new Error('Invalid Unicom entry counts');
-          if (unicom.primaryPlaylistMode !== 'all-lines-for-aptv') throw new Error('Unexpected Unicom primary mode');
+          if (unicom.selectedLines < unicom.selectedChannels) throw new Error('Invalid Unicom line counts');
+          if (unicom.fourKChannels < 1 || unicom.fourKLines < 1) throw new Error('No Unicom 4K channels generated');
+          if (unicom.primaryPlaylistMode !== 'merged-all-lines-plus-4k-group') throw new Error('Unexpected Unicom primary mode');
+          if (unicom.simplePlaylistMode !== 'best-line-per-channel-plus-4k-group') throw new Error('Unexpected Unicom simple mode');
+
+          function validateUnicomUrls(filename) {
+            const text = fs.readFileSync(filename, 'utf8');
+            for (const raw of text.split(/\r?\n/)) {
+              const line = raw.trim();
+              if (!line || line.startsWith('#')) continue;
+              const url = new URL(line);
+              const hostOk = /^120\.87\.\d{1,3}\.\d{1,3}$/.test(url.hostname) || url.hostname === '112.89.121.23';
+              const pathOk = url.pathname.includes('/PLTV/88888973/224/') && /\.m3u8$/i.test(url.pathname);
+              if (!hostOk || !pathOk) throw new Error(`Non-Unicom IPTV URL leaked into ${filename}: ${line}`);
+            }
+          }
+          validateUnicomUrls('./m3u/gd-unicom.m3u');
+          validateUnicomUrls('./m3u/gd-unicom-simple.m3u');
 
           const primary = fs.readFileSync('./m3u/gd-unicom.m3u', 'utf8');
           const simple = fs.readFileSync('./m3u/gd-unicom-simple.m3u', 'utf8');
           const primaryCctv13 = (primary.match(/,CCTV13\n/g) || []).length;
           const simpleCctv13 = (simple.match(/,CCTV13\n/g) || []).length;
           if (primaryCctv13 < 2) throw new Error('CCTV13 alternates missing from APTV playlist');
-          if (simpleCctv13 !== 1) throw new Error('CCTV13 simple playlist should contain one line');
+          if (simpleCctv13 !== 1) throw new Error('CCTV13 simple playlist should contain one regular entry');
 
           console.log(JSON.stringify({ telecom, blockedProbeEntries: blockedAddresses.length, unicom, primaryCctv13, simpleCctv13 }, null, 2));
           NODE
