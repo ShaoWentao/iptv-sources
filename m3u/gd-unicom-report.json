@@ -1,19 +1,52 @@
 {
-  "schemaVersion": 2,
-  "upstream": "xisohi/CHINA-IPTV",
-  "upstreamFile": "Unicast/guangdong/unicom.txt",
-  "upstreamSha": "8c504068a68ab5e53c7aba3badf612bde17c0459",
-  "upstreamEntries": 191,
-  "selectedChannels": 114,
-  "alternateEntries": 77,
+  "schemaVersion": 3,
+  "upstreams": [
+    {
+      "repository": "xisohi/CHINA-IPTV",
+      "file": "Unicast/guangdong/unicom.txt",
+      "sha": "48508e405375df86619ef514a0bcc038d700223c",
+      "parsedEntries": 191,
+      "acceptedEntries": 191,
+      "rejectedNonUnicom": 0
+    },
+    {
+      "repository": "lu791758-hub/GDIPTV",
+      "file": "tv.m3u",
+      "sha": "e0addaad6761b998c257e1af4a82e4fffe25aa3e",
+      "parsedEntries": 224,
+      "acceptedEntries": 163,
+      "rejectedNonUnicom": 61
+    }
+  ],
+  "upstreamEntries": 354,
+  "filteredNonUnicom": 61,
+  "deduplicatedEntries": 148,
+  "selectedChannels": 120,
+  "selectedLines": 206,
+  "alternateEntries": 86,
+  "fourKChannels": 11,
+  "fourKLines": 12,
+  "renderedPrimaryEntries": 218,
   "groups": {
+    "4K超高清": 11,
     "央视": 19,
     "卫视": 31,
-    "地方": 18,
+    "广东": 1,
+    "地方": 20,
+    "专业": 3,
     "教育": 4,
     "其它": 42
   },
-  "primaryPlaylistMode": "all-lines-for-aptv",
-  "simplePlaylistMode": "first-line-per-channel",
-  "note": "Stream reachability is network-dependent and is not tested by GitHub Actions."
+  "primaryPlaylistMode": "merged-all-lines-plus-4k-group",
+  "simplePlaylistMode": "best-line-per-channel-plus-4k-group",
+  "qualityOrder": [
+    "4k",
+    "hd",
+    "normal"
+  ],
+  "allowedIptvHosts": [
+    "120.87.0.0/16",
+    "112.89.121.23"
+  ],
+  "note": "Only Guangdong Unicom PLTV unicast URLs are retained. Stream reachability is network-dependent and is not tested by GitHub Actions."
 }
