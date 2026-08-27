@@ -1,6 +1,6 @@
 #EXTM3U
 # Generated from merged Guangdong Unicom IPTV unicast sources
-# Primary upstream commit: 48508e405375df86619ef514a0bcc038d700223c
+# Primary upstream commit: d9cc8e235e82c3e886d3eafa25c8007bb2b473b1
 # Secondary upstream commit: e0addaad6761b998c257e1af4a82e4fffe25aa3e
 #EXTINF:-1 tvg-id="北京卫视4K" tvg-name="北京卫视" group-title="4K超高清",北京卫视4K
 http://120.87.19.109:80/PLTV/88888973/224/3221226680/371059534.smil/01.m3u8?fmt=ts2hls,244,01.m3u8&accountinfo=VDZkqe2wDG/DozHtN5Qt2rSqeZkQUG07rgE0zxej+vXlUY3cxzF4b4EdoFXUYfIFrZU17scXXfWzTQ5WGY4N6AWZ1F4+6A1eDkDeh5XZlpvpn23wIF+ldb6dnBPa8zHj3,END&tenantId=8601
