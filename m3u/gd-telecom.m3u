@@ -56,6 +56,8 @@ rtp://239.77.0.171:5146
 #EXTINF:-1 tvg-id="CCTV-6" tvg-name="CCTV-6" group-title="央视",CCTV-6
 rtp://239.77.0.35:5146
 #EXTINF:-1 tvg-id="CCTV-7" tvg-name="CCTV-7" group-title="央视",CCTV-7
+rtp://239.77.1.167:5146
+#EXTINF:-1 tvg-id="CCTV-7" tvg-name="CCTV-7" group-title="央视",CCTV-7
 rtp://239.77.1.159:5146
 #EXTINF:-1 tvg-id="CCTV-7" tvg-name="CCTV-7" group-title="央视",CCTV-7
 rtp://239.77.0.138:5146
@@ -73,6 +75,8 @@ rtp://239.77.0.135:5146
 rtp://239.77.0.38:5146
 #EXTINF:-1 tvg-id="CCTV-10" tvg-name="CCTV-10" group-title="央视",CCTV-10
 rtp://239.77.1.113:5146
+#EXTINF:-1 tvg-id="CCTV-10" tvg-name="CCTV-10" group-title="央视",CCTV-10
+rtp://239.77.1.169:5146
 #EXTINF:-1 tvg-id="CCTV-10" tvg-name="CCTV-10" group-title="央视",CCTV-10
 rtp://239.77.0.134:5146
 #EXTINF:-1 tvg-id="CCTV-10" tvg-name="CCTV-10" group-title="央视",CCTV-10
@@ -251,6 +255,8 @@ rtp://239.77.0.57:5146
 rtp://239.77.0.7:5146
 #EXTINF:-1 tvg-id="江苏卫视" tvg-name="江苏卫视" group-title="卫视",江苏卫视
 rtp://239.77.1.18:5146
+#EXTINF:-1 tvg-id="江苏卫视" tvg-name="江苏卫视" group-title="卫视",江苏卫视
+rtp://239.77.1.149:5146
 #EXTINF:-1 tvg-id="江西卫视" tvg-name="江西卫视" group-title="卫视",江西卫视
 rtp://239.77.1.219:5146
 #EXTINF:-1 tvg-id="江西卫视" tvg-name="江西卫视" group-title="卫视",江西卫视
@@ -287,8 +293,6 @@ rtp://239.77.0.61:5146
 rtp://239.77.0.8:5146
 #EXTINF:-1 tvg-id="山东卫视" tvg-name="山东卫视" group-title="卫视",山东卫视
 rtp://239.77.1.142:5146
-#EXTINF:-1 tvg-id="山东卫视" tvg-name="山东卫视" group-title="卫视",山东卫视
-rtp://239.77.1.153:5146
 #EXTINF:-1 tvg-id="山西卫视" tvg-name="山西卫视" group-title="卫视",山西卫视
 rtp://239.77.0.69:5146
 #EXTINF:-1 tvg-id="陕西卫视" tvg-name="陕西卫视" group-title="卫视",陕西卫视
