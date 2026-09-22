@@ -47,7 +47,20 @@ jobs:
           curl --fail --location --retry 3 --connect-timeout 20 -o .tmp/all.m3u "$telecom/GuangdongIPTV_rtp_all.m3u"
           curl --fail --location --retry 3 --connect-timeout 20 -o .tmp/hd.m3u "$telecom/GuangdongIPTV_rtp_hd.m3u"
           curl --fail --location --retry 3 --connect-timeout 20 -o .tmp/4k.m3u "$telecom/GuangdongIPTV_rtp_4k.m3u"
-          curl --fail --location --retry 3 --connect-timeout 20 -o .tmp/probe.txt "$telecom/GuangdongIPTV_rtp_probe.txt"
+          probe_url="$telecom/GuangdongIPTV_rtp_probe.txt"
+          curl --fail --location --retry 3 --connect-timeout 20 -o .tmp/probe.txt "$probe_url"
+
+          if [[ ! -s .tmp/probe.txt ]]; then
+            echo "::warning::Current upstream probe file is empty; using last known non-empty probe data."
+            curl --fail --location --retry 3 --connect-timeout 20 \
+              -o .tmp/probe.txt \
+              "https://raw.githubusercontent.com/Tzwcard/ChinaTelecom-GuangdongIPTV-RTP-List/3200b2ccd08238ba423622e8310e84be121233b7/GuangdongIPTV_rtp_probe.txt"
+          fi
+
+          if [[ ! -s .tmp/probe.txt ]]; then
+            echo "::error::Guangdong IPTV probe data is empty in both current and fallback sources."
+            exit 1
+          fi
           curl --fail --location --retry 3 --connect-timeout 20 -o .tmp/epg.xml "$telecom/epg.xml"
           git ls-remote https://github.com/Tzwcard/ChinaTelecom-GuangdongIPTV-RTP-List.git refs/heads/master | cut -f1 > .tmp/telecom-upstream-sha
 
