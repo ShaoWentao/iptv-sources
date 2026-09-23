@@ -2,7 +2,7 @@ name: Update Guangdong IPTV
 
 on:
   push:
-    branches: [main]
+    branches: [main, fix/unicom-grouping]
     paths:
       - 'config/**'
       - 'scripts/**'
