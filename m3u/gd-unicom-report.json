@@ -29,13 +29,14 @@
   "renderedPrimaryEntries": 218,
   "groups": {
     "4K超高清": 11,
-    "央视": 19,
-    "卫视": 31,
-    "广东": 1,
-    "地方": 20,
-    "专业": 3,
-    "教育": 4,
-    "其它": 42
+    "央视": 23,
+    "卫视": 35,
+    "广东": 14,
+    "地方": 6,
+    "少儿": 4,
+    "教育": 8,
+    "专业": 2,
+    "其它": 28
   },
   "primaryPlaylistMode": "merged-all-lines-plus-4k-group",
   "simplePlaylistMode": "best-line-per-channel-plus-4k-group",
