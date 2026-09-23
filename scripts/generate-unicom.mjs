@@ -79,12 +79,42 @@ function mapRegularGroup(group) {
   return value;
 }
 
+const GUANGDONG_CHANNELS = new Set([
+  '广东经济科教',
+  '广东体育',
+  '广东珠江',
+  '广东民生',
+  '广东影视',
+  '广东新闻',
+  '广东少儿',
+  '广东现代教育',
+  '嘉佳卡通',
+  '岭南戏曲',
+  '南方购物',
+  '大湾区卫视',
+  '广东移动',
+  '广东4K',
+]);
+
+const PROFESSIONAL_CHANNELS = new Set(['金鹰纪实']);
+const LOCAL_CITY_PREFIX = /^(?:佛山|中山|河源|惠州|汕头|珠海|江门|肇庆|清远|韶关|梅州|湛江|茂名|阳江|云浮|潮州|揭阳)/;
+
 function inferGroup(name) {
   const value = String(name || '');
   if (/^(?:CCTV|CGTN)|央视/.test(value)) return '央视';
+  if (GUANGDONG_CHANNELS.has(value)) return '广东';
+  if (/^CETV|教育|中学生|国学/.test(value)) return '教育';
+  if (/(?:少儿|卡通|动漫)/.test(value) || value === '哈哈炫动') return '少儿';
+  if (PROFESSIONAL_CHANNELS.has(value)) return '专业';
   if (/卫视$/.test(value)) return '卫视';
-  if (/^(?:广东|大湾区|岭南|嘉佳|南方购物)/.test(value)) return '广东';
+  if (LOCAL_CITY_PREFIX.test(value)) return '地方';
   return '其他';
+}
+
+function normalizeRegularGroup(name, upstreamGroup) {
+  const inferred = inferGroup(name);
+  if (inferred !== '其他') return inferred;
+  return upstreamGroup || '其他';
 }
 
 function parsePrimary(text) {
@@ -233,7 +263,7 @@ for (const entry of combined) {
 }
 for (const entry of combined) {
   entry.quality = betterQuality(entry.quality, qualityEvidence.get(resourceKey(entry.url)) || 'normal');
-  entry.group = groupByChannel.get(entry.name) || entry.groupCandidate || inferGroup(entry.name);
+  entry.group = normalizeRegularGroup(entry.name, groupByChannel.get(entry.name) || entry.groupCandidate);
 }
 
 const deduped = [];
@@ -270,7 +300,7 @@ for (const items of buckets.values()) {
   );
 }
 
-const defaultGroupOrder = ['央视', '卫视', '广东', '地方', 'IPTV特色', '专业', '其他'];
+const defaultGroupOrder = ['央视', '卫视', '广东', '地方', 'IPTV特色', '少儿', '教育', '专业', '其他'];
 const discoveredGroups = [];
 for (const [name, items] of buckets) {
   const group = items[0]?.group || inferGroup(name);
