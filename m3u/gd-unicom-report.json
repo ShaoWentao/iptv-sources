@@ -21,12 +21,14 @@
   "upstreamEntries": 354,
   "filteredNonUnicom": 61,
   "deduplicatedEntries": 148,
+  "standardDefinitionLinesRemoved": 77,
+  "standardDefinitionOnlyFallbackChannels": 26,
   "selectedChannels": 120,
-  "selectedLines": 206,
-  "alternateEntries": 86,
+  "selectedLines": 129,
+  "alternateEntries": 9,
   "fourKChannels": 11,
   "fourKLines": 12,
-  "renderedPrimaryEntries": 218,
+  "renderedPrimaryEntries": 141,
   "groups": {
     "4K超高清": 11,
     "央视": 23,
@@ -49,5 +51,5 @@
     "120.87.0.0/16",
     "112.89.121.23"
   ],
-  "note": "Only Guangdong Unicom PLTV unicast URLs are retained. Stream reachability is network-dependent and is not tested by GitHub Actions."
+  "note": "Only Guangdong Unicom PLTV unicast URLs are retained. SD lines are removed when HD/4K alternatives exist; SD-only channels keep one fallback line. Stream reachability is network-dependent and is not tested by GitHub Actions."
 }
