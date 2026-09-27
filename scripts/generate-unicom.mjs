@@ -291,13 +291,25 @@ for (const entry of deduped) {
   if (!buckets.has(entry.name)) buckets.set(entry.name, []);
   buckets.get(entry.name).push(entry);
 }
-for (const items of buckets.values()) {
+let standardDefinitionLinesRemoved = 0;
+let standardDefinitionOnlyFallbackChannels = 0;
+for (const [name, items] of buckets) {
   items.sort((a, b) =>
     QUALITY_SCORE[b.quality] - QUALITY_SCORE[a.quality]
     || a.sourcePriority - b.sourcePriority
     || a.globalIndex - b.globalIndex
     || a.url.localeCompare(b.url)
   );
+
+  const higherQuality = items.filter((item) => item.quality !== 'normal');
+  if (higherQuality.length > 0) {
+    standardDefinitionLinesRemoved += items.length - higherQuality.length;
+    buckets.set(name, higherQuality);
+  } else if (items.length > 1) {
+    standardDefinitionLinesRemoved += items.length - 1;
+    standardDefinitionOnlyFallbackChannels += 1;
+    buckets.set(name, [items[0]]);
+  }
 }
 
 const defaultGroupOrder = ['央视', '卫视', '广东', '地方', 'IPTV特色', '少儿', '教育', '专业', '其他'];
@@ -387,6 +399,8 @@ const report = {
   upstreamEntries: combined.length,
   filteredNonUnicom: primary.rejectedNonUnicom + secondary.rejectedNonUnicom,
   deduplicatedEntries: combined.length - deduped.length,
+  standardDefinitionLinesRemoved,
+  standardDefinitionOnlyFallbackChannels,
   selectedChannels: buckets.size,
   selectedLines: regularEntries.length,
   alternateEntries: regularEntries.length - buckets.size,
@@ -398,7 +412,7 @@ const report = {
   simplePlaylistMode: 'best-line-per-channel-plus-4k-group',
   qualityOrder: ['4k', 'hd', 'normal'],
   allowedIptvHosts: ['120.87.0.0/16', '112.89.121.23'],
-  note: 'Only Guangdong Unicom PLTV unicast URLs are retained. Stream reachability is network-dependent and is not tested by GitHub Actions.',
+  note: 'Only Guangdong Unicom PLTV unicast URLs are retained. SD lines are removed when HD/4K alternatives exist; SD-only channels keep one fallback line. Stream reachability is network-dependent and is not tested by GitHub Actions.',
 };
 fs.writeFileSync(path.join(outputDir, 'gd-unicom-report.json'), `${JSON.stringify(report, null, 2)}\n`);
 console.log(JSON.stringify(report, null, 2));
