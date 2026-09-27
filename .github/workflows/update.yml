@@ -184,8 +184,9 @@ jobs:
           const simple = fs.readFileSync('./m3u/gd-unicom-simple.m3u', 'utf8');
           const primaryCctv13 = (primary.match(/,CCTV13\n/g) || []).length;
           const simpleCctv13 = (simple.match(/,CCTV13\n/g) || []).length;
-          if (primaryCctv13 < 2) throw new Error('CCTV13 alternates missing from APTV playlist');
+          if (primaryCctv13 < 1) throw new Error('CCTV13 missing from APTV playlist');
           if (simpleCctv13 !== 1) throw new Error('CCTV13 simple playlist should contain one regular entry');
+          if (unicom.standardDefinitionLinesRemoved < 1) throw new Error('Unicom SD pruning did not remove any lines');
 
           console.log(JSON.stringify({ telecom, blockedProbeEntries: blockedAddresses.length, unicom, primaryCctv13, simpleCctv13 }, null, 2));
           NODE
