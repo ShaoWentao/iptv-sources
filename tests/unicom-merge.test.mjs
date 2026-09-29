@@ -63,8 +63,8 @@ test('merges two Unicom upstreams, filters non-IPTV URLs, ranks 4K first and add
   assert.ok(regularBlock.includes(hd));
   assert.ok(!regularBlock.includes(sd), 'SD line should be removed when HD/4K alternatives exist');
 
-  assert.match(main, /asset_3221228101\.smil/);
-  assert.doesNotMatch(main, /asset_3221228102\.smil/, 'SD-only channel should keep only one fallback line');
+  assert.doesNotMatch(main, /asset_3221228101\.smil/, 'known lower-resolution-only channel should be removed');
+  assert.doesNotMatch(main, /asset_3221228102\.smil/, 'known lower-resolution-only channel should be removed');
 
   assert.equal((main.match(/asset_3221228001\.smil/g) || []).length, 1, 'auth-only duplicate should be removed');
   assert.equal((main.match(/asset_3221229001\.smil/g) || []).length, 2, '4K URL should appear in regular and 4K groups');
@@ -74,7 +74,7 @@ test('merges two Unicom upstreams, filters non-IPTV URLs, ranks 4K first and add
   assert.equal(report.filteredNonUnicom, 3);
   assert.ok(report.deduplicatedEntries >= 1);
   assert.ok(report.standardDefinitionLinesRemoved >= 2);
-  assert.equal(report.standardDefinitionOnlyFallbackChannels, 1);
+  assert.equal(report.standardDefinitionOnlyFallbackChannels, 0);
 });
 
 
