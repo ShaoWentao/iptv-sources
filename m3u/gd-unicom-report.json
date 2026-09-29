@@ -52,5 +52,5 @@
     "120.87.0.0/16",
     "112.89.121.23"
   ],
-  "note": "Only Guangdong Unicom PLTV unicast URLs are retained. For Guangdong Unicom PLTV, fmt=244 is treated as the 1080-class stream while fmt=504/744 are treated as lower-resolution fallback variants. 720/lower lines are removed when 1080/4K alternatives exist; lower-resolution-only channels keep one fallback line. Stream reachability is network-dependent and is not tested by GitHub Actions."
+  "note": "Only Guangdong Unicom PLTV unicast URLs are retained. For Guangdong Unicom PLTV, fmt=244 is treated as the 1080-class stream while fmt=504/744 are treated as lower-resolution variants. 720/lower lines are removed when 1080/4K alternatives exist; channels with only lower-resolution lines keep one fallback line. Stream reachability is network-dependent and is not tested by GitHub Actions."
 }
