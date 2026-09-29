@@ -326,20 +326,10 @@ for (const [name, items] of buckets) {
   if (higherQuality.length > 0) {
     standardDefinitionLinesRemoved += items.length - higherQuality.length;
     buckets.set(name, higherQuality);
-    continue;
-  }
-
-  // Strictly remove known 720/lower variants. Unknown-format entries are kept
-  // because their real resolution cannot be proven from upstream metadata.
-  const nonSd = items.filter((item) => item.quality !== 'sd');
-  standardDefinitionLinesRemoved += items.length - nonSd.length;
-  if (nonSd.length === 0) {
-    buckets.delete(name);
-  } else if (nonSd.length > 1) {
-    standardDefinitionLinesRemoved += nonSd.length - 1;
-    buckets.set(name, [nonSd[0]]);
-  } else {
-    buckets.set(name, nonSd);
+  } else if (items.length > 1) {
+    standardDefinitionLinesRemoved += items.length - 1;
+    standardDefinitionOnlyFallbackChannels += 1;
+    buckets.set(name, [items[0]]);
   }
 }
 
@@ -443,7 +433,7 @@ const report = {
   simplePlaylistMode: 'best-line-per-channel-plus-4k-group',
   qualityOrder: ['4k', 'hd', 'sd', 'normal'],
   allowedIptvHosts: ['120.87.0.0/16', '112.89.121.23'],
-  note: 'Only Guangdong Unicom PLTV unicast URLs are retained. For Guangdong Unicom PLTV, fmt=244 is treated as the 1080-class stream while fmt=504/744 are treated as known 720/lower variants. Known 720/lower lines are removed even when no 1080/4K alternative exists; unknown-format entries are kept because their real resolution cannot be proven from upstream metadata. Stream reachability is network-dependent and is not tested by GitHub Actions.',
+  note: 'Only Guangdong Unicom PLTV unicast URLs are retained. For Guangdong Unicom PLTV, fmt=244 is treated as the 1080-class stream while fmt=504/744 are treated as lower-resolution variants. 720/lower lines are removed when 1080/4K alternatives exist; channels with only lower-resolution lines keep one fallback line. Stream reachability is network-dependent and is not tested by GitHub Actions.',
 };
 fs.writeFileSync(path.join(outputDir, 'gd-unicom-report.json'), `${JSON.stringify(report, null, 2)}\n`);
 console.log(JSON.stringify(report, null, 2));
