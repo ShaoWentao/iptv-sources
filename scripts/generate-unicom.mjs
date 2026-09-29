@@ -41,14 +41,35 @@ function isUnicomIptvUrl(value) {
   }
 }
 
-function qualityFromText(...parts) {
+function streamFormatCode(value) {
+  try {
+    const url = new URL(value);
+    const match = url.search.match(/[?&]fmt=ts2hls,([^,&]+)/i);
+    return match ? match[1] : '';
+  } catch {
+    return '';
+  }
+}
+
+function qualityFromEntry(urlValue, ...parts) {
   const text = parts.filter(Boolean).join(' ');
-  if (/4K|UHD|超高清/i.test(text)) return '4k';
-  if (/高清|\bHD\b/i.test(text)) return 'hd';
+
+  // Explicit 4K metadata wins because a few upstream 4K entries still use fmt=244.
+  if (/4K|UHD|2160P|3840\s*[x×]\s*2160|超高清/i.test(text)) return '4k';
+
+  // Guangdong Unicom PLTV uses fmt=244 for the 1080-class stream.
+  // fmt=504/744 are the lower-resolution variants that were previously
+  // being kept because upstream labels called them "高清".
+  const fmt = streamFormatCode(urlValue);
+  if (fmt === '244') return 'hd';
+  if (fmt === '504' || fmt === '744') return 'sd';
+
+  if (/1080P|1920\s*[x×]\s*1080|FHD|高清|\bHD\b/i.test(text)) return 'hd';
+  if (/720P|1280\s*[x×]\s*720|标清|\bSD\b/i.test(text)) return 'sd';
   return 'normal';
 }
 
-const QUALITY_SCORE = { normal: 1, hd: 2, '4k': 3 };
+const QUALITY_SCORE = { normal: 0, sd: 1, hd: 2, '4k': 3 };
 
 function betterQuality(a, b) {
   return QUALITY_SCORE[a] >= QUALITY_SCORE[b] ? a : b;
@@ -148,7 +169,7 @@ function parsePrimary(text) {
       sourcePriority: 0,
       index: index++,
       groupCandidate: mapRegularGroup(group) || group || '其他',
-      quality: qualityFromText(name, group),
+      quality: qualityFromEntry(value, name, group),
     });
   }
 
@@ -212,7 +233,7 @@ function parseSecondary(text) {
       sourcePriority: 1,
       index: index++,
       groupCandidate: mapRegularGroup(sourceGroup),
-      quality: qualityFromText(displayName, sourceGroup),
+      quality: qualityFromEntry(line, displayName, sourceGroup),
     });
   }
 
@@ -301,7 +322,7 @@ for (const [name, items] of buckets) {
     || a.url.localeCompare(b.url)
   );
 
-  const higherQuality = items.filter((item) => item.quality !== 'normal');
+  const higherQuality = items.filter((item) => item.quality === 'hd' || item.quality === '4k');
   if (higherQuality.length > 0) {
     standardDefinitionLinesRemoved += items.length - higherQuality.length;
     buckets.set(name, higherQuality);
@@ -410,9 +431,9 @@ const report = {
   groups,
   primaryPlaylistMode: 'merged-all-lines-plus-4k-group',
   simplePlaylistMode: 'best-line-per-channel-plus-4k-group',
-  qualityOrder: ['4k', 'hd', 'normal'],
+  qualityOrder: ['4k', 'hd', 'sd', 'normal'],
   allowedIptvHosts: ['120.87.0.0/16', '112.89.121.23'],
-  note: 'Only Guangdong Unicom PLTV unicast URLs are retained. SD lines are removed when HD/4K alternatives exist; SD-only channels keep one fallback line. Stream reachability is network-dependent and is not tested by GitHub Actions.',
+  note: 'Only Guangdong Unicom PLTV unicast URLs are retained. For Guangdong Unicom PLTV, fmt=244 is treated as the 1080-class stream while fmt=504/744 are treated as lower-resolution fallback variants. 720/lower lines are removed when 1080/4K alternatives exist; lower-resolution-only channels keep one fallback line. Stream reachability is network-dependent and is not tested by GitHub Actions.',
 };
 fs.writeFileSync(path.join(outputDir, 'gd-unicom-report.json'), `${JSON.stringify(report, null, 2)}\n`);
 console.log(JSON.stringify(report, null, 2));

@@ -78,6 +78,36 @@ test('merges two Unicom upstreams, filters non-IPTV URLs, ranks 4K first and add
 });
 
 
+test('keeps fmt=244 1080-class lines and removes fmt=504/744 lower-resolution alternatives', () => {
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'unicom-resolution-'));
+  const primary = path.join(temp, 'primary.txt');
+  const secondary = path.join(temp, 'secondary.m3u');
+  const out = path.join(temp, 'out');
+
+  const lines = ['央视,#genre#'];
+  for (let i = 1; i <= 22; i += 1) lines.push(`测试${i},${url('120.87.19.109', 3221240000 + i)}`);
+  lines.push('卫视,#genre#');
+  lines.push(`分辨率测试,${url('120.87.19.109', 3221241001, '1080', '244')}`);
+  lines.push(`分辨率测试,${url('120.87.19.109', 3221241002, '720-A', '504')}`);
+  lines.push(`分辨率测试,${url('120.87.19.109', 3221241003, '720-B', '744')}`);
+  fs.writeFileSync(primary, lines.join('\n') + '\n');
+  fs.writeFileSync(secondary, '#EXTM3U\n');
+
+  const result = spawnSync(process.execPath, [
+    'scripts/generate-unicom.mjs', '--input', primary, '--input-secondary', secondary,
+    '--output', out, '--upstream-sha', 'primary-sha', '--secondary-sha', 'secondary-sha',
+  ], { cwd: path.resolve('.'), encoding: 'utf8' });
+  assert.equal(result.status, 0, result.stderr || result.stdout);
+
+  const main = fs.readFileSync(path.join(out, 'gd-unicom.m3u'), 'utf8');
+  const report = JSON.parse(fs.readFileSync(path.join(out, 'gd-unicom-report.json'), 'utf8'));
+
+  assert.match(main, /asset_3221241001\.smil/, 'fmt=244 1080-class line should be kept');
+  assert.doesNotMatch(main, /asset_3221241002\.smil/, 'fmt=504 lower-resolution line should be removed');
+  assert.doesNotMatch(main, /asset_3221241003\.smil/, 'fmt=744 lower-resolution line should be removed');
+  assert.deepEqual(report.qualityOrder, ['4k', 'hd', 'sd', 'normal']);
+});
+
 test('normalizes Guangdong, satellite, children and city channel groups instead of inheriting bad upstream groups', () => {
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'unicom-groups-'));
   const primary = path.join(temp, 'primary.txt');
