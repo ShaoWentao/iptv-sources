@@ -1,8 +1,8 @@
 {
   "schemaVersion": 3,
-  "generatedAt": "2026-10-03T01:20:46.139Z",
+  "generatedAt": "2026-10-03T14:46:21.066Z",
   "upstreamRepository": "Tzwcard/ChinaTelecom-GuangdongIPTV-RTP-List",
-  "upstreamSha": "f1d3c006d7e6afdfd33d9e5023b23594e30870c9",
+  "upstreamSha": "65e7edcb397f8da083446c814b4dd06ad5d679c3",
   "udpxy": {
     "protocol": "http",
     "host": "192.168.5.7",
@@ -32,8 +32,8 @@
       ]
     },
     "epg": {
-      "bytes": 99478,
-      "sha256": "22efcfc69104cd3211f68bf2eca1a404b44fdfb831606fc6e9dff50c2e7a05d5"
+      "bytes": 204064,
+      "sha256": "4159c68616dca3d19cca5aeb7f2bba5f80117d4147e543396f493dfee60c7235"
     }
   },
   "filtered": {
