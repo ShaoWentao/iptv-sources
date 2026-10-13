@@ -1,5 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
+import { generateMulticast } from './unicom-multicast.mjs';
 
 function parseArgs(argv) {
   const args = {};
@@ -115,6 +116,7 @@ const GUANGDONG_CHANNELS = new Set([
   '大湾区卫视',
   '广东移动',
   '广东4K',
+  '广东房产',
 ]);
 
 const PROFESSIONAL_CHANNELS = new Set(['金鹰纪实']);
@@ -263,7 +265,33 @@ function resourceKey(value) {
 
 const primary = parsePrimary(readText(input));
 const secondary = parseSecondary(readText(secondaryInput));
-const combined = [...primary.accepted, ...secondary.accepted].map((entry, index) => ({ ...entry, globalIndex: index }));
+const supplement = args.supplement ? JSON.parse(readText(args.supplement)) : null;
+const supplementAccepted = [];
+const supplementReport = { addedChannels: [], acceptedEntries: 0, rejectedEntries: 0, skippedExistingEntries: 0 };
+if (supplement) {
+  if (supplement.schemaVersion !== 1 || !Array.isArray(supplement.unicast) || !Array.isArray(supplement.multicast)) {
+    throw new Error('Invalid Guangdong Unicom supplement schema');
+  }
+  const existingNames = new Set([...primary.accepted, ...secondary.accepted].map(e => e.name));
+  for (const item of supplement.unicast) {
+    if (!item.name || /[\r\n"]/.test(item.name) || !isUnicomIptvUrl(item.url)) {
+      supplementReport.rejectedEntries += 1;
+      continue;
+    }
+    if (existingNames.has(item.name)) {
+      supplementReport.skippedExistingEntries += 1;
+      continue;
+    }
+    supplementAccepted.push({ name: item.name, url: item.url, source: 'user-attachment', sourcePriority: 2,
+      index: supplementAccepted.length, groupCandidate: inferGroup(item.name), quality: qualityFromEntry(item.url, item.sourceName || item.name) });
+    if (!supplementReport.addedChannels.includes(item.name)) supplementReport.addedChannels.push(item.name);
+  }
+  supplementReport.acceptedEntries = supplementAccepted.length;
+  supplementReport.provenance = supplement.provenance || [];
+  supplementReport.reachability = 'not-verified';
+  supplementReport.note = 'Attachment URLs retain original authentication. No successful playback has been established; reachability and token validity require checking on the Guangdong Unicom IPTV network. Unknown fmt codes are not promoted to 1080.';
+}
+const combined = [...primary.accepted, ...secondary.accepted, ...supplementAccepted].map((entry, index) => ({ ...entry, globalIndex: index }));
 
 if (combined.length < 20) {
   throw new Error(`Merged Guangdong Unicom list looks incomplete: ${combined.length} accepted IPTV entries`);
@@ -417,7 +445,7 @@ const report = {
       rejectedNonUnicom: secondary.rejectedNonUnicom,
     },
   ],
-  upstreamEntries: combined.length,
+  upstreamEntries: primary.accepted.length + secondary.accepted.length,
   filteredNonUnicom: primary.rejectedNonUnicom + secondary.rejectedNonUnicom,
   deduplicatedEntries: combined.length - deduped.length,
   standardDefinitionLinesRemoved,
@@ -435,5 +463,10 @@ const report = {
   allowedIptvHosts: ['120.87.0.0/16', '112.89.121.23'],
   note: 'Only Guangdong Unicom PLTV unicast URLs are retained. For Guangdong Unicom PLTV, fmt=244 is treated as the 1080-class stream while fmt=504/744 are treated as lower-resolution variants. 720/lower lines are removed when 1080/4K alternatives exist; channels with only lower-resolution lines keep one fallback line. Stream reachability is network-dependent and is not tested by GitHub Actions.',
 };
+if (supplement) {
+  report.supplement = supplementReport;
+  report.totalInputEntries = combined.length;
+  report.multicast = generateMulticast(supplement, outputDir, new Set(buckets.keys()));
+}
 fs.writeFileSync(path.join(outputDir, 'gd-unicom-report.json'), `${JSON.stringify(report, null, 2)}\n`);
 console.log(JSON.stringify(report, null, 2));

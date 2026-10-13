@@ -95,6 +95,7 @@ jobs:
           node scripts/generate-unicom.mjs \
             --input .tmp/gd-unicom.txt \
             --input-secondary .tmp/gd-unicom-secondary.m3u \
+            --supplement config/gd-unicom-supplement.json \
             --output m3u \
             --upstream-sha "$(cat .tmp/unicom-upstream-sha)" \
             --secondary-sha "$(cat .tmp/unicom-secondary-sha)"
@@ -122,6 +123,9 @@ jobs:
           test -s m3u/gd-unicom.m3u
           test -s m3u/gd-unicom-simple.m3u
           test -s m3u/gd-unicom-report.json
+          test -s m3u/gd-unicom-multicast.m3u
+          test -s m3u/gd-unicom-multicast-rtp.m3u
+          test -s m3u/gd-unicom-multicast-report.json
           grep -q '^#EXTINF:' m3u/gd-unicom.m3u
           grep -q 'group-title="4K超高清"' m3u/gd-unicom.m3u
           grep -q '120\.87\.19\.109' m3u/gd-unicom.m3u
@@ -179,6 +183,21 @@ jobs:
           }
           validateUnicomUrls('./m3u/gd-unicom.m3u');
           validateUnicomUrls('./m3u/gd-unicom-simple.m3u');
+          const multicast = require('./m3u/gd-unicom-multicast-report.json');
+          if (multicast.selectedChannels < 100) throw new Error('Unicom multicast supplement incomplete');
+          if (multicast.transport !== 'unknown' || multicast.reachability !== 'not-verified') throw new Error('Unexpected multicast verification claim');
+          if (!unicom.supplement || unicom.supplement.rejectedEntries !== 0) throw new Error('Invalid unicast supplement');
+          for (const filename of ['gd-unicom-multicast.m3u', 'gd-unicom-multicast-rtp.m3u']) {
+            const text = fs.readFileSync(`./m3u/${filename}`, 'utf8');
+            if (/浙江|AVS2|CAVS|igmp:\/\/|https?:\/\//i.test(text)) throw new Error('Excluded entry leaked into multicast');
+            const expected = filename.includes('-rtp') ? /^rtp:\/\/239\.0\.(?:1|10)\.\d+:\d+$/ : /^udp:\/\/@239\.0\.(?:1|10)\.\d+:\d+$/;
+            for (const line of text.split(/\r?\n/).filter(l => l && !l.startsWith('#'))) {
+              if (!expected.test(line)) throw new Error(`Invalid multicast candidate: ${line}`);
+            }
+            for (const conflict of multicast.conflicts) {
+              if (text.includes(conflict.address + '\n')) throw new Error('Conflicting multicast address leaked');
+            }
+          }
 
           const primary = fs.readFileSync('./m3u/gd-unicom.m3u', 'utf8');
           const simple = fs.readFileSync('./m3u/gd-unicom-simple.m3u', 'utf8');
@@ -204,6 +223,9 @@ jobs:
             m3u/gd-unicom.m3u
             m3u/gd-unicom-simple.m3u
             m3u/gd-unicom-report.json
+            m3u/gd-unicom-multicast.m3u
+            m3u/gd-unicom-multicast-rtp.m3u
+            m3u/gd-unicom-multicast-report.json
           )
           if [[ -z "$(git status --porcelain -- "${files[@]}")" ]]; then
             echo 'No data changes.'
