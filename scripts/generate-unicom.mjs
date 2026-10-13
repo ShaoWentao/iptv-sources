@@ -267,7 +267,8 @@ const primary = parsePrimary(readText(input));
 const secondary = parseSecondary(readText(secondaryInput));
 const supplement = args.supplement ? JSON.parse(readText(args.supplement)) : null;
 const supplementAccepted = [];
-const supplementReport = { addedChannels: [], acceptedEntries: 0, rejectedEntries: 0, skippedExistingEntries: 0 };
+const unverifiedAccepted = [];
+const supplementReport = { addedChannels: [], quarantinedChannels: [], acceptedEntries: 0, rejectedEntries: 0, skippedExistingEntries: 0 };
 if (supplement) {
   if (supplement.schemaVersion !== 1 || !Array.isArray(supplement.unicast) || !Array.isArray(supplement.multicast)) {
     throw new Error('Invalid Guangdong Unicom supplement schema');
@@ -282,6 +283,11 @@ if (supplement) {
       supplementReport.skippedExistingEntries += 1;
       continue;
     }
+    if (item.playbackStatus !== 'verified') {
+      unverifiedAccepted.push({ name: item.name, url: item.url, group: '未验证候选' });
+      if (!supplementReport.quarantinedChannels.includes(item.name)) supplementReport.quarantinedChannels.push(item.name);
+      continue;
+    }
     supplementAccepted.push({ name: item.name, url: item.url, source: 'user-attachment', sourcePriority: 2,
       index: supplementAccepted.length, groupCandidate: inferGroup(item.name), quality: qualityFromEntry(item.url, item.sourceName || item.name) });
     if (!supplementReport.addedChannels.includes(item.name)) supplementReport.addedChannels.push(item.name);
@@ -289,7 +295,8 @@ if (supplement) {
   supplementReport.acceptedEntries = supplementAccepted.length;
   supplementReport.provenance = supplement.provenance || [];
   supplementReport.reachability = 'not-verified';
-  supplementReport.note = 'Attachment URLs retain original authentication. No successful playback has been established; reachability and token validity require checking on the Guangdong Unicom IPTV network. Unknown fmt codes are not promoted to 1080.';
+  supplementReport.note = 'Only attachments explicitly marked playbackStatus=verified enter the main playlists. Unverified legacy URLs remain in gd-unicom-unverified.m3u. Address whitelisting and workflow success do not establish playback or token validity. Unknown fmt codes are not promoted to 1080.';
+  supplementReport.playbackIssues = supplement.playbackIssues || [];
 }
 const combined = [...primary.accepted, ...secondary.accepted, ...supplementAccepted].map((entry, index) => ({ ...entry, globalIndex: index }));
 
@@ -421,6 +428,10 @@ const primaryItems = [...fourKEntries, ...regularEntries];
 const simpleItems = [...simpleFourK, ...simpleRegular];
 fs.writeFileSync(path.join(outputDir, 'gd-unicom.m3u'), render(primaryItems));
 fs.writeFileSync(path.join(outputDir, 'gd-unicom-simple.m3u'), render(simpleItems));
+if (supplement) {
+  fs.writeFileSync(path.join(outputDir, 'gd-unicom-unverified.m3u'), render(unverifiedAccepted)
+    .replace('# Generated from merged Guangdong Unicom IPTV unicast sources', '# UNVERIFIED attachment candidates; NOT a verified playable playlist'));
+}
 
 const groups = { '4K超高清': simpleFourK.length };
 for (const item of simpleRegular) groups[item.group] = (groups[item.group] || 0) + 1;

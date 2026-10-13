@@ -22,37 +22,51 @@
     {
       "name": "广东房产",
       "url": "http://120.87.4.18:80/PLTV/88888973/224/3221225732/10000100000000060000000000334256_0.smil/01.m3u8?fmt=ts2hls,163,01.m3u8,0,2513,0,0&accountinfo=Wti4h1vlszvIgmJ2Rn+JT30YqhIlb959YafU65xwPQuFI6KpBBcFipVQNWSpm9U4cljBwkAKGt2Lq1W8IgjWjgzcX+uhk0/ut3dCvLMCowmxZkz3btHg8HNlovI+YSwV:20181110091937,END&GuardEncType=2",
-      "sourceName": "广东房产"
+      "sourceName": "广东房产",
+      "playbackStatus": "unverified",
+      "playbackNote": "User reported newly added channels unplayable; URL retains authentication containing 20181110. Current host cannot retrieve control streams either, so exact cause is not established."
     },
     {
       "name": "梨园频道",
       "url": "http://120.87.4.10:80/PLTV/88888973/224/3221226164/10000100000000060000000001091898_0.smil/01.m3u8?fmt=ts2hls,123,01.m3u8,0,2441,0,0&accountinfo=Wti4h1vlszvIgmJ2Rn+JT30YqhIlb959YafU65xwPQuFI6KpBBcFipVQNWSpm9U4cljBwkAKGt2Lq1W8IgjWjgzcX+uhk0/ut3dCvLMCowl+6xtn26q6q3FpHgZDbOvY:20181110091937,END&GuardEncType=2",
-      "sourceName": "梨园频道"
+      "sourceName": "梨园频道",
+      "playbackStatus": "unverified",
+      "playbackNote": "User reported newly added channels unplayable; URL retains authentication containing 20181110. Current host cannot retrieve control streams either, so exact cause is not established."
     },
     {
       "name": "靓装",
       "url": "http://120.87.4.25:80/PLTV/88888973/224/3221226166/10000100000000060000000001091900_0.smil/01.m3u8?fmt=ts2hls,363,01.m3u8,0,2441,0,0&accountinfo=Wti4h1vlszvIgmJ2Rn+JT30YqhIlb959YafU65xwPQuFI6KpBBcFipVQNWSpm9U4cljBwkAKGt2Lq1W8IgjWjgzcX+uhk0/ut3dCvLMCowmrXbOxf0+hSB9tUSh7yUm0:20181110091937,END&GuardEncType=2",
-      "sourceName": "靓装"
+      "sourceName": "靓装",
+      "playbackStatus": "unverified",
+      "playbackNote": "User reported newly added channels unplayable; URL retains authentication containing 20181110. Current host cannot retrieve control streams either, so exact cause is not established."
     },
     {
       "name": "CETV早期教育",
       "url": "http://120.87.4.12:80/PLTV/88888973/224/3221226169/10000100000000060000000001091903_0.smil/01.m3u8?fmt=ts2hls,143,01.m3u8,0,2441,0,0&accountinfo=Wti4h1vlszvIgmJ2Rn+JT30YqhIlb959YafU65xwPQuFI6KpBBcFipVQNWSpm9U4cljBwkAKGt2Lq1W8IgjWjgzcX+uhk0/ut3dCvLMCownc7X6vSlJK9uig8Bi+PWn+:20181110091937,END&GuardEncType=2",
-      "sourceName": "CETV早期教育"
+      "sourceName": "CETV早期教育",
+      "playbackStatus": "unverified",
+      "playbackNote": "User reported newly added channels unplayable; URL retains authentication containing 20181110. Current host cannot retrieve control streams either, so exact cause is not established."
     },
     {
       "name": "武术世界",
       "url": "http://120.87.4.11:80/PLTV/88888973/224/3221226168/10000100000000060000000001091902_0.smil/01.m3u8?fmt=ts2hls,143,01.m3u8,0,2441,0,0&accountinfo=Wti4h1vlszvIgmJ2Rn+JT30YqhIlb959YafU65xwPQuFI6KpBBcFipVQNWSpm9U4cljBwkAKGt2Lq1W8IgjWjgzcX+uhk0/ut3dCvLMCowltNLCQEuf93RkBhAuytdeH:20181110091937,END&GuardEncType=2",
-      "sourceName": "武术世界"
+      "sourceName": "武术世界",
+      "playbackStatus": "unverified",
+      "playbackNote": "User reported newly added channels unplayable; URL retains authentication containing 20181110. Current host cannot retrieve control streams either, so exact cause is not established."
     },
     {
       "name": "文物宝库",
       "url": "http://120.87.4.11:80/PLTV/88888973/224/3221226151/10000100000000060000000001091885_0.smil/01.m3u8?fmt=ts2hls,143,01.m3u8,0,2441,0,0&accountinfo=Wti4h1vlszvIgmJ2Rn+JT30YqhIlb959YafU65xwPQuFI6KpBBcFipVQNWSpm9U4cljBwkAKGt2Lq1W8IgjWjgzcX+uhk0/ut3dCvLMCowmS7x0UPV35jqcWdGwFtcnS:20181110091937,END&GuardEncType=2",
-      "sourceName": "文物宝库"
+      "sourceName": "文物宝库",
+      "playbackStatus": "unverified",
+      "playbackNote": "User reported newly added channels unplayable; URL retains authentication containing 20181110. Current host cannot retrieve control streams either, so exact cause is not established."
     },
     {
       "name": "环球奇观",
       "url": "http://120.87.4.11:80/PLTV/88888973/224/3221226154/10000100000000060000000001091888_0.smil/01.m3u8?fmt=ts2hls,143,01.m3u8,0,2441,0,0&accountinfo=Wti4h1vlszvIgmJ2Rn+JT30YqhIlb959YafU65xwPQuFI6KpBBcFipVQNWSpm9U4cljBwkAKGt2Lq1W8IgjWjgzcX+uhk0/ut3dCvLMCown2fOkoHFfWNNFaOHOO7tvT:20181110091937,END&GuardEncType=2",
-      "sourceName": "环球奇观"
+      "sourceName": "环球奇观",
+      "playbackStatus": "unverified",
+      "playbackNote": "User reported newly added channels unplayable; URL retains authentication containing 20181110. Current host cannot retrieve control streams either, so exact cause is not established."
     }
   ],
   "multicast": [
@@ -2690,5 +2704,17 @@
     "forumProxy": "1.2.3.0:0000 is a placeholder; not imported as unicast",
     "forumUnicast": "Existing channels, incomplete authentication; not added",
     "forumProxyEntries": 44
-  }
+  },
+  "playbackIssues": [
+    {
+      "channel": "CCTV4K",
+      "resourceId": "3221226217",
+      "reportedAt": "2026-10-13",
+      "player": "APTV",
+      "symptom": "audio-only",
+      "videoCodec": "unknown",
+      "resolutionStatus": "not-resolved",
+      "note": "Both singlecast playlist entries use the same URL. Current host cannot retrieve stream bytes. No guessed replacement is published."
+    }
+  ]
 }

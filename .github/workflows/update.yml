@@ -123,6 +123,7 @@ jobs:
           test -s m3u/gd-unicom.m3u
           test -s m3u/gd-unicom-simple.m3u
           test -s m3u/gd-unicom-report.json
+          test -s m3u/gd-unicom-unverified.m3u
           test -s m3u/gd-unicom-multicast.m3u
           test -s m3u/gd-unicom-multicast-rtp.m3u
           test -s m3u/gd-unicom-multicast-report.json
@@ -183,6 +184,13 @@ jobs:
           }
           validateUnicomUrls('./m3u/gd-unicom.m3u');
           validateUnicomUrls('./m3u/gd-unicom-simple.m3u');
+          validateUnicomUrls('./m3u/gd-unicom-unverified.m3u');
+          const mainText = fs.readFileSync('./m3u/gd-unicom.m3u', 'utf8');
+          const simpleText = fs.readFileSync('./m3u/gd-unicom-simple.m3u', 'utf8');
+          const supplementData = require('./config/gd-unicom-supplement.json');
+          for (const item of supplementData.unicast.filter(e => e.playbackStatus !== 'verified')) {
+            if (mainText.includes(item.url) || simpleText.includes(item.url)) throw new Error('Unverified attachment URL leaked into main playlist');
+          }
           const multicast = require('./m3u/gd-unicom-multicast-report.json');
           if (multicast.selectedChannels < 100) throw new Error('Unicom multicast supplement incomplete');
           if (multicast.transport !== 'unknown' || multicast.reachability !== 'not-verified') throw new Error('Unexpected multicast verification claim');
@@ -223,6 +231,7 @@ jobs:
             m3u/gd-unicom.m3u
             m3u/gd-unicom-simple.m3u
             m3u/gd-unicom-report.json
+            m3u/gd-unicom-unverified.m3u
             m3u/gd-unicom-multicast.m3u
             m3u/gd-unicom-multicast-rtp.m3u
             m3u/gd-unicom-multicast-report.json
