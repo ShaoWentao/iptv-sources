@@ -23,21 +23,22 @@
   "deduplicatedEntries": 148,
   "standardDefinitionLinesRemoved": 15,
   "standardDefinitionOnlyFallbackChannels": 0,
-  "selectedChannels": 120,
-  "selectedLines": 191,
+  "selectedChannels": 127,
+  "selectedLines": 198,
   "alternateEntries": 71,
   "fourKChannels": 11,
   "fourKLines": 12,
-  "renderedPrimaryEntries": 203,
+  "renderedPrimaryEntries": 210,
   "groups": {
     "4K超高清": 11,
     "央视": 23,
     "卫视": 35,
-    "广东": 14,
+    "广东": 15,
     "地方": 6,
     "少儿": 4,
-    "教育": 8,
+    "教育": 9,
     "专业": 2,
+    "其他": 5,
     "其它": 28
   },
   "primaryPlaylistMode": "merged-all-lines-plus-4k-group",
@@ -52,5 +53,157 @@
     "120.87.0.0/16",
     "112.89.121.23"
   ],
-  "note": "Only Guangdong Unicom PLTV unicast URLs are retained. For Guangdong Unicom PLTV, fmt=244 is treated as the 1080-class stream while fmt=504/744 are treated as lower-resolution variants. 720/lower lines are removed when 1080/4K alternatives exist; channels with only lower-resolution lines keep one fallback line. Stream reachability is network-dependent and is not tested by GitHub Actions."
+  "note": "Only Guangdong Unicom PLTV unicast URLs are retained. For Guangdong Unicom PLTV, fmt=244 is treated as the 1080-class stream while fmt=504/744 are treated as lower-resolution variants. 720/lower lines are removed when 1080/4K alternatives exist; channels with only lower-resolution lines keep one fallback line. Stream reachability is network-dependent and is not tested by GitHub Actions.",
+  "supplement": {
+    "addedChannels": [
+      "广东房产",
+      "梨园频道",
+      "靓装",
+      "CETV早期教育",
+      "武术世界",
+      "文物宝库",
+      "环球奇观"
+    ],
+    "acceptedEntries": 7,
+    "rejectedEntries": 0,
+    "skippedExistingEntries": 0,
+    "provenance": [
+      {
+        "filename": "1949.txt",
+        "sha256": "013fa0be1a723b98079719ba49903ecb5467672bc80aa33c96202adcbf41fe6d"
+      },
+      {
+        "filename": "广东联通组播地址完整版.txt",
+        "sha256": "589af2004139321fbdc553c709e9d83ce4f0d45e48e6f1febfd91120eca307e0"
+      },
+      {
+        "url": "https://www.right.com.cn/forum/thread-8443839-1-1.html",
+        "postId": "22003010",
+        "published": "2025-08-25",
+        "retrieved": "2026-10-13",
+        "sha256": "bf6173ec33aa8006950c90adba9e562b699fb659714e337d01355ed95f7d2d7e",
+        "additionalPostId": "22002778"
+      }
+    ],
+    "reachability": "not-verified",
+    "note": "Attachment URLs retain original authentication. No successful playback has been established; reachability and token validity require checking on the Guangdong Unicom IPTV network. Unknown fmt codes are not promoted to 1080."
+  },
+  "totalInputEntries": 361,
+  "multicast": {
+    "schemaVersion": 1,
+    "provenance": [
+      {
+        "filename": "1949.txt",
+        "sha256": "013fa0be1a723b98079719ba49903ecb5467672bc80aa33c96202adcbf41fe6d"
+      },
+      {
+        "filename": "广东联通组播地址完整版.txt",
+        "sha256": "589af2004139321fbdc553c709e9d83ce4f0d45e48e6f1febfd91120eca307e0"
+      },
+      {
+        "url": "https://www.right.com.cn/forum/thread-8443839-1-1.html",
+        "postId": "22003010",
+        "published": "2025-08-25",
+        "retrieved": "2026-10-13",
+        "sha256": "bf6173ec33aa8006950c90adba9e562b699fb659714e337d01355ed95f7d2d7e",
+        "additionalPostId": "22002778"
+      }
+    ],
+    "inputEntries": 390,
+    "rejectedEntries": 0,
+    "excludedEntries": [
+      {
+        "name": "浙江卫视",
+        "url": "igmp://239.0.1.166:3004",
+        "sourceName": "浙江卫视4k超高清50p",
+        "quality": "4k",
+        "reason": "user-excluded-zhejiang"
+      },
+      {
+        "name": "浙江卫视",
+        "url": "igmp://239.0.1.79:1234",
+        "sourceName": "浙江卫视高清1",
+        "quality": "hd",
+        "reason": "user-excluded-zhejiang"
+      },
+      {
+        "name": "浙江卫视",
+        "url": "igmp://239.0.1.8:8284",
+        "sourceName": "浙江卫视标清1",
+        "quality": "sd",
+        "reason": "user-excluded-zhejiang"
+      },
+      {
+        "name": "浙江卫视",
+        "sourceName": "浙江卫视高清1",
+        "url": "igmp://239.0.1.79:1234",
+        "quality": "hd",
+        "source": "forum-8443839",
+        "reason": "user-excluded-zhejiang"
+      },
+      {
+        "name": "广东综艺宽色域AVS2",
+        "sourceName": "广东综艺宽色域AVS2",
+        "url": "igmp://239.0.1.138:5177",
+        "quality": "normal",
+        "source": "forum-8443839",
+        "reason": "unsupported-codec-label"
+      },
+      {
+        "name": "浙江卫视",
+        "sourceName": "浙江卫视标清1",
+        "url": "igmp://239.0.1.8:8284",
+        "quality": "sd",
+        "source": "forum-8443839",
+        "reason": "user-excluded-zhejiang"
+      },
+      {
+        "name": "浙江卫视",
+        "sourceName": "浙江卫视1080P",
+        "url": "igmp://239.0.1.79:1234",
+        "quality": "hd",
+        "source": "forum-8443839-post-22002778",
+        "reason": "user-excluded-zhejiang"
+      }
+    ],
+    "conflicts": [
+      {
+        "address": "239.0.1.169:6030",
+        "channels": [
+          "广东影视",
+          "广东综艺"
+        ]
+      },
+      {
+        "address": "239.0.1.166:3005",
+        "channels": [
+          "山东卫视",
+          "四川卫视"
+        ]
+      }
+    ],
+    "selectedChannels": 122,
+    "selectedLines": 135,
+    "missingFromUnicast": [
+      "潮州民生",
+      "潮州综合",
+      "VSPN电竞",
+      "广东公共",
+      "精选频道2",
+      "佛山公共",
+      "佛山影视",
+      "河源公共",
+      "精选频道1",
+      "炫动卡通",
+      "阳江文化生活频道",
+      "阳江综合频道",
+      "广东综艺",
+      "北京纪实",
+      "上海纪实"
+    ],
+    "qualityEvidence": "attachment-labels-only",
+    "transport": "unknown",
+    "reachability": "not-verified",
+    "note": "IGMP is group membership, not a media transport. UDP and RTP files are alternative candidates, not verified playable streams. No unicast conversion or public relay is inferred. Conflicting addresses are excluded. Requires Guangdong Unicom IPTV VLAN/routing and multicast support; GitHub Actions cannot verify that network."
+  }
 }
