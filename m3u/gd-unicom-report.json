@@ -23,22 +23,21 @@
   "deduplicatedEntries": 148,
   "standardDefinitionLinesRemoved": 15,
   "standardDefinitionOnlyFallbackChannels": 0,
-  "selectedChannels": 127,
-  "selectedLines": 198,
+  "selectedChannels": 120,
+  "selectedLines": 191,
   "alternateEntries": 71,
   "fourKChannels": 11,
   "fourKLines": 12,
-  "renderedPrimaryEntries": 210,
+  "renderedPrimaryEntries": 203,
   "groups": {
     "4K超高清": 11,
     "央视": 23,
     "卫视": 35,
-    "广东": 15,
+    "广东": 14,
     "地方": 6,
     "少儿": 4,
-    "教育": 9,
+    "教育": 8,
     "专业": 2,
-    "其他": 5,
     "其它": 28
   },
   "primaryPlaylistMode": "merged-all-lines-plus-4k-group",
@@ -55,7 +54,8 @@
   ],
   "note": "Only Guangdong Unicom PLTV unicast URLs are retained. For Guangdong Unicom PLTV, fmt=244 is treated as the 1080-class stream while fmt=504/744 are treated as lower-resolution variants. 720/lower lines are removed when 1080/4K alternatives exist; channels with only lower-resolution lines keep one fallback line. Stream reachability is network-dependent and is not tested by GitHub Actions.",
   "supplement": {
-    "addedChannels": [
+    "addedChannels": [],
+    "quarantinedChannels": [
       "广东房产",
       "梨园频道",
       "靓装",
@@ -64,7 +64,7 @@
       "文物宝库",
       "环球奇观"
     ],
-    "acceptedEntries": 7,
+    "acceptedEntries": 0,
     "rejectedEntries": 0,
     "skippedExistingEntries": 0,
     "provenance": [
@@ -86,9 +86,21 @@
       }
     ],
     "reachability": "not-verified",
-    "note": "Attachment URLs retain original authentication. No successful playback has been established; reachability and token validity require checking on the Guangdong Unicom IPTV network. Unknown fmt codes are not promoted to 1080."
+    "note": "Only attachments explicitly marked playbackStatus=verified enter the main playlists. Unverified legacy URLs remain in gd-unicom-unverified.m3u. Address whitelisting and workflow success do not establish playback or token validity. Unknown fmt codes are not promoted to 1080.",
+    "playbackIssues": [
+      {
+        "channel": "CCTV4K",
+        "resourceId": "3221226217",
+        "reportedAt": "2026-10-13",
+        "player": "APTV",
+        "symptom": "audio-only",
+        "videoCodec": "unknown",
+        "resolutionStatus": "not-resolved",
+        "note": "Both singlecast playlist entries use the same URL. Current host cannot retrieve stream bytes. No guessed replacement is published."
+      }
+    ]
   },
-  "totalInputEntries": 361,
+  "totalInputEntries": 354,
   "multicast": {
     "schemaVersion": 1,
     "provenance": [

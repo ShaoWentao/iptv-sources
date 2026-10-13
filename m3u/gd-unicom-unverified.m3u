@@ -1,0 +1,18 @@
+#EXTM3U
+# UNVERIFIED attachment candidates; NOT a verified playable playlist
+# Primary upstream commit: d50ada110b92052fb6be204d54c303971eabaccf
+# Secondary upstream commit: e0addaad6761b998c257e1af4a82e4fffe25aa3e
+#EXTINF:-1 tvg-name="广东房产" group-title="未验证候选",广东房产
+http://120.87.4.18:80/PLTV/88888973/224/3221225732/10000100000000060000000000334256_0.smil/01.m3u8?fmt=ts2hls,163,01.m3u8,0,2513,0,0&accountinfo=Wti4h1vlszvIgmJ2Rn+JT30YqhIlb959YafU65xwPQuFI6KpBBcFipVQNWSpm9U4cljBwkAKGt2Lq1W8IgjWjgzcX+uhk0/ut3dCvLMCowmxZkz3btHg8HNlovI+YSwV:20181110091937,END&GuardEncType=2
+#EXTINF:-1 tvg-name="梨园频道" group-title="未验证候选",梨园频道
+http://120.87.4.10:80/PLTV/88888973/224/3221226164/10000100000000060000000001091898_0.smil/01.m3u8?fmt=ts2hls,123,01.m3u8,0,2441,0,0&accountinfo=Wti4h1vlszvIgmJ2Rn+JT30YqhIlb959YafU65xwPQuFI6KpBBcFipVQNWSpm9U4cljBwkAKGt2Lq1W8IgjWjgzcX+uhk0/ut3dCvLMCowl+6xtn26q6q3FpHgZDbOvY:20181110091937,END&GuardEncType=2
+#EXTINF:-1 tvg-name="靓装" group-title="未验证候选",靓装
+http://120.87.4.25:80/PLTV/88888973/224/3221226166/10000100000000060000000001091900_0.smil/01.m3u8?fmt=ts2hls,363,01.m3u8,0,2441,0,0&accountinfo=Wti4h1vlszvIgmJ2Rn+JT30YqhIlb959YafU65xwPQuFI6KpBBcFipVQNWSpm9U4cljBwkAKGt2Lq1W8IgjWjgzcX+uhk0/ut3dCvLMCowmrXbOxf0+hSB9tUSh7yUm0:20181110091937,END&GuardEncType=2
+#EXTINF:-1 tvg-name="CETV早期教育" group-title="未验证候选",CETV早期教育
+http://120.87.4.12:80/PLTV/88888973/224/3221226169/10000100000000060000000001091903_0.smil/01.m3u8?fmt=ts2hls,143,01.m3u8,0,2441,0,0&accountinfo=Wti4h1vlszvIgmJ2Rn+JT30YqhIlb959YafU65xwPQuFI6KpBBcFipVQNWSpm9U4cljBwkAKGt2Lq1W8IgjWjgzcX+uhk0/ut3dCvLMCownc7X6vSlJK9uig8Bi+PWn+:20181110091937,END&GuardEncType=2
+#EXTINF:-1 tvg-name="武术世界" group-title="未验证候选",武术世界
+http://120.87.4.11:80/PLTV/88888973/224/3221226168/10000100000000060000000001091902_0.smil/01.m3u8?fmt=ts2hls,143,01.m3u8,0,2441,0,0&accountinfo=Wti4h1vlszvIgmJ2Rn+JT30YqhIlb959YafU65xwPQuFI6KpBBcFipVQNWSpm9U4cljBwkAKGt2Lq1W8IgjWjgzcX+uhk0/ut3dCvLMCowltNLCQEuf93RkBhAuytdeH:20181110091937,END&GuardEncType=2
+#EXTINF:-1 tvg-name="文物宝库" group-title="未验证候选",文物宝库
+http://120.87.4.11:80/PLTV/88888973/224/3221226151/10000100000000060000000001091885_0.smil/01.m3u8?fmt=ts2hls,143,01.m3u8,0,2441,0,0&accountinfo=Wti4h1vlszvIgmJ2Rn+JT30YqhIlb959YafU65xwPQuFI6KpBBcFipVQNWSpm9U4cljBwkAKGt2Lq1W8IgjWjgzcX+uhk0/ut3dCvLMCowmS7x0UPV35jqcWdGwFtcnS:20181110091937,END&GuardEncType=2
+#EXTINF:-1 tvg-name="环球奇观" group-title="未验证候选",环球奇观
+http://120.87.4.11:80/PLTV/88888973/224/3221226154/10000100000000060000000001091888_0.smil/01.m3u8?fmt=ts2hls,143,01.m3u8,0,2441,0,0&accountinfo=Wti4h1vlszvIgmJ2Rn+JT30YqhIlb959YafU65xwPQuFI6KpBBcFipVQNWSpm9U4cljBwkAKGt2Lq1W8IgjWjgzcX+uhk0/ut3dCvLMCown2fOkoHFfWNNFaOHOO7tvT:20181110091937,END&GuardEncType=2
