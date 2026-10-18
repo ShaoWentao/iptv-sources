@@ -56,7 +56,15 @@
     "112.89.33.7",
     "112.89.33.8",
     "112.89.33.9",
-    "112.89.35.70"
+    "112.89.35.70",
+    "112.89.33.5",
+    "112.89.121.21",
+    "112.89.121.22",
+    "112.89.121.24",
+    "112.89.77.21",
+    "112.89.77.22",
+    "112.89.77.23",
+    "112.89.77.24"
   ],
   "note": "Only Guangdong Unicom PLTV unicast URLs are retained. For Guangdong Unicom PLTV, fmt=244 is treated as the 1080-class stream while fmt=504/744 are treated as lower-resolution variants. 720/lower lines are removed when 1080/4K alternatives exist; channels with only lower-resolution lines keep one fallback line. Stream reachability is network-dependent and is not tested by GitHub Actions.",
   "supplement": {
