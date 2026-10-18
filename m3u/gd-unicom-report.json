@@ -20,18 +20,19 @@
   ],
   "upstreamEntries": 354,
   "filteredNonUnicom": 61,
+  "excludedCctv4KLines": 1,
   "deduplicatedEntries": 158,
   "standardDefinitionLinesRemoved": 64,
   "standardDefinitionOnlyFallbackChannels": 2,
-  "selectedChannels": 122,
-  "selectedLines": 306,
+  "selectedChannels": 121,
+  "selectedLines": 305,
   "alternateEntries": 184,
-  "fourKChannels": 11,
-  "fourKLines": 16,
-  "renderedPrimaryEntries": 322,
+  "fourKChannels": 10,
+  "fourKLines": 15,
+  "renderedPrimaryEntries": 320,
   "groups": {
-    "4K超高清": 11,
-    "央视": 23,
+    "4K超高清": 10,
+    "央视": 22,
     "卫视": 36,
     "广东": 14,
     "地方": 7,
@@ -305,7 +306,7 @@
       }
     ]
   },
-  "totalInputEntries": 528,
+  "totalInputEntries": 527,
   "multicast": {
     "schemaVersion": 1,
     "provenance": [
@@ -416,6 +417,7 @@
     "selectedChannels": 122,
     "selectedLines": 135,
     "missingFromUnicast": [
+      "CCTV4K",
       "潮州民生",
       "潮州综合",
       "VSPN电竞",
