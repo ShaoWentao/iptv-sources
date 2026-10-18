@@ -372,9 +372,15 @@ for (const [name, items] of buckets) {
     standardDefinitionLinesRemoved += items.length - selected.length;
     buckets.set(name, selected);
   } else if (items.length > 1) {
-    standardDefinitionLinesRemoved += items.length - 1;
+    // Until their resolution is probed, keep playback-verified unknown-format
+    // backups alongside the single best existing SD/normal fallback.
+    // Known SD duplicates continue to collapse to a single entry.
+    const verifiedUnknownAlternates = items.filter(item => item.verifiedAlternate && item.quality === 'normal');
+    const bestExisting = items.find(item => !item.verifiedAlternate) || items[0];
+    const selected = [bestExisting, ...verifiedUnknownAlternates.filter(item => item !== bestExisting)];
+    standardDefinitionLinesRemoved += items.length - selected.length;
     standardDefinitionOnlyFallbackChannels += 1;
-    buckets.set(name, [items[0]]);
+    buckets.set(name, selected);
   }
 }
 
