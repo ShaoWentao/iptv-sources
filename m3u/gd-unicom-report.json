@@ -21,20 +21,20 @@
   "upstreamEntries": 354,
   "filteredNonUnicom": 61,
   "deduplicatedEntries": 148,
-  "standardDefinitionLinesRemoved": 15,
-  "standardDefinitionOnlyFallbackChannels": 0,
-  "selectedChannels": 121,
-  "selectedLines": 192,
-  "alternateEntries": 71,
+  "standardDefinitionLinesRemoved": 16,
+  "standardDefinitionOnlyFallbackChannels": 1,
+  "selectedChannels": 122,
+  "selectedLines": 204,
+  "alternateEntries": 82,
   "fourKChannels": 11,
   "fourKLines": 12,
-  "renderedPrimaryEntries": 204,
+  "renderedPrimaryEntries": 216,
   "groups": {
     "4K超高清": 11,
     "央视": 23,
     "卫视": 36,
     "广东": 14,
-    "地方": 6,
+    "地方": 7,
     "少儿": 4,
     "教育": 8,
     "专业": 2,
@@ -61,9 +61,23 @@
   "note": "Only Guangdong Unicom PLTV unicast URLs are retained. For Guangdong Unicom PLTV, fmt=244 is treated as the 1080-class stream while fmt=504/744 are treated as lower-resolution variants. 720/lower lines are removed when 1080/4K alternatives exist; channels with only lower-resolution lines keep one fallback line. Stream reachability is network-dependent and is not tested by GitHub Actions.",
   "supplement": {
     "addedChannels": [
-      "延边卫视"
+      "延边卫视",
+      "阳江综合"
     ],
-    "addedAlternateLines": [],
+    "addedAlternateLines": [
+      "CCTV1",
+      "CCTV3",
+      "CCTV5",
+      "风云足球",
+      "内蒙古卫视",
+      "CCTV1",
+      "西藏卫视",
+      "新疆卫视",
+      "兵团卫视",
+      "宁夏卫视",
+      "陕西卫视",
+      "东南卫视"
+    ],
     "quarantinedChannels": [
       "广东房产",
       "梨园频道",
@@ -73,7 +87,7 @@
       "文物宝库",
       "环球奇观"
     ],
-    "acceptedEntries": 1,
+    "acceptedEntries": 14,
     "rejectedEntries": 0,
     "skippedExistingEntries": 0,
     "provenance": [
@@ -116,7 +130,7 @@
       }
     ]
   },
-  "totalInputEntries": 355,
+  "totalInputEntries": 368,
   "multicast": {
     "schemaVersion": 1,
     "provenance": [
