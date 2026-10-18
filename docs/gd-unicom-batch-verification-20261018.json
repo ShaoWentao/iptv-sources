@@ -1,0 +1,1944 @@
+{
+  "schemaVersion": 1,
+  "testDate": "2026-10-18",
+  "sourcePlaylist": "m3u/gd-unicom-test-untested-batch-20261018.m3u",
+  "initialCount": 223,
+  "normalPlaybackCount": 168,
+  "timeoutCount": 55,
+  "importedAsVerifiedAlternate": 160,
+  "heldForNameCheck": 8,
+  "note": "此表基于用户按IP分组的测试反馈，禁止把本批IP超时外推至曾经正常播放的其他URL。节目实际名称/视频分辨率未逐条独立确认；发生资源ID标签冲突者暂不入正式源。",
+  "timeoutIPs": [
+    "120.87.19.109",
+    "112.89.33.4",
+    "112.89.33.9",
+    "112.89.77.25",
+    "112.89.77.26",
+    "120.87.4.18"
+  ],
+  "summaryByIP": {
+    "112.89.77.24": {
+      "tested": 8,
+      "normal": 7,
+      "timeout": 0,
+      "hold": 1
+    },
+    "112.89.121.21": {
+      "tested": 18,
+      "normal": 18,
+      "timeout": 0,
+      "hold": 0
+    },
+    "120.87.4.11": {
+      "tested": 6,
+      "normal": 6,
+      "timeout": 0,
+      "hold": 0
+    },
+    "120.87.4.13": {
+      "tested": 8,
+      "normal": 8,
+      "timeout": 0,
+      "hold": 0
+    },
+    "120.87.19.109": {
+      "tested": 4,
+      "normal": 0,
+      "timeout": 4,
+      "hold": 0
+    },
+    "112.89.33.4": {
+      "tested": 19,
+      "normal": 0,
+      "timeout": 19,
+      "hold": 0
+    },
+    "112.89.33.6": {
+      "tested": 4,
+      "normal": 4,
+      "timeout": 0,
+      "hold": 0
+    },
+    "112.89.33.7": {
+      "tested": 21,
+      "normal": 21,
+      "timeout": 0,
+      "hold": 0
+    },
+    "112.89.33.8": {
+      "tested": 9,
+      "normal": 9,
+      "timeout": 0,
+      "hold": 0
+    },
+    "112.89.33.9": {
+      "tested": 20,
+      "normal": 0,
+      "timeout": 20,
+      "hold": 0
+    },
+    "120.87.4.17": {
+      "tested": 2,
+      "normal": 2,
+      "timeout": 0,
+      "hold": 0
+    },
+    "112.89.33.5": {
+      "tested": 2,
+      "normal": 2,
+      "timeout": 0,
+      "hold": 0
+    },
+    "112.89.77.21": {
+      "tested": 1,
+      "normal": 1,
+      "timeout": 0,
+      "hold": 0
+    },
+    "112.89.77.22": {
+      "tested": 6,
+      "normal": 5,
+      "timeout": 0,
+      "hold": 1
+    },
+    "112.89.77.23": {
+      "tested": 4,
+      "normal": 4,
+      "timeout": 0,
+      "hold": 0
+    },
+    "112.89.77.25": {
+      "tested": 3,
+      "normal": 0,
+      "timeout": 3,
+      "hold": 0
+    },
+    "112.89.77.26": {
+      "tested": 2,
+      "normal": 0,
+      "timeout": 2,
+      "hold": 0
+    },
+    "112.89.121.22": {
+      "tested": 4,
+      "normal": 4,
+      "timeout": 0,
+      "hold": 0
+    },
+    "112.89.121.23": {
+      "tested": 16,
+      "normal": 16,
+      "timeout": 0,
+      "hold": 0
+    },
+    "112.89.121.24": {
+      "tested": 13,
+      "normal": 12,
+      "timeout": 0,
+      "hold": 1
+    },
+    "120.87.4.5": {
+      "tested": 1,
+      "normal": 0,
+      "timeout": 0,
+      "hold": 1
+    },
+    "120.87.4.9": {
+      "tested": 10,
+      "normal": 10,
+      "timeout": 0,
+      "hold": 0
+    },
+    "120.87.4.10": {
+      "tested": 10,
+      "normal": 8,
+      "timeout": 0,
+      "hold": 2
+    },
+    "120.87.4.12": {
+      "tested": 9,
+      "normal": 8,
+      "timeout": 0,
+      "hold": 1
+    },
+    "120.87.4.14": {
+      "tested": 5,
+      "normal": 5,
+      "timeout": 0,
+      "hold": 0
+    },
+    "120.87.4.18": {
+      "tested": 7,
+      "normal": 0,
+      "timeout": 7,
+      "hold": 0
+    },
+    "120.87.4.19": {
+      "tested": 3,
+      "normal": 3,
+      "timeout": 0,
+      "hold": 0
+    },
+    "120.87.4.20": {
+      "tested": 2,
+      "normal": 2,
+      "timeout": 0,
+      "hold": 0
+    },
+    "120.87.4.24": {
+      "tested": 1,
+      "normal": 1,
+      "timeout": 0,
+      "hold": 0
+    },
+    "120.87.4.25": {
+      "tested": 3,
+      "normal": 3,
+      "timeout": 0,
+      "hold": 0
+    },
+    "120.87.4.26": {
+      "tested": 1,
+      "normal": 1,
+      "timeout": 0,
+      "hold": 0
+    },
+    "120.87.4.27": {
+      "tested": 1,
+      "normal": 0,
+      "timeout": 0,
+      "hold": 1
+    }
+  },
+  "entries": [
+    {
+      "number": "001",
+      "originalName": "广东卫视",
+      "ip": "112.89.77.24",
+      "resourceId": "3221225766",
+      "decision": "verified-import",
+      "canonicalChannel": "广东卫视"
+    },
+    {
+      "number": "002",
+      "originalName": "广东卫视",
+      "ip": "112.89.121.21",
+      "resourceId": "3221225766",
+      "decision": "verified-import",
+      "canonicalChannel": "广东卫视"
+    },
+    {
+      "number": "003",
+      "originalName": "吉林卫视",
+      "ip": "120.87.4.11",
+      "resourceId": "3221225674",
+      "decision": "verified-import",
+      "canonicalChannel": "吉林卫视"
+    },
+    {
+      "number": "004",
+      "originalName": "青海卫视",
+      "ip": "120.87.4.13",
+      "resourceId": "3221225679",
+      "decision": "verified-import",
+      "canonicalChannel": "青海卫视"
+    },
+    {
+      "number": "005",
+      "originalName": "吉林卫视",
+      "ip": "120.87.19.109",
+      "resourceId": "3221225674",
+      "decision": "timeout"
+    },
+    {
+      "number": "006",
+      "originalName": "青海卫视",
+      "ip": "120.87.19.109",
+      "resourceId": "3221225679",
+      "decision": "timeout"
+    },
+    {
+      "number": "007",
+      "originalName": "上海纪实人文",
+      "ip": "120.87.19.109",
+      "resourceId": "3221226639",
+      "decision": "timeout"
+    },
+    {
+      "number": "008",
+      "originalName": "北京卫视4K",
+      "ip": "112.89.33.4",
+      "resourceId": "3221226685",
+      "decision": "timeout"
+    },
+    {
+      "number": "009",
+      "originalName": "大湾区卫视",
+      "ip": "112.89.33.4",
+      "resourceId": "3221226652",
+      "decision": "timeout"
+    },
+    {
+      "number": "010",
+      "originalName": "东方卫视4K",
+      "ip": "112.89.33.4",
+      "resourceId": "3221226691",
+      "decision": "timeout"
+    },
+    {
+      "number": "011",
+      "originalName": "佛山城市生活",
+      "ip": "112.89.33.4",
+      "resourceId": "3221226674",
+      "decision": "timeout"
+    },
+    {
+      "number": "012",
+      "originalName": "佛山综合",
+      "ip": "112.89.33.4",
+      "resourceId": "3221226668",
+      "decision": "timeout"
+    },
+    {
+      "number": "013",
+      "originalName": "广东民生",
+      "ip": "112.89.33.4",
+      "resourceId": "3221226660",
+      "decision": "timeout"
+    },
+    {
+      "number": "014",
+      "originalName": "广东新闻",
+      "ip": "112.89.33.4",
+      "resourceId": "3221226655",
+      "decision": "timeout"
+    },
+    {
+      "number": "015",
+      "originalName": "广东珠江",
+      "ip": "112.89.33.4",
+      "resourceId": "3221226219",
+      "decision": "timeout"
+    },
+    {
+      "number": "016",
+      "originalName": "河北卫视",
+      "ip": "112.89.33.4",
+      "resourceId": "3221225672",
+      "decision": "timeout"
+    },
+    {
+      "number": "017",
+      "originalName": "河北卫视",
+      "ip": "112.89.33.4",
+      "resourceId": "3221226622",
+      "decision": "timeout"
+    },
+    {
+      "number": "018",
+      "originalName": "河南卫视",
+      "ip": "112.89.33.4",
+      "resourceId": "3221226672",
+      "decision": "timeout"
+    },
+    {
+      "number": "019",
+      "originalName": "湖南卫视4K",
+      "ip": "112.89.33.4",
+      "resourceId": "3221226686",
+      "decision": "timeout"
+    },
+    {
+      "number": "020",
+      "originalName": "嘉佳卡通",
+      "ip": "112.89.33.4",
+      "resourceId": "3221225728",
+      "decision": "timeout"
+    },
+    {
+      "number": "021",
+      "originalName": "经济科教",
+      "ip": "112.89.33.4",
+      "resourceId": "3221225752",
+      "decision": "timeout"
+    },
+    {
+      "number": "022",
+      "originalName": "岭南戏曲",
+      "ip": "112.89.33.4",
+      "resourceId": "3221226678",
+      "decision": "timeout"
+    },
+    {
+      "number": "023",
+      "originalName": "三沙卫视",
+      "ip": "112.89.33.4",
+      "resourceId": "3221226641",
+      "decision": "timeout"
+    },
+    {
+      "number": "024",
+      "originalName": "山东卫视4K",
+      "ip": "112.89.33.4",
+      "resourceId": "3221226694",
+      "decision": "timeout"
+    },
+    {
+      "number": "025",
+      "originalName": "四川卫视",
+      "ip": "112.89.33.4",
+      "resourceId": "3221225712",
+      "decision": "timeout"
+    },
+    {
+      "number": "026",
+      "originalName": "现代教育高清",
+      "ip": "112.89.33.4",
+      "resourceId": "3221226659",
+      "decision": "timeout"
+    },
+    {
+      "number": "027",
+      "originalName": "湖南卫视",
+      "ip": "112.89.33.6",
+      "resourceId": "3221225716",
+      "decision": "verified-import",
+      "canonicalChannel": "湖南卫视"
+    },
+    {
+      "number": "028",
+      "originalName": "岭南戏曲",
+      "ip": "112.89.33.6",
+      "resourceId": "3221225731",
+      "decision": "verified-import",
+      "canonicalChannel": "岭南戏曲"
+    },
+    {
+      "number": "029",
+      "originalName": "CCTV-12社会与法",
+      "ip": "112.89.33.6",
+      "resourceId": "3221225742",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV12"
+    },
+    {
+      "number": "030",
+      "originalName": "CCTV-13新闻",
+      "ip": "112.89.33.6",
+      "resourceId": "3221226669",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV13"
+    },
+    {
+      "number": "031",
+      "originalName": "广东影视",
+      "ip": "112.89.33.7",
+      "resourceId": "3221225726",
+      "decision": "verified-import",
+      "canonicalChannel": "广东影视"
+    },
+    {
+      "number": "032",
+      "originalName": "广西卫视",
+      "ip": "112.89.33.7",
+      "resourceId": "3221225675",
+      "decision": "verified-import",
+      "canonicalChannel": "广西卫视"
+    },
+    {
+      "number": "033",
+      "originalName": "湖南卫视",
+      "ip": "112.89.33.7",
+      "resourceId": "3221225716",
+      "decision": "verified-import",
+      "canonicalChannel": "湖南卫视"
+    },
+    {
+      "number": "034",
+      "originalName": "吉林卫视",
+      "ip": "112.89.33.7",
+      "resourceId": "3221226623",
+      "decision": "verified-import",
+      "canonicalChannel": "吉林卫视"
+    },
+    {
+      "number": "035",
+      "originalName": "江苏卫视4K",
+      "ip": "112.89.33.7",
+      "resourceId": "3221226714",
+      "decision": "verified-import",
+      "canonicalChannel": "江苏卫视4K"
+    },
+    {
+      "number": "036",
+      "originalName": "金鹰卡通",
+      "ip": "112.89.33.7",
+      "resourceId": "3221225699",
+      "decision": "verified-import",
+      "canonicalChannel": "金鹰卡通"
+    },
+    {
+      "number": "037",
+      "originalName": "岭南戏曲",
+      "ip": "112.89.33.7",
+      "resourceId": "3221225731",
+      "decision": "verified-import",
+      "canonicalChannel": "岭南戏曲"
+    },
+    {
+      "number": "038",
+      "originalName": "南海频道",
+      "ip": "112.89.33.7",
+      "resourceId": "3221226687",
+      "decision": "verified-import",
+      "canonicalChannel": "佛山南海"
+    },
+    {
+      "number": "039",
+      "originalName": "青海卫视",
+      "ip": "112.89.33.7",
+      "resourceId": "3221226646",
+      "decision": "verified-import",
+      "canonicalChannel": "青海卫视"
+    },
+    {
+      "number": "040",
+      "originalName": "三沙卫视",
+      "ip": "112.89.33.7",
+      "resourceId": "3221226649",
+      "decision": "verified-import",
+      "canonicalChannel": "三沙卫视"
+    },
+    {
+      "number": "041",
+      "originalName": "深圳卫视4K",
+      "ip": "112.89.33.7",
+      "resourceId": "3221226683",
+      "decision": "verified-import",
+      "canonicalChannel": "深圳卫视4K"
+    },
+    {
+      "number": "042",
+      "originalName": "浙江卫视4K",
+      "ip": "112.89.33.7",
+      "resourceId": "3221226717",
+      "decision": "verified-import",
+      "canonicalChannel": "浙江卫视4K"
+    },
+    {
+      "number": "043",
+      "originalName": "CCTV10",
+      "ip": "112.89.33.7",
+      "resourceId": "3221225745",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV10"
+    },
+    {
+      "number": "044",
+      "originalName": "CCTV11",
+      "ip": "112.89.33.7",
+      "resourceId": "3221226644",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV11"
+    },
+    {
+      "number": "045",
+      "originalName": "CCTV12",
+      "ip": "112.89.33.7",
+      "resourceId": "3221225742",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV12"
+    },
+    {
+      "number": "046",
+      "originalName": "CCTV13",
+      "ip": "112.89.33.7",
+      "resourceId": "3221226669",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV13"
+    },
+    {
+      "number": "047",
+      "originalName": "CCTV2",
+      "ip": "112.89.33.7",
+      "resourceId": "3221225767",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV2"
+    },
+    {
+      "number": "048",
+      "originalName": "CCTV7",
+      "ip": "112.89.33.7",
+      "resourceId": "3221225749",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV7"
+    },
+    {
+      "number": "049",
+      "originalName": "CCTV8",
+      "ip": "112.89.33.7",
+      "resourceId": "3221226349",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV8"
+    },
+    {
+      "number": "050",
+      "originalName": "CCTV9",
+      "ip": "112.89.33.7",
+      "resourceId": "3221225743",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV9"
+    },
+    {
+      "number": "051",
+      "originalName": "广东影视频道",
+      "ip": "112.89.33.7",
+      "resourceId": "3221226658",
+      "decision": "verified-import",
+      "canonicalChannel": "广东影视"
+    },
+    {
+      "number": "052",
+      "originalName": "甘肃卫视",
+      "ip": "112.89.33.8",
+      "resourceId": "3221226656",
+      "decision": "verified-import",
+      "canonicalChannel": "甘肃卫视"
+    },
+    {
+      "number": "053",
+      "originalName": "广东少儿",
+      "ip": "112.89.33.8",
+      "resourceId": "3221226666",
+      "decision": "verified-import",
+      "canonicalChannel": "广东少儿"
+    },
+    {
+      "number": "054",
+      "originalName": "广东卫视4K",
+      "ip": "112.89.33.8",
+      "resourceId": "3221226699",
+      "decision": "verified-import",
+      "canonicalChannel": "广东卫视"
+    },
+    {
+      "number": "055",
+      "originalName": "广东卫视4K",
+      "ip": "112.89.33.8",
+      "resourceId": "3221226702",
+      "decision": "verified-import",
+      "canonicalChannel": "广东卫视4K"
+    },
+    {
+      "number": "056",
+      "originalName": "西藏卫视",
+      "ip": "112.89.33.8",
+      "resourceId": "3221225693",
+      "decision": "verified-import",
+      "canonicalChannel": "西藏卫视"
+    },
+    {
+      "number": "057",
+      "originalName": "新疆卫视",
+      "ip": "112.89.33.8",
+      "resourceId": "3221225694",
+      "decision": "verified-import",
+      "canonicalChannel": "新疆卫视"
+    },
+    {
+      "number": "058",
+      "originalName": "CCTV17",
+      "ip": "112.89.33.8",
+      "resourceId": "3221226661",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV17"
+    },
+    {
+      "number": "059",
+      "originalName": "CCTV5+",
+      "ip": "112.89.33.8",
+      "resourceId": "3221225705",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV5+"
+    },
+    {
+      "number": "060",
+      "originalName": "CCTV7",
+      "ip": "112.89.33.8",
+      "resourceId": "3221225741",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV7"
+    },
+    {
+      "number": "061",
+      "originalName": "北京卫视",
+      "ip": "112.89.33.9",
+      "resourceId": "3221225706",
+      "decision": "timeout"
+    },
+    {
+      "number": "062",
+      "originalName": "北京卫视4K",
+      "ip": "112.89.33.9",
+      "resourceId": "3221226680",
+      "decision": "timeout"
+    },
+    {
+      "number": "063",
+      "originalName": "广东体育",
+      "ip": "112.89.33.9",
+      "resourceId": "3221225721",
+      "decision": "timeout"
+    },
+    {
+      "number": "064",
+      "originalName": "广东卫视",
+      "ip": "112.89.33.9",
+      "resourceId": "3221225770",
+      "decision": "timeout"
+    },
+    {
+      "number": "065",
+      "originalName": "海南卫视",
+      "ip": "112.89.33.9",
+      "resourceId": "3221226653",
+      "decision": "timeout"
+    },
+    {
+      "number": "066",
+      "originalName": "嘉佳卡通",
+      "ip": "112.89.33.9",
+      "resourceId": "3221226663",
+      "decision": "timeout"
+    },
+    {
+      "number": "067",
+      "originalName": "金鹰纪实",
+      "ip": "112.89.33.9",
+      "resourceId": "3221225755",
+      "decision": "timeout"
+    },
+    {
+      "number": "068",
+      "originalName": "辽宁卫视",
+      "ip": "112.89.33.9",
+      "resourceId": "3221225709",
+      "decision": "timeout"
+    },
+    {
+      "number": "069",
+      "originalName": "顺德频道",
+      "ip": "112.89.33.9",
+      "resourceId": "3221226671",
+      "decision": "timeout"
+    },
+    {
+      "number": "070",
+      "originalName": "四川卫视4K",
+      "ip": "112.89.33.9",
+      "resourceId": "3221226689",
+      "decision": "timeout"
+    },
+    {
+      "number": "071",
+      "originalName": "天津卫视",
+      "ip": "112.89.33.9",
+      "resourceId": "3221225715",
+      "decision": "timeout"
+    },
+    {
+      "number": "072",
+      "originalName": "云南卫视",
+      "ip": "112.89.33.9",
+      "resourceId": "3221226650",
+      "decision": "timeout"
+    },
+    {
+      "number": "073",
+      "originalName": "CCTV2",
+      "ip": "112.89.33.9",
+      "resourceId": "3221225738",
+      "decision": "timeout"
+    },
+    {
+      "number": "074",
+      "originalName": "CCTV3",
+      "ip": "112.89.33.9",
+      "resourceId": "3221225814",
+      "decision": "timeout"
+    },
+    {
+      "number": "075",
+      "originalName": "CCTV5",
+      "ip": "112.89.33.9",
+      "resourceId": "3221225815",
+      "decision": "timeout"
+    },
+    {
+      "number": "076",
+      "originalName": "炫动卡通",
+      "ip": "112.89.33.9",
+      "resourceId": "3221225700",
+      "decision": "timeout"
+    },
+    {
+      "number": "077",
+      "originalName": "广东少儿频道",
+      "ip": "112.89.33.9",
+      "resourceId": "3221226666",
+      "decision": "timeout"
+    },
+    {
+      "number": "078",
+      "originalName": "深圳卫视",
+      "ip": "112.89.33.9",
+      "resourceId": "3221225708",
+      "decision": "timeout"
+    },
+    {
+      "number": "079",
+      "originalName": "CCTV-15音乐",
+      "ip": "112.89.33.9",
+      "resourceId": "3221226647",
+      "decision": "timeout"
+    },
+    {
+      "number": "080",
+      "originalName": "CCTV-3综艺",
+      "ip": "112.89.33.9",
+      "resourceId": "3221226350",
+      "decision": "timeout"
+    },
+    {
+      "number": "081",
+      "originalName": "陕西卫视",
+      "ip": "120.87.4.17",
+      "resourceId": "3221225676",
+      "decision": "verified-import",
+      "canonicalChannel": "陕西卫视"
+    },
+    {
+      "number": "082",
+      "originalName": "天津卫视",
+      "ip": "120.87.4.17",
+      "resourceId": "3221225715",
+      "decision": "verified-import",
+      "canonicalChannel": "天津卫视"
+    },
+    {
+      "number": "083",
+      "originalName": "东南卫视",
+      "ip": "120.87.19.109",
+      "resourceId": "3221225673",
+      "decision": "timeout"
+    },
+    {
+      "number": "084",
+      "originalName": "广东新闻频道",
+      "ip": "112.89.33.5",
+      "resourceId": "3221226655",
+      "decision": "verified-import",
+      "canonicalChannel": "广东新闻"
+    },
+    {
+      "number": "085",
+      "originalName": "现代教育",
+      "ip": "112.89.33.5",
+      "resourceId": "3221226659",
+      "decision": "verified-import",
+      "canonicalChannel": "现代教育"
+    },
+    {
+      "number": "086",
+      "originalName": "CCTV-7国防军事",
+      "ip": "112.89.77.21",
+      "resourceId": "3221225749",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV7"
+    },
+    {
+      "number": "087",
+      "originalName": "经济科教",
+      "ip": "112.89.77.22",
+      "resourceId": "3221225721",
+      "decision": "name-review",
+      "note": "同一资源ID现有频道为广东体育，而来源标为经济科教"
+    },
+    {
+      "number": "088",
+      "originalName": "南方购物",
+      "ip": "112.89.77.22",
+      "resourceId": "3221225729",
+      "decision": "verified-import",
+      "canonicalChannel": "南方购物"
+    },
+    {
+      "number": "089",
+      "originalName": "CCTV-10科教",
+      "ip": "112.89.77.22",
+      "resourceId": "3221225745",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV10"
+    },
+    {
+      "number": "090",
+      "originalName": "CCTV-14少儿",
+      "ip": "112.89.77.22",
+      "resourceId": "3221225740",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV14"
+    },
+    {
+      "number": "091",
+      "originalName": "CCTV-4中文国际",
+      "ip": "112.89.77.22",
+      "resourceId": "3221225739",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV4"
+    },
+    {
+      "number": "092",
+      "originalName": "CCTV-6电影",
+      "ip": "112.89.77.22",
+      "resourceId": "3221226351",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV6"
+    },
+    {
+      "number": "093",
+      "originalName": "浙江卫视",
+      "ip": "112.89.77.23",
+      "resourceId": "3221225713",
+      "decision": "verified-import",
+      "canonicalChannel": "浙江卫视"
+    },
+    {
+      "number": "094",
+      "originalName": "CCTV-1综合",
+      "ip": "112.89.77.23",
+      "resourceId": "3221225768",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV1"
+    },
+    {
+      "number": "095",
+      "originalName": "CCTV-2财经",
+      "ip": "112.89.77.23",
+      "resourceId": "3221225767",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV2"
+    },
+    {
+      "number": "096",
+      "originalName": "CCTV-8电视剧",
+      "ip": "112.89.77.23",
+      "resourceId": "3221226349",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV8"
+    },
+    {
+      "number": "097",
+      "originalName": "4K超高清",
+      "ip": "112.89.77.24",
+      "resourceId": "3221226174",
+      "decision": "name-review",
+      "note": "资源ID当前归广东4K，来源仅标4K超高清，需确认身份及编码"
+    },
+    {
+      "number": "098",
+      "originalName": "北京卫视",
+      "ip": "112.89.77.24",
+      "resourceId": "3221225706",
+      "decision": "verified-import",
+      "canonicalChannel": "北京卫视"
+    },
+    {
+      "number": "099",
+      "originalName": "广东民生",
+      "ip": "112.89.77.24",
+      "resourceId": "3221225720",
+      "decision": "verified-import",
+      "canonicalChannel": "广东民生"
+    },
+    {
+      "number": "100",
+      "originalName": "广东移动",
+      "ip": "112.89.77.24",
+      "resourceId": "3221225735",
+      "decision": "verified-import",
+      "canonicalChannel": "广东移动"
+    },
+    {
+      "number": "101",
+      "originalName": "CCTV-5+体育赛事",
+      "ip": "112.89.77.24",
+      "resourceId": "3221225705",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV5+"
+    },
+    {
+      "number": "102",
+      "originalName": "CCTV-5体育",
+      "ip": "112.89.77.24",
+      "resourceId": "3221226352",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV5"
+    },
+    {
+      "number": "103",
+      "originalName": "CCTV-9纪录",
+      "ip": "112.89.77.24",
+      "resourceId": "3221225747",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV9"
+    },
+    {
+      "number": "104",
+      "originalName": "广东珠江 (1080p)",
+      "ip": "112.89.77.25",
+      "resourceId": "3221225765",
+      "decision": "timeout"
+    },
+    {
+      "number": "105",
+      "originalName": "嘉佳卡通",
+      "ip": "112.89.77.25",
+      "resourceId": "3221225728",
+      "decision": "timeout"
+    },
+    {
+      "number": "106",
+      "originalName": "江苏卫视",
+      "ip": "112.89.77.25",
+      "resourceId": "3221225710",
+      "decision": "timeout"
+    },
+    {
+      "number": "107",
+      "originalName": "佛山综合 (1080p)",
+      "ip": "112.89.77.26",
+      "resourceId": "3221226668",
+      "decision": "timeout"
+    },
+    {
+      "number": "108",
+      "originalName": "CCTV-11戏曲",
+      "ip": "112.89.77.26",
+      "resourceId": "3221226644",
+      "decision": "timeout"
+    },
+    {
+      "number": "109",
+      "originalName": "安徽卫视",
+      "ip": "112.89.121.21",
+      "resourceId": "3221225687",
+      "decision": "verified-import",
+      "canonicalChannel": "安徽卫视"
+    },
+    {
+      "number": "110",
+      "originalName": "北京卫视",
+      "ip": "112.89.121.21",
+      "resourceId": "3221225688",
+      "decision": "verified-import",
+      "canonicalChannel": "北京卫视"
+    },
+    {
+      "number": "111",
+      "originalName": "东方卫视",
+      "ip": "112.89.121.21",
+      "resourceId": "3221225686",
+      "decision": "verified-import",
+      "canonicalChannel": "东方卫视"
+    },
+    {
+      "number": "112",
+      "originalName": "广东公共",
+      "ip": "112.89.121.21",
+      "resourceId": "3221225720",
+      "decision": "verified-import",
+      "canonicalChannel": "广东民生"
+    },
+    {
+      "number": "113",
+      "originalName": "广东经济科教",
+      "ip": "112.89.121.21",
+      "resourceId": "3221225752",
+      "decision": "verified-import",
+      "canonicalChannel": "广东经济科教"
+    },
+    {
+      "number": "114",
+      "originalName": "广东少儿",
+      "ip": "112.89.121.21",
+      "resourceId": "3221225727",
+      "decision": "verified-import",
+      "canonicalChannel": "广东少儿"
+    },
+    {
+      "number": "115",
+      "originalName": "广东新闻",
+      "ip": "112.89.121.21",
+      "resourceId": "3221225719",
+      "decision": "verified-import",
+      "canonicalChannel": "广东新闻"
+    },
+    {
+      "number": "116",
+      "originalName": "广东影视",
+      "ip": "112.89.121.21",
+      "resourceId": "3221225726",
+      "decision": "verified-import",
+      "canonicalChannel": "广东影视"
+    },
+    {
+      "number": "117",
+      "originalName": "湖南卫视",
+      "ip": "112.89.121.21",
+      "resourceId": "3221225716",
+      "decision": "verified-import",
+      "canonicalChannel": "湖南卫视"
+    },
+    {
+      "number": "118",
+      "originalName": "嘉佳卡通",
+      "ip": "112.89.121.21",
+      "resourceId": "3221225728",
+      "decision": "verified-import",
+      "canonicalChannel": "嘉佳卡通"
+    },
+    {
+      "number": "119",
+      "originalName": "江苏卫视",
+      "ip": "112.89.121.21",
+      "resourceId": "3221225710",
+      "decision": "verified-import",
+      "canonicalChannel": "江苏卫视"
+    },
+    {
+      "number": "120",
+      "originalName": "南方卫视",
+      "ip": "112.89.121.21",
+      "resourceId": "3221225724",
+      "decision": "verified-import",
+      "canonicalChannel": "大湾区卫视"
+    },
+    {
+      "number": "121",
+      "originalName": "浙江卫视",
+      "ip": "112.89.121.21",
+      "resourceId": "3221225713",
+      "decision": "verified-import",
+      "canonicalChannel": "浙江卫视"
+    },
+    {
+      "number": "122",
+      "originalName": "CCTV-10",
+      "ip": "112.89.121.21",
+      "resourceId": "3221225744",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV10"
+    },
+    {
+      "number": "123",
+      "originalName": "CCTV-13",
+      "ip": "112.89.121.21",
+      "resourceId": "3221225751",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV13"
+    },
+    {
+      "number": "124",
+      "originalName": "CCTV-4",
+      "ip": "112.89.121.21",
+      "resourceId": "3221225739",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV4"
+    },
+    {
+      "number": "125",
+      "originalName": "CCTV-9",
+      "ip": "112.89.121.21",
+      "resourceId": "3221225743",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV9"
+    },
+    {
+      "number": "126",
+      "originalName": "浙江卫视",
+      "ip": "112.89.121.22",
+      "resourceId": "3221225684",
+      "decision": "verified-import",
+      "canonicalChannel": "浙江卫视"
+    },
+    {
+      "number": "127",
+      "originalName": "CCTV-12",
+      "ip": "112.89.121.22",
+      "resourceId": "3221225748",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV12"
+    },
+    {
+      "number": "128",
+      "originalName": "CCTV-15",
+      "ip": "112.89.121.22",
+      "resourceId": "3221225756",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV15"
+    },
+    {
+      "number": "129",
+      "originalName": "CCTV-2",
+      "ip": "112.89.121.22",
+      "resourceId": "3221225738",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV2"
+    },
+    {
+      "number": "130",
+      "originalName": "安徽卫视",
+      "ip": "112.89.121.23",
+      "resourceId": "3221225759",
+      "decision": "verified-import",
+      "canonicalChannel": "安徽卫视"
+    },
+    {
+      "number": "131",
+      "originalName": "北京卫视",
+      "ip": "112.89.121.23",
+      "resourceId": "3221225706",
+      "decision": "verified-import",
+      "canonicalChannel": "北京卫视"
+    },
+    {
+      "number": "132",
+      "originalName": "东方卫视",
+      "ip": "112.89.121.23",
+      "resourceId": "3221225707",
+      "decision": "verified-import",
+      "canonicalChannel": "东方卫视"
+    },
+    {
+      "number": "133",
+      "originalName": "广东经济科教",
+      "ip": "112.89.121.23",
+      "resourceId": "3221225723",
+      "decision": "verified-import",
+      "canonicalChannel": "广东经济科教"
+    },
+    {
+      "number": "134",
+      "originalName": "广东体育",
+      "ip": "112.89.121.23",
+      "resourceId": "3221225750",
+      "decision": "verified-import",
+      "canonicalChannel": "广东体育"
+    },
+    {
+      "number": "135",
+      "originalName": "金鹰卡通",
+      "ip": "112.89.121.23",
+      "resourceId": "3221225699",
+      "decision": "verified-import",
+      "canonicalChannel": "金鹰卡通"
+    },
+    {
+      "number": "136",
+      "originalName": "深圳卫视",
+      "ip": "112.89.121.23",
+      "resourceId": "3221225708",
+      "decision": "verified-import",
+      "canonicalChannel": "深圳卫视"
+    },
+    {
+      "number": "137",
+      "originalName": "CCTV-1",
+      "ip": "112.89.121.23",
+      "resourceId": "3221225768",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV1"
+    },
+    {
+      "number": "138",
+      "originalName": "CCTV-10",
+      "ip": "112.89.121.23",
+      "resourceId": "3221225745",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV10"
+    },
+    {
+      "number": "139",
+      "originalName": "CCTV-12",
+      "ip": "112.89.121.23",
+      "resourceId": "3221225742",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV12"
+    },
+    {
+      "number": "140",
+      "originalName": "CCTV-14",
+      "ip": "112.89.121.23",
+      "resourceId": "3221225740",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV14"
+    },
+    {
+      "number": "141",
+      "originalName": "CCTV-2",
+      "ip": "112.89.121.23",
+      "resourceId": "3221225767",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV2"
+    },
+    {
+      "number": "142",
+      "originalName": "CCTV-5+",
+      "ip": "112.89.121.23",
+      "resourceId": "3221225705",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV5+"
+    },
+    {
+      "number": "143",
+      "originalName": "CCTV-7",
+      "ip": "112.89.121.23",
+      "resourceId": "3221225749",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV7"
+    },
+    {
+      "number": "144",
+      "originalName": "CCTV-9",
+      "ip": "112.89.121.23",
+      "resourceId": "3221225747",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV9"
+    },
+    {
+      "number": "145",
+      "originalName": "IPTV5+",
+      "ip": "112.89.121.23",
+      "resourceId": "3221226112",
+      "decision": "verified-import",
+      "canonicalChannel": "IPTV5+"
+    },
+    {
+      "number": "146",
+      "originalName": "东南卫视",
+      "ip": "112.89.121.24",
+      "resourceId": "3221225673",
+      "decision": "verified-import",
+      "canonicalChannel": "东南卫视"
+    },
+    {
+      "number": "147",
+      "originalName": "广东体育",
+      "ip": "112.89.121.24",
+      "resourceId": "3221225721",
+      "decision": "verified-import",
+      "canonicalChannel": "广东体育"
+    },
+    {
+      "number": "148",
+      "originalName": "广东移动",
+      "ip": "112.89.121.24",
+      "resourceId": "3221225735",
+      "decision": "verified-import",
+      "canonicalChannel": "广东移动"
+    },
+    {
+      "number": "149",
+      "originalName": "贵州卫视",
+      "ip": "112.89.121.24",
+      "resourceId": "3221226123",
+      "decision": "verified-import",
+      "canonicalChannel": "贵州卫视"
+    },
+    {
+      "number": "150",
+      "originalName": "湖南卫视",
+      "ip": "112.89.121.24",
+      "resourceId": "3221225682",
+      "decision": "verified-import",
+      "canonicalChannel": "湖南卫视"
+    },
+    {
+      "number": "151",
+      "originalName": "深圳卫视",
+      "ip": "112.89.121.24",
+      "resourceId": "3221225692",
+      "decision": "verified-import",
+      "canonicalChannel": "深圳卫视"
+    },
+    {
+      "number": "152",
+      "originalName": "四川卫视",
+      "ip": "112.89.121.24",
+      "resourceId": "3221225668",
+      "decision": "verified-import",
+      "canonicalChannel": "四川卫视"
+    },
+    {
+      "number": "153",
+      "originalName": "炫动卡通",
+      "ip": "112.89.121.24",
+      "resourceId": "3221225700",
+      "decision": "name-review",
+      "note": "资源ID当前归IPTV影视推荐，来源标炫动卡通"
+    },
+    {
+      "number": "154",
+      "originalName": "CCTV-1",
+      "ip": "112.89.121.24",
+      "resourceId": "3221225737",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV1"
+    },
+    {
+      "number": "155",
+      "originalName": "CCTV-11",
+      "ip": "112.89.121.24",
+      "resourceId": "3221225746",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV11"
+    },
+    {
+      "number": "156",
+      "originalName": "CCTV-14",
+      "ip": "112.89.121.24",
+      "resourceId": "3221225753",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV14"
+    },
+    {
+      "number": "157",
+      "originalName": "CCTV-7",
+      "ip": "112.89.121.24",
+      "resourceId": "3221225741",
+      "decision": "verified-import",
+      "canonicalChannel": "CCTV7"
+    },
+    {
+      "number": "158",
+      "originalName": "CGTN",
+      "ip": "112.89.121.24",
+      "resourceId": "3221225718",
+      "decision": "verified-import",
+      "canonicalChannel": "CGTN"
+    },
+    {
+      "number": "159",
+      "originalName": "广东综艺4K",
+      "ip": "120.87.4.5",
+      "resourceId": "3221226174",
+      "decision": "name-review",
+      "note": "资源ID当前归广东4K，来源标广东综艺4K"
+    },
+    {
+      "number": "160",
+      "originalName": "山东教育",
+      "ip": "120.87.4.9",
+      "resourceId": "3221225760",
+      "decision": "verified-import",
+      "canonicalChannel": "山东教育卫视"
+    },
+    {
+      "number": "161",
+      "originalName": "中学生",
+      "ip": "120.87.4.9",
+      "resourceId": "3221226156",
+      "decision": "verified-import",
+      "canonicalChannel": "中学生"
+    },
+    {
+      "number": "162",
+      "originalName": "CCTV电视指南",
+      "ip": "120.87.4.9",
+      "resourceId": "3221226624",
+      "decision": "verified-import",
+      "canonicalChannel": "电视指南"
+    },
+    {
+      "number": "163",
+      "originalName": "CCTV高尔夫网球",
+      "ip": "120.87.4.9",
+      "resourceId": "3221226608",
+      "decision": "verified-import",
+      "canonicalChannel": "高尔夫网球"
+    },
+    {
+      "number": "164",
+      "originalName": "CCTV女性时尚",
+      "ip": "120.87.4.9",
+      "resourceId": "3221226621",
+      "decision": "verified-import",
+      "canonicalChannel": "女性时尚"
+    },
+    {
+      "number": "165",
+      "originalName": "CCTV世界地理",
+      "ip": "120.87.4.9",
+      "resourceId": "3221226617",
+      "decision": "verified-import",
+      "canonicalChannel": "世界地理"
+    },
+    {
+      "number": "166",
+      "originalName": "江西卫视",
+      "ip": "120.87.4.9",
+      "resourceId": "3221225691",
+      "decision": "verified-import",
+      "canonicalChannel": "江西卫视"
+    },
+    {
+      "number": "167",
+      "originalName": "山东卫视",
+      "ip": "120.87.4.9",
+      "resourceId": "3221225690",
+      "decision": "verified-import",
+      "canonicalChannel": "山东卫视"
+    },
+    {
+      "number": "168",
+      "originalName": "IPTV法制频道",
+      "ip": "120.87.4.9",
+      "resourceId": "3221226106",
+      "decision": "verified-import",
+      "canonicalChannel": "IPTV法治"
+    },
+    {
+      "number": "169",
+      "originalName": "IPTV经典电影",
+      "ip": "120.87.4.9",
+      "resourceId": "3221226108",
+      "decision": "verified-import",
+      "canonicalChannel": "IPTV经典电影"
+    },
+    {
+      "number": "170",
+      "originalName": "国学频道",
+      "ip": "120.87.4.10",
+      "resourceId": "3221226152",
+      "decision": "verified-import",
+      "canonicalChannel": "国学"
+    },
+    {
+      "number": "171",
+      "originalName": "河源公共",
+      "ip": "120.87.4.10",
+      "resourceId": "3221226605",
+      "decision": "name-review",
+      "note": "资源ID当前归河源生活，来源标河源公共"
+    },
+    {
+      "number": "172",
+      "originalName": "魅力时尚",
+      "ip": "120.87.4.10",
+      "resourceId": "3221226114",
+      "decision": "verified-import",
+      "canonicalChannel": "IPTV魅力时尚"
+    },
+    {
+      "number": "173",
+      "originalName": "CCTV兵器科技",
+      "ip": "120.87.4.10",
+      "resourceId": "3221226613",
+      "decision": "verified-import",
+      "canonicalChannel": "兵器科技"
+    },
+    {
+      "number": "174",
+      "originalName": "CCTV怀旧剧场",
+      "ip": "120.87.4.10",
+      "resourceId": "3221226614",
+      "decision": "verified-import",
+      "canonicalChannel": "怀旧剧场"
+    },
+    {
+      "number": "175",
+      "originalName": "IPTV法治",
+      "ip": "120.87.4.10",
+      "resourceId": "3221226106",
+      "decision": "verified-import",
+      "canonicalChannel": "IPTV法治"
+    },
+    {
+      "number": "176",
+      "originalName": "IPTV相声小品",
+      "ip": "120.87.4.10",
+      "resourceId": "3221226117",
+      "decision": "verified-import",
+      "canonicalChannel": "IPTV相声小品"
+    },
+    {
+      "number": "177",
+      "originalName": "VSPN电竞",
+      "ip": "120.87.4.10",
+      "resourceId": "3221226642",
+      "decision": "name-review",
+      "note": "资源ID当前归IPTV影视推荐，来源标VSPN电竞"
+    },
+    {
+      "number": "178",
+      "originalName": "厦门卫视",
+      "ip": "120.87.4.10",
+      "resourceId": "3221225703",
+      "decision": "verified-import",
+      "canonicalChannel": "厦门卫视"
+    },
+    {
+      "number": "179",
+      "originalName": "天津卫视",
+      "ip": "120.87.4.10",
+      "resourceId": "3221225689",
+      "decision": "verified-import",
+      "canonicalChannel": "天津卫视"
+    },
+    {
+      "number": "180",
+      "originalName": "老故事",
+      "ip": "120.87.4.11",
+      "resourceId": "3221226159",
+      "decision": "verified-import",
+      "canonicalChannel": "老故事"
+    },
+    {
+      "number": "181",
+      "originalName": "少儿动画",
+      "ip": "120.87.4.11",
+      "resourceId": "3221226113",
+      "decision": "verified-import",
+      "canonicalChannel": "IPTV少儿动画"
+    },
+    {
+      "number": "182",
+      "originalName": "宁夏卫视",
+      "ip": "120.87.4.11",
+      "resourceId": "3221225681",
+      "decision": "verified-import",
+      "canonicalChannel": "宁夏卫视"
+    },
+    {
+      "number": "183",
+      "originalName": "汽摩频道",
+      "ip": "120.87.4.11",
+      "resourceId": "3221226163",
+      "decision": "verified-import",
+      "canonicalChannel": "汽摩"
+    },
+    {
+      "number": "184",
+      "originalName": "CCTV-中学生",
+      "ip": "120.87.4.11",
+      "resourceId": "3221226156",
+      "decision": "verified-import",
+      "canonicalChannel": "中央新影中学生"
+    },
+    {
+      "number": "185",
+      "originalName": "广东4K",
+      "ip": "120.87.4.12",
+      "resourceId": "3221226217",
+      "decision": "name-review",
+      "note": "资源ID当前归CCTV4K，来源标广东4K"
+    },
+    {
+      "number": "186",
+      "originalName": "汽摩",
+      "ip": "120.87.4.12",
+      "resourceId": "3221226163",
+      "decision": "verified-import",
+      "canonicalChannel": "汽摩"
+    },
+    {
+      "number": "187",
+      "originalName": "国学频道",
+      "ip": "120.87.4.12",
+      "resourceId": "3221226152",
+      "decision": "verified-import",
+      "canonicalChannel": "国学"
+    },
+    {
+      "number": "188",
+      "originalName": "黑龙江卫视",
+      "ip": "120.87.4.12",
+      "resourceId": "3221225711",
+      "decision": "verified-import",
+      "canonicalChannel": "黑龙江卫视"
+    },
+    {
+      "number": "189",
+      "originalName": "辽宁卫视",
+      "ip": "120.87.4.12",
+      "resourceId": "3221225709",
+      "decision": "verified-import",
+      "canonicalChannel": "辽宁卫视"
+    },
+    {
+      "number": "190",
+      "originalName": "旅游卫视",
+      "ip": "120.87.4.12",
+      "resourceId": "3221225680",
+      "decision": "verified-import",
+      "canonicalChannel": "海南卫视"
+    },
+    {
+      "number": "191",
+      "originalName": "山西卫视",
+      "ip": "120.87.4.12",
+      "resourceId": "3221225677",
+      "decision": "verified-import",
+      "canonicalChannel": "山西卫视"
+    },
+    {
+      "number": "192",
+      "originalName": "IPTV3+",
+      "ip": "120.87.4.12",
+      "resourceId": "3221226111",
+      "decision": "verified-import",
+      "canonicalChannel": "IPTV3+"
+    },
+    {
+      "number": "193",
+      "originalName": "IPTV少儿动画",
+      "ip": "120.87.4.12",
+      "resourceId": "3221226113",
+      "decision": "verified-import",
+      "canonicalChannel": "IPTV少儿动画"
+    },
+    {
+      "number": "194",
+      "originalName": "兵团卫视",
+      "ip": "120.87.4.13",
+      "resourceId": "3221225696",
+      "decision": "verified-import",
+      "canonicalChannel": "兵团卫视"
+    },
+    {
+      "number": "195",
+      "originalName": "财富天下",
+      "ip": "120.87.4.13",
+      "resourceId": "3221225702",
+      "decision": "verified-import",
+      "canonicalChannel": "财富天下"
+    },
+    {
+      "number": "196",
+      "originalName": "重庆卫视",
+      "ip": "120.87.4.13",
+      "resourceId": "3221225757",
+      "decision": "verified-import",
+      "canonicalChannel": "重庆卫视"
+    },
+    {
+      "number": "197",
+      "originalName": "湖北卫视",
+      "ip": "120.87.4.13",
+      "resourceId": "3221225714",
+      "decision": "verified-import",
+      "canonicalChannel": "湖北卫视"
+    },
+    {
+      "number": "198",
+      "originalName": "内蒙古卫视",
+      "ip": "120.87.4.13",
+      "resourceId": "3221225678",
+      "decision": "verified-import",
+      "canonicalChannel": "内蒙古卫视"
+    },
+    {
+      "number": "199",
+      "originalName": "山东卫视",
+      "ip": "120.87.4.13",
+      "resourceId": "3221225758",
+      "decision": "verified-import",
+      "canonicalChannel": "山东卫视"
+    },
+    {
+      "number": "200",
+      "originalName": "西藏卫视",
+      "ip": "120.87.4.13",
+      "resourceId": "3221225693",
+      "decision": "verified-import",
+      "canonicalChannel": "西藏卫视"
+    },
+    {
+      "number": "201",
+      "originalName": "甘肃卫视",
+      "ip": "120.87.4.14",
+      "resourceId": "3221225695",
+      "decision": "verified-import",
+      "canonicalChannel": "甘肃卫视"
+    },
+    {
+      "number": "202",
+      "originalName": "广西卫视",
+      "ip": "120.87.4.14",
+      "resourceId": "3221225675",
+      "decision": "verified-import",
+      "canonicalChannel": "广西卫视"
+    },
+    {
+      "number": "203",
+      "originalName": "黑龙江卫视",
+      "ip": "120.87.4.14",
+      "resourceId": "3221225666",
+      "decision": "verified-import",
+      "canonicalChannel": "黑龙江卫视"
+    },
+    {
+      "number": "204",
+      "originalName": "岭南戏曲",
+      "ip": "120.87.4.14",
+      "resourceId": "3221225731",
+      "decision": "verified-import",
+      "canonicalChannel": "岭南戏曲"
+    },
+    {
+      "number": "205",
+      "originalName": "CETV-1",
+      "ip": "120.87.4.14",
+      "resourceId": "3221225701",
+      "decision": "verified-import",
+      "canonicalChannel": "CETV1"
+    },
+    {
+      "number": "206",
+      "originalName": "河南卫视",
+      "ip": "120.87.4.18",
+      "resourceId": "3221225669",
+      "decision": "timeout"
+    },
+    {
+      "number": "207",
+      "originalName": "湖北卫视",
+      "ip": "120.87.4.18",
+      "resourceId": "3221225664",
+      "decision": "timeout"
+    },
+    {
+      "number": "208",
+      "originalName": "卡酷动画",
+      "ip": "120.87.4.18",
+      "resourceId": "3221225698",
+      "decision": "timeout"
+    },
+    {
+      "number": "209",
+      "originalName": "南方购物",
+      "ip": "120.87.4.18",
+      "resourceId": "3221225729",
+      "decision": "timeout"
+    },
+    {
+      "number": "210",
+      "originalName": "现代教育",
+      "ip": "120.87.4.18",
+      "resourceId": "3221225733",
+      "decision": "timeout"
+    },
+    {
+      "number": "211",
+      "originalName": "新疆卫视",
+      "ip": "120.87.4.18",
+      "resourceId": "3221225694",
+      "decision": "timeout"
+    },
+    {
+      "number": "212",
+      "originalName": "云南卫视",
+      "ip": "120.87.4.18",
+      "resourceId": "3221225670",
+      "decision": "timeout"
+    },
+    {
+      "number": "213",
+      "originalName": "热播剧场",
+      "ip": "120.87.4.19",
+      "resourceId": "3221226110",
+      "decision": "verified-import",
+      "canonicalChannel": "IPTV热播剧场"
+    },
+    {
+      "number": "214",
+      "originalName": "IPTV野外",
+      "ip": "120.87.4.19",
+      "resourceId": "3221226105",
+      "decision": "verified-import",
+      "canonicalChannel": "IPTV野外"
+    },
+    {
+      "number": "215",
+      "originalName": "贵州卫视",
+      "ip": "120.87.4.19",
+      "resourceId": "3221225667",
+      "decision": "verified-import",
+      "canonicalChannel": "贵州卫视"
+    },
+    {
+      "number": "216",
+      "originalName": "收视指南",
+      "ip": "120.87.4.20",
+      "resourceId": "3221226115",
+      "decision": "verified-import",
+      "canonicalChannel": "IPTV收视指南"
+    },
+    {
+      "number": "217",
+      "originalName": "辽宁卫视",
+      "ip": "120.87.4.20",
+      "resourceId": "3221225665",
+      "decision": "verified-import",
+      "canonicalChannel": "辽宁卫视"
+    },
+    {
+      "number": "218",
+      "originalName": "IPTV8",
+      "ip": "120.87.4.24",
+      "resourceId": "3221226109",
+      "decision": "verified-import",
+      "canonicalChannel": "IPTV8+"
+    },
+    {
+      "number": "219",
+      "originalName": "CCTV风云音乐",
+      "ip": "120.87.4.25",
+      "resourceId": "3221226627",
+      "decision": "verified-import",
+      "canonicalChannel": "风云音乐"
+    },
+    {
+      "number": "220",
+      "originalName": "CCTV央视台球",
+      "ip": "120.87.4.25",
+      "resourceId": "3221226611",
+      "decision": "verified-import",
+      "canonicalChannel": "央视台球"
+    },
+    {
+      "number": "221",
+      "originalName": "IPTV魅力时尚",
+      "ip": "120.87.4.25",
+      "resourceId": "3221226114",
+      "decision": "verified-import",
+      "canonicalChannel": "IPTV魅力时尚"
+    },
+    {
+      "number": "222",
+      "originalName": "CCTV风云剧场",
+      "ip": "120.87.4.26",
+      "resourceId": "3221226620",
+      "decision": "verified-import",
+      "canonicalChannel": "风云剧场"
+    },
+    {
+      "number": "223",
+      "originalName": "精选频道2",
+      "ip": "120.87.4.27",
+      "resourceId": "3221226358",
+      "decision": "name-review",
+      "note": "资源ID当前归中山综合，来源标精选频道2"
+    }
+  ]
+}
