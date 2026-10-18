@@ -16,6 +16,13 @@
       "retrieved": "2026-10-13",
       "sha256": "bf6173ec33aa8006950c90adba9e562b699fb659714e337d01355ed95f7d2d7e",
       "additionalPostId": "22002778"
+    },
+    {
+      "url": "https://github.com/qist/tvbox/blob/master/live/广东联通内网.txt",
+      "fileBlobSha": "915d964d6036ab68e27b7c62b97b02cc91b0868e",
+      "updated": "2026-07-04",
+      "verifiedBy": "user-playback-test-2026-10-18",
+      "note": "Resource 3221225725 originally labelled 广东综艺; actual channel 延边卫视."
     }
   ],
   "inputEntries": 390,

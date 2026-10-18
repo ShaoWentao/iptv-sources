@@ -23,16 +23,16 @@
   "deduplicatedEntries": 148,
   "standardDefinitionLinesRemoved": 15,
   "standardDefinitionOnlyFallbackChannels": 0,
-  "selectedChannels": 120,
-  "selectedLines": 191,
+  "selectedChannels": 121,
+  "selectedLines": 192,
   "alternateEntries": 71,
   "fourKChannels": 11,
   "fourKLines": 12,
-  "renderedPrimaryEntries": 203,
+  "renderedPrimaryEntries": 204,
   "groups": {
     "4K超高清": 11,
     "央视": 23,
-    "卫视": 35,
+    "卫视": 36,
     "广东": 14,
     "地方": 6,
     "少儿": 4,
@@ -54,7 +54,9 @@
   ],
   "note": "Only Guangdong Unicom PLTV unicast URLs are retained. For Guangdong Unicom PLTV, fmt=244 is treated as the 1080-class stream while fmt=504/744 are treated as lower-resolution variants. 720/lower lines are removed when 1080/4K alternatives exist; channels with only lower-resolution lines keep one fallback line. Stream reachability is network-dependent and is not tested by GitHub Actions.",
   "supplement": {
-    "addedChannels": [],
+    "addedChannels": [
+      "延边卫视"
+    ],
     "quarantinedChannels": [
       "广东房产",
       "梨园频道",
@@ -64,7 +66,7 @@
       "文物宝库",
       "环球奇观"
     ],
-    "acceptedEntries": 0,
+    "acceptedEntries": 1,
     "rejectedEntries": 0,
     "skippedExistingEntries": 0,
     "provenance": [
@@ -83,6 +85,13 @@
         "retrieved": "2026-10-13",
         "sha256": "bf6173ec33aa8006950c90adba9e562b699fb659714e337d01355ed95f7d2d7e",
         "additionalPostId": "22002778"
+      },
+      {
+        "url": "https://github.com/qist/tvbox/blob/master/live/广东联通内网.txt",
+        "fileBlobSha": "915d964d6036ab68e27b7c62b97b02cc91b0868e",
+        "updated": "2026-07-04",
+        "verifiedBy": "user-playback-test-2026-10-18",
+        "note": "Resource 3221225725 originally labelled 广东综艺; actual channel 延边卫视."
       }
     ],
     "reachability": "not-verified",
@@ -100,7 +109,7 @@
       }
     ]
   },
-  "totalInputEntries": 354,
+  "totalInputEntries": 355,
   "multicast": {
     "schemaVersion": 1,
     "provenance": [
@@ -119,6 +128,13 @@
         "retrieved": "2026-10-13",
         "sha256": "bf6173ec33aa8006950c90adba9e562b699fb659714e337d01355ed95f7d2d7e",
         "additionalPostId": "22002778"
+      },
+      {
+        "url": "https://github.com/qist/tvbox/blob/master/live/广东联通内网.txt",
+        "fileBlobSha": "915d964d6036ab68e27b7c62b97b02cc91b0868e",
+        "updated": "2026-07-04",
+        "verifiedBy": "user-playback-test-2026-10-18",
+        "note": "Resource 3221225725 originally labelled 广东综艺; actual channel 延边卫视."
       }
     ],
     "inputEntries": 390,
