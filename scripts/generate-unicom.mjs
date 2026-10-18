@@ -297,7 +297,8 @@ if (supplement) {
     }
     supplementAccepted.push({ name: item.name, url: item.url, source: 'user-playback-verified', sourcePriority: 2,
       index: supplementAccepted.length, groupCandidate: inferGroup(item.name),
-      quality: qualityFromEntry(item.url, item.name), verifiedAlternate: existingChannel && item.verifiedAlternate === true });
+      quality: qualityFromEntry(item.url, item.name, item.verifiedQualityHint === '4k' ? '4K' : ''),
+      verifiedAlternate: existingChannel && item.verifiedAlternate === true });
     if (existingChannel) supplementReport.addedAlternateLines.push(item.name);
     else if (!supplementReport.addedChannels.includes(item.name)) supplementReport.addedChannels.push(item.name);
   }
