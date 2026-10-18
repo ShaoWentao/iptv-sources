@@ -16,6 +16,13 @@
       "retrieved": "2026-10-13",
       "sha256": "bf6173ec33aa8006950c90adba9e562b699fb659714e337d01355ed95f7d2d7e",
       "additionalPostId": "22002778"
+    },
+    {
+      "url": "https://github.com/qist/tvbox/blob/master/live/广东联通内网.txt",
+      "fileBlobSha": "915d964d6036ab68e27b7c62b97b02cc91b0868e",
+      "updated": "2026-07-04",
+      "verifiedBy": "user-playback-test-2026-10-18",
+      "note": "Resource 3221225725 originally labelled 广东综艺; actual channel 延边卫视."
     }
   ],
   "unicast": [
@@ -67,6 +74,17 @@
       "sourceName": "环球奇观",
       "playbackStatus": "unverified",
       "playbackNote": "User reported newly added channels unplayable; URL retains authentication containing 20181110. Current host cannot retrieve control streams either, so exact cause is not established."
+    },
+    {
+      "name": "延边卫视",
+      "url": "http://120.87.4.17:80/PLTV/88888973/224/3221225725/10000100000000060000000000334169_0.smil/01.m3u8?fmt=ts2hls,163,01.m3u8,0,2442,0,0&accountinfo=7P9%2FPZjGeZIv%2BPttGdhw9SUy2v3weVxkOFl4CStfwsnkh3kcFCJXwqkgcXGDUDPqVnG5raoIzXr62tkqARzOzQWZ1F4%2B6A1eDkDeh5XZlpvpn23wIF%2Bldb6dnBPa8zHj%2CEND&GuardEncType=2&tenantId=8601",
+      "sourceName": "广东综艺（上游误标；用户实测实际播放延边卫视）",
+      "sourceRepository": "qist/tvbox",
+      "sourcePath": "live/广东联通内网.txt",
+      "resourceId": "3221225725",
+      "playbackStatus": "verified",
+      "playbackVerifiedAt": "2026-10-18",
+      "playbackNote": "在广东联通网络中由用户实际播放确认：频道内容为延边卫视。原始上游写作广东综艺，故以实测名称覆盖。视频分辨率尚未实测。"
     }
   ],
   "multicast": [
