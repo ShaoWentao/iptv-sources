@@ -177,7 +177,10 @@ jobs:
               const line = raw.trim();
               if (!line || line.startsWith('#')) continue;
               const url = new URL(line);
-              const hostOk = /^120\.87\.\d{1,3}\.\d{1,3}$/.test(url.hostname) || url.hostname === '112.89.121.23';
+              const hostOk = /^120\.87\.\d{1,3}\.\d{1,3}$/.test(url.hostname)
+                || url.hostname === '112.89.121.23'
+                || /^112\.89\.33\.(?:4|6|7|8|9)$/.test(url.hostname)
+                || url.hostname === '112.89.35.70';
               const pathOk = url.pathname.includes('/PLTV/88888973/224/') && /\.m3u8$/i.test(url.pathname);
               if (!hostOk || !pathOk) throw new Error(`Non-Unicom IPTV URL leaked into ${filename}: ${line}`);
             }
