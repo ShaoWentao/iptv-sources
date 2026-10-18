@@ -123,6 +123,40 @@ test('unverified attachment URLs stay out of main playlists and remain in an exp
   } finally { fs.rmSync(temp, { recursive: true, force: true }); }
 });
 
+test('2026-10-18 batch excludes all 55 timed-out URLs, retains 160 verified candidates and quarantines eight name collisions', () => {
+  const audit = JSON.parse(fs.readFileSync('docs/gd-unicom-batch-verification-20261018.json', 'utf8'));
+  const source = fs.readFileSync('m3u/gd-unicom-test-untested-batch-20261018.m3u', 'utf8');
+  const supplement = JSON.parse(fs.readFileSync('config/gd-unicom-supplement.json', 'utf8'));
+  assert.equal(audit.initialCount, 223);
+  assert.equal(audit.normalPlaybackCount, 168);
+  assert.equal(audit.timeoutCount, 55);
+  assert.equal(audit.importedAsVerifiedAlternate, 160);
+  assert.equal(audit.heldForNameCheck, 8);
+  const batchItems = new Map();
+  let current = '';
+  for (const line of source.split(/\r?\n/)) {
+    if (line.startsWith('#EXTINF:')) {
+      current = line.slice(line.indexOf(',') + 1).match(/^(\d{3}) /)?.[1] || '';
+    } else if (current && /^http:\/\//.test(line)) {
+      batchItems.set(current, line); current = '';
+    }
+  }
+  assert.equal(batchItems.size, 223);
+  const allowed = new Set(supplement.unicast.filter(e => e.playbackStatus === 'verified').map(e => e.url));
+  for (const e of audit.entries) {
+    const url = batchItems.get(e.number);
+    assert.ok(url, 'Missing original playback URL for ' + e.number);
+    if (e.decision === 'verified-import') {
+      assert.ok(allowed.has(url), 'A playback-confirmed line is missing from supplement: ' + e.number);
+    } else {
+      assert.ok(!allowed.has(url), 'Timed-out or misnamed line entered supplement: ' + e.number);
+    }
+  }
+  for (const blocked of ['112.89.45.21', '112.89.45.22', '112.89.77.25', '112.89.77.26']) {
+    assert.ok(!supplement.unicast.some(e => e.playbackStatus === 'verified' && new URL(e.url).hostname === blocked));
+  }
+});
+
 test('reviewed attachment data preserves seven unverified legacy channels, and verified Yanbian TV, excluding Zhejiang and codec labels', () => {
   const data = JSON.parse(fs.readFileSync('config/gd-unicom-supplement.json', 'utf8'));
   assert.deepEqual(data.unicast.filter(e => e.playbackStatus !== 'verified').map(e => e.name),
@@ -138,9 +172,11 @@ test('reviewed attachment data preserves seven unverified legacy channels, and v
   for (const entry of data.unicast) {
     const parsed = new URL(entry.url);
     assert.ok(/^120\.87\./.test(parsed.hostname)
-      || /^112\.89\.33\.(?:4|6|7|8|9)$/.test(parsed.hostname)
-      || parsed.hostname === '112.89.35.70',
-      'Only verified Guangdong Unicom IPTV hosts may appear in the supplement');
+      || /^112\.89\.33\.(?:4|5|6|7|8|9)$/.test(parsed.hostname)
+      || parsed.hostname === '112.89.35.70'
+      || /^112\.89\.121\.(?:21|22|23|24)$/.test(parsed.hostname)
+      || /^112\.89\.77\.(?:21|22|23|24)$/.test(parsed.hostname),
+      'Only user-tested Guangdong Unicom IPTV hosts may appear in the supplement');
     assert.match(parsed.pathname, /^\/PLTV\/88888973\/224\/\d+\//);
   }
   assert.ok(data.exclusions.some(e => e.reason === 'user-excluded-zhejiang'));
