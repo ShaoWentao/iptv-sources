@@ -58,6 +58,44 @@ test('verified supplement obeys Unicom whitelist and existing quality selection 
   }
 });
 
+test('keeps unknown-resolution playback-tested alternatives behind 1080 while excluding SD and timed-out hosts', () => {
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'unicom-tested-alternates-'));
+  try {
+    fs.writeFileSync(path.join(temp, 'primary.txt'),
+      Array.from({ length: 22 }, (_, i) => `频道${i},${url(i, '244')}`).join('\n'));
+    fs.writeFileSync(path.join(temp, 'secondary.m3u'), '#EXTM3U\n');
+    const alternative = `http://112.89.33.7:80/PLTV/88888973/224/99999/asset.smil/01.m3u8?fmt=ts2hls,1706,01.m3u8`;
+    const alternativeSd = `http://112.89.33.4:80/PLTV/88888973/224/99998/asset.smil/01.m3u8?fmt=ts2hls,744,01.m3u8`;
+    const blockedHost = `http://112.89.45.23:80/PLTV/88888973/224/99997/asset.smil/01.m3u8?fmt=ts2hls,1707,01.m3u8`;
+    const newChannel = `http://120.87.4.29:80/PLTV/88888973/224/99996/asset.smil/01.m3u8?fmt=ts2hls,1666,01.m3u8`;
+    const supplements = [
+      { name: '频道0', url: alternative, playbackStatus: 'verified', verifiedAlternate: true },
+      { name: '频道0', url: alternativeSd, playbackStatus: 'verified', verifiedAlternate: true },
+      { name: '频道0', url: blockedHost, playbackStatus: 'verified', verifiedAlternate: true },
+      { name: '阳江综合', url: newChannel, playbackStatus: 'verified' },
+    ];
+    fs.writeFileSync(path.join(temp, 'supplement.json'),
+      JSON.stringify({ schemaVersion: 1, provenance: [], unicast: supplements, multicast: [] }));
+    const result = spawnSync(process.execPath,
+      ['scripts/generate-unicom.mjs', '--input', path.join(temp, 'primary.txt'),
+        '--input-secondary', path.join(temp, 'secondary.m3u'),
+        '--supplement', path.join(temp, 'supplement.json'), '--output', temp], { encoding: 'utf8' });
+    assert.equal(result.status, 0, result.stderr);
+    const main = fs.readFileSync(path.join(temp, 'gd-unicom.m3u'), 'utf8');
+    const simple = fs.readFileSync(path.join(temp, 'gd-unicom-simple.m3u'), 'utf8');
+    assert.ok(main.includes(alternative), 'Verified unknown-resolution backup should be present');
+    assert.ok(!main.includes(alternativeSd), 'Verified SD must be excluded when HD exists');
+    assert.ok(!main.includes(blockedHost), 'Timed-out host cannot be accepted');
+    assert.ok(main.includes(newChannel), 'Verified new channel should enter main');
+    assert.ok(simple.includes(newChannel));
+    assert.ok(!simple.includes(alternative), 'Simple list should prefer existing 1080 source');
+    const report = JSON.parse(fs.readFileSync(path.join(temp, 'gd-unicom-report.json'), 'utf8'));
+    assert.deepEqual(report.supplement.addedChannels, ['阳江综合']);
+    assert.ok(report.supplement.addedAlternateLines.includes('频道0'));
+    assert.equal(report.supplement.rejectedEntries, 1);
+  } finally { fs.rmSync(temp, { recursive: true, force: true }); }
+});
+
 test('unverified attachment URLs stay out of main playlists and remain in an explicit candidate file', () => {
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'unicom-unverified-'));
   try {
@@ -94,7 +132,10 @@ test('reviewed attachment data preserves seven unverified legacy channels, and v
   assert.equal(data.provenance[2].postId, '22003010');
   for (const entry of data.unicast) {
     const parsed = new URL(entry.url);
-    assert.match(parsed.hostname, /^120\.87\./);
+    assert.ok(/^120\.87\./.test(parsed.hostname)
+      || /^112\.89\.33\.(?:4|6|7|8|9)$/.test(parsed.hostname)
+      || parsed.hostname === '112.89.35.70',
+      'Only verified Guangdong Unicom IPTV hosts may appear in the supplement');
     assert.match(parsed.pathname, /^\/PLTV\/88888973\/224\/\d+\//);
   }
   assert.ok(data.exclusions.some(e => e.reason === 'user-excluded-zhejiang'));
