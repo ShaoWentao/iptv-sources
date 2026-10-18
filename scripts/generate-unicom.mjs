@@ -37,7 +37,10 @@ function isUnicomIptvUrl(value) {
     const hostOk = /^120\.87\.\d{1,3}\.\d{1,3}$/.test(url.hostname)
       || url.hostname === '112.89.121.23'
       || /^112\.89\.33\.(?:4|6|7|8|9)$/.test(url.hostname)
-      || url.hostname === '112.89.35.70';
+      || url.hostname === '112.89.35.70'
+      || /^112\.89\.121\.(?:21|22|24)$/.test(url.hostname)
+      || /^112\.89\.77\.(?:21|22|23|24)$/.test(url.hostname)
+      || url.hostname === '112.89.33.5';
     if (!hostOk) return false;
     return url.pathname.includes('/PLTV/88888973/224/') && /\.m3u8$/i.test(url.pathname);
   } catch {
