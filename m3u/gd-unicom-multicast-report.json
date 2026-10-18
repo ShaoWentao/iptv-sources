@@ -23,6 +23,13 @@
       "updated": "2026-07-04",
       "verifiedBy": "user-playback-test-2026-10-18",
       "note": "Resource 3221225725 originally labelled 广东综艺; actual channel 延边卫视."
+    },
+    {
+      "filename": "m3u/gd-unicom-test-untested-batch-20261018.m3u",
+      "fileBlobSha": "36c750d7736066a9ba601aba0359f1c2b50e8944",
+      "playbackVerifiedAt": "2026-10-18",
+      "batchAudit": "docs/gd-unicom-batch-verification-20261018.json",
+      "note": "223条线路按IP测试；168正常，55超时；正常中160条频道身份可按现有ID归档，8条频道标签冲突单独保留。"
     }
   ],
   "inputEntries": 390,
