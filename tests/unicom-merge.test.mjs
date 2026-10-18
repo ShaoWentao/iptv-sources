@@ -175,3 +175,52 @@ test('normalizes Guangdong, satellite, children and city channel groups instead 
   assert.ok(simple.includes('group-title="地方",佛山南海\n'));
   assert.ok(simple.includes('group-title="地方",佛山顺德\n'));
 });
+
+
+test('excludes CCTV4K and its PLTV ID on regeneration while keeping Guangdong 4K', () => {
+  const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'unicom-no-cctv4k-'));
+  try {
+    const primary = path.join(temp, 'primary.txt');
+    const secondary = path.join(temp, 'secondary.m3u');
+    const supplement = path.join(temp, 'supplement.json');
+    const output = path.join(temp, 'out');
+    const primaryLines = ['央视,#genre#'];
+    for (let i = 1; i <= 22; i++) primaryLines.push('测试' + i + ',' + url('120.87.19.109', 3221270000 + i));
+    primaryLines.push('CCTV4K,' + url('120.87.19.109', 3221226217, 'cctv-4k', '244'));
+    primaryLines.push('广东4K,' + url('120.87.19.109', 3221226217, 'cctv-mislabeled', '1'));
+    primaryLines.push('广东4K,' + url('120.87.19.109', 3221226174, 'real-guangdong-4k', '1'));
+    fs.writeFileSync(primary, primaryLines.join('\n') + '\n');
+    fs.writeFileSync(secondary,
+      '#EXTM3U\n' +
+      '#EXTINF:-1 tvg-name="CCTV-4K" group-title="4K超高清",CCTV-4K\n' +
+      url('120.87.19.109', 3221229010, 'renamed', '1') + '\n' +
+      '#EXTINF:-1 tvg-name="广东卫视" group-title="4K超高清",广东卫视4K\n' +
+      url('120.87.19.109', 3221229011, 'guangdong-satellite-4k', '1') + '\n');
+    fs.writeFileSync(supplement, JSON.stringify({
+      schemaVersion: 1, provenance: [], multicast: [],
+      unicast: [
+        { name: 'CCTV4K', url: url('120.87.19.109', 3221226217, 'supplement-a'), playbackStatus: 'verified' },
+        { name: '广东4K', url: url('120.87.19.109', 3221226217, 'supplement-b'), playbackStatus: 'verified', verifiedAlternate: true },
+      ],
+    }));
+    const result = spawnSync(process.execPath, [
+      'scripts/generate-unicom.mjs', '--input', primary, '--input-secondary', secondary,
+      '--supplement', supplement, '--output', output,
+    ], { cwd: path.resolve('.'), encoding: 'utf8' });
+    assert.equal(result.status, 0, result.stderr || result.stdout);
+    for (const filename of ['gd-unicom.m3u', 'gd-unicom-simple.m3u', 'gd-unicom-unverified.m3u']) {
+      const playlist = fs.readFileSync(path.join(output, filename), 'utf8');
+      assert.doesNotMatch(playlist, /CCTV[\s_-]*4K|\/3221226217\//i,
+        'Disallowed CCTV4K resource should never appear in ' + filename);
+    }
+    const main = fs.readFileSync(path.join(output, 'gd-unicom.m3u'), 'utf8');
+    const simple = fs.readFileSync(path.join(output, 'gd-unicom-simple.m3u'), 'utf8');
+    assert.match(main, /\/3221226174\//, 'Guangdong4K should remain in main');
+    assert.match(simple, /\/3221226174\//, 'Guangdong4K should remain in simple');
+    assert.match(main, /广东卫视4K/, 'Other satellite 4K channel should remain');
+    assert.match(main, /group-title="4K超高清",广东4K/, 'Keep Guangdong 4K group');
+    const report = JSON.parse(fs.readFileSync(path.join(output, 'gd-unicom-report.json'), 'utf8'));
+    assert.equal(report.excludedCctv4KLines, 3, 'CCTV4K primary and secondary entries must be filtered');
+    assert.ok(report.fourKChannels >= 2);
+  } finally { fs.rmSync(temp, { recursive: true, force: true }); }
+});
