@@ -62,17 +62,20 @@ test('keeps unknown-resolution playback-tested alternatives behind 1080 while ex
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'unicom-tested-alternates-'));
   try {
     fs.writeFileSync(path.join(temp, 'primary.txt'),
-      Array.from({ length: 22 }, (_, i) => `频道${i},${url(i, '244')}`).join('\n'));
+      Array.from({ length: 22 }, (_, i) => `频道${i},${url(i, '244')}`)
+        .concat([`低清原线,${url(555, '744')}`]).join('\n'));
     fs.writeFileSync(path.join(temp, 'secondary.m3u'), '#EXTM3U\n');
     const alternative = `http://112.89.33.7:80/PLTV/88888973/224/99999/asset.smil/01.m3u8?fmt=ts2hls,1706,01.m3u8`;
     const alternativeSd = `http://112.89.33.4:80/PLTV/88888973/224/99998/asset.smil/01.m3u8?fmt=ts2hls,744,01.m3u8`;
     const blockedHost = `http://112.89.45.23:80/PLTV/88888973/224/99997/asset.smil/01.m3u8?fmt=ts2hls,1707,01.m3u8`;
     const newChannel = `http://120.87.4.29:80/PLTV/88888973/224/99996/asset.smil/01.m3u8?fmt=ts2hls,1666,01.m3u8`;
+    const sdOnlyBackup = `http://112.89.33.4:80/PLTV/88888973/224/99995/asset.smil/01.m3u8?fmt=ts2hls,1705,01.m3u8`;
     const supplements = [
       { name: '频道0', url: alternative, playbackStatus: 'verified', verifiedAlternate: true },
       { name: '频道0', url: alternativeSd, playbackStatus: 'verified', verifiedAlternate: true },
       { name: '频道0', url: blockedHost, playbackStatus: 'verified', verifiedAlternate: true },
       { name: '阳江综合', url: newChannel, playbackStatus: 'verified' },
+      { name: '低清原线', url: sdOnlyBackup, playbackStatus: 'verified', verifiedAlternate: true },
     ];
     fs.writeFileSync(path.join(temp, 'supplement.json'),
       JSON.stringify({ schemaVersion: 1, provenance: [], unicast: supplements, multicast: [] }));
@@ -88,6 +91,8 @@ test('keeps unknown-resolution playback-tested alternatives behind 1080 while ex
     assert.ok(!main.includes(blockedHost), 'Timed-out host cannot be accepted');
     assert.ok(main.includes(newChannel), 'Verified new channel should enter main');
     assert.ok(simple.includes(newChannel));
+    assert.ok(main.includes(sdOnlyBackup), 'Unknown-resolution backup must survive beside an existing SD-only feed');
+    assert.ok(!simple.includes(sdOnlyBackup), 'Simple playlist should retain the single existing low-quality fallback');
     assert.ok(!simple.includes(alternative), 'Simple list should prefer existing 1080 source');
     const report = JSON.parse(fs.readFileSync(path.join(temp, 'gd-unicom-report.json'), 'utf8'));
     assert.deepEqual(report.supplement.addedChannels, ['阳江综合']);
