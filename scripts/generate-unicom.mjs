@@ -269,6 +269,12 @@ function resourceKey(value) {
   }
 }
 
+function isCctv4KLabelOrResource(name, url) {
+  const normalizedName = String(name || '').replace(/[\\s_-]/g, '');
+  return /^CCTV4K(?:超高清)?$/i.test(normalizedName)
+    || /\/PLTV\/88888973\/224\/3221226217\//.test(String(url || ''));
+}
+
 const primary = parsePrimary(readText(input));
 const secondary = parseSecondary(readText(secondaryInput));
 const supplement = args.supplement ? JSON.parse(readText(args.supplement)) : null;
@@ -283,6 +289,10 @@ if (supplement) {
   for (const item of supplement.unicast) {
     if (!item.name || /[\r\n"]/.test(item.name) || !isUnicomIptvUrl(item.url)) {
       supplementReport.rejectedEntries += 1;
+      continue;
+    }
+    if (isCctv4KLabelOrResource(item.name, item.url)) {
+      supplementReport.skippedExistingEntries += 1;
       continue;
     }
     const existingChannel = existingNames.has(item.name);
@@ -308,7 +318,17 @@ if (supplement) {
   supplementReport.note = 'Only attachments explicitly marked playbackStatus=verified enter the main playlists. Unverified legacy URLs remain in gd-unicom-unverified.m3u. Address whitelisting and workflow success do not establish playback or token validity. Unknown fmt codes are not promoted to 1080.';
   supplementReport.playbackIssues = supplement.playbackIssues || [];
 }
-const combined = [...primary.accepted, ...secondary.accepted, ...supplementAccepted].map((entry, index) => ({ ...entry, globalIndex: index }));
+// The user's Guangdong Unicom CCTV4K feed plays audio without video.
+// Exclude this channel (including alternative display names for its resource ID)
+// from both regular and 4K-group outputs on every scheduled regeneration.
+function isExcludedCctv4K(entry) {
+  return isCctv4KLabelOrResource(entry.name, entry.url);
+}
+
+const combinedCandidates = [...primary.accepted, ...secondary.accepted, ...supplementAccepted];
+const excludedCctv4KLines = combinedCandidates.filter(isExcludedCctv4K).length;
+const combined = combinedCandidates.filter(entry => !isExcludedCctv4K(entry))
+  .map((entry, index) => ({ ...entry, globalIndex: index }));
 
 if (combined.length < 20) {
   throw new Error(`Merged Guangdong Unicom list looks incomplete: ${combined.length} accepted IPTV entries`);
@@ -478,6 +498,7 @@ const report = {
   ],
   upstreamEntries: primary.accepted.length + secondary.accepted.length,
   filteredNonUnicom: primary.rejectedNonUnicom + secondary.rejectedNonUnicom,
+  excludedCctv4KLines,
   deduplicatedEntries: combined.length - deduped.length,
   standardDefinitionLinesRemoved,
   standardDefinitionOnlyFallbackChannels,
