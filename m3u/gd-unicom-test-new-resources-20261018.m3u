@@ -1,0 +1,21 @@
+#EXTM3U
+# 广东联通候选线路测试 - 2026-10-18
+# 来源：qist/tvbox 广东联通内网，文件最近更新：2026-07-04
+# 6条现有频道的不同资源ID（112.89.33.*）+ 2条新增频道候选（120.87.4.17/.33，未验证IP）
+# 正式播放列表未改动，分辨率尚未实测。
+#EXTINF:-1 tvg-name="西藏卫视" group-title="现有频道-新资源",西藏卫视 [112.89.33.4]
+http://112.89.33.4:80/PLTV/88888973/224/3221226705/371213179.smil/01.m3u8?fmt=ts2hls,1705,01.m3u8,0,8520,0,0&accountinfo=7P9%2FPZjGeZIv%2BPttGdhw9SUy2v3weVxkOFl4CStfwsm3BmTwjyEukLKuM5iU1lsecFvXBULNxC9R4Jc1e7rVXwWZ1F4%2B6A1eDkDeh5XZlpvpn23wIF%2Bldb6dnBPa8zHj%2CEND&GuardEncType=2&tenantId=8601
+#EXTINF:-1 tvg-name="新疆卫视" group-title="现有频道-新资源",新疆卫视 [112.89.33.4]
+http://112.89.33.4:80/PLTV/88888973/224/3221226708/371213193.smil/01.m3u8?fmt=ts2hls,1705,01.m3u8,0,8515,0,0&accountinfo=7P9%2FPZjGeZIv%2BPttGdhw9SUy2v3weVxkOFl4CStfwsm3BmTwjyEukLKuM5iU1lsen8gE3PnnYgHb%2Ftl%2FVmDx2gWZ1F4%2B6A1eDkDeh5XZlpvpn23wIF%2Bldb6dnBPa8zHj%2CEND&GuardEncType=2&tenantId=8601
+#EXTINF:-1 tvg-name="兵团卫视" group-title="现有频道-新资源",兵团卫视 [112.89.33.4]
+http://112.89.33.4:80/PLTV/88888973/224/3221226711/371213205.smil/01.m3u8?fmt=ts2hls,1705,01.m3u8,0,8513,0,0&accountinfo=7P9%2FPZjGeZIv%2BPttGdhw9SUy2v3weVxkOFl4CStfwsm3BmTwjyEukLKuM5iU1lsezLu2fBcatG3ZC9ujbXwHUQWZ1F4%2B6A1eDkDeh5XZlpvpn23wIF%2Bldb6dnBPa8zHj%2CEND&GuardEncType=2&tenantId=8601
+#EXTINF:-1 tvg-name="宁夏卫视" group-title="现有频道-新资源",宁夏卫视 [112.89.33.4]
+http://112.89.33.4:80/PLTV/88888973/224/3221226688/371213217.smil/01.m3u8?fmt=ts2hls,1705,01.m3u8,0,8517,0,0&accountinfo=7P9%2FPZjGeZIv%2BPttGdhw9SUy2v3weVxkOFl4CStfwsm3BmTwjyEukLKuM5iU1lsew%2FDoonKPn2svnJBK1cUzzAWZ1F4%2B6A1eDkDeh5XZlpvpn23wIF%2Bldb6dnBPa8zHj%2CEND&GuardEncType=2&tenantId=8601
+#EXTINF:-1 tvg-name="陕西卫视" group-title="现有频道-新资源",陕西卫视 [112.89.33.7]
+http://112.89.33.7:80/PLTV/88888973/224/3221226692/371444733.smil/01.m3u8?fmt=ts2hls,1706,01.m3u8,0,8595,0,0&accountinfo=7P9%2FPZjGeZIv%2BPttGdhw9SDULdQ2O3hR1WtGP6OEkt5ptq54f03oevyt0MlcISX%2Fm2j5rTz6Rirv5BrSoioFY%2FtfJ%2Be5cuPukUHUQrsTrlmMAcBkbs8LL691ccJjISEL%2CEND&GuardEncType=2&tenantId=8601
+#EXTINF:-1 tvg-name="东南卫视" group-title="现有频道-新资源",东南卫视 [112.89.33.7]
+http://112.89.33.7:80/PLTV/88888973/224/3221225673/10000100000000060000000000332976_0.smil/01.m3u8?fmt=ts2hls,1706,01.m3u8,0,2674,0,0&accountinfo=7P9%2FPZjGeZIv%2BPttGdhw9SUy2v3weVxkOFl4CStfwsnkh3kcFCJXwqkgcXGDUDPqJfnz5Dkify7mK1mSYl%2FVgwWZ1F4%2B6A1eDkDeh5XZlpvpn23wIF%2Bldb6dnBPa8zHj%2CEND&GuardEncType=2&tenantId=8601
+#EXTINF:-1 tvg-name="广东综艺" group-title="候选新增频道-待验证IP",广东综艺 [120.87.4.17]
+http://120.87.4.17:80/PLTV/88888973/224/3221225725/10000100000000060000000000334169_0.smil/01.m3u8?fmt=ts2hls,163,01.m3u8,0,2442,0,0&accountinfo=7P9%2FPZjGeZIv%2BPttGdhw9SUy2v3weVxkOFl4CStfwsnkh3kcFCJXwqkgcXGDUDPqVnG5raoIzXr62tkqARzOzQWZ1F4%2B6A1eDkDeh5XZlpvpn23wIF%2Bldb6dnBPa8zHj%2CEND&GuardEncType=2&tenantId=8601
+#EXTINF:-1 tvg-name="精选4K频道" group-title="候选新增频道-待验证IP",精选4K频道 [120.87.4.33]
+http://120.87.4.33:80/PLTV/88888973/224/3221226720/371604305.smil/01.m3u8?fmt=ts2hls,1947,01.m3u8,0,8594,0,0&accountinfo=26iThfOUESj7KWSP%2BCf6P2%2FtQdrks7k%2BU%2FtzcxyJZWh899xQ5UcWhd3FMVhE1wHOR%2BMWFcztb2vHFvLh3BMlNLsU6KazgFvxqBhk4q2PxHvyeajLnsVEKjVqdEYhmZl8%3A20260704105541%2CEND&GuardEncType=2&tenantId=8601
