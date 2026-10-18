@@ -393,7 +393,7 @@
       "playbackNote": "用户于2026-10-18反馈这批测试中该IP下的线路正常播放；视频实际分辨率尚未检测。按既有同资源ID频道名称归类，若名称有出入以实播节目进一步核验。"
     },
     {
-      "name": "江苏卫视4K",
+      "name": "江苏卫视",
       "url": "http://112.89.33.7:80/PLTV/88888973/224/3221226714/371266888.smil/01.m3u8?fmt=ts2hls,1706,01.m3u8,0,37198,0,0&accountinfo=7P9%2FPZjGeZIv%2BPttGdhw9SUy2v3weVxkOFl4CStfwsm3BmTwjyEukLKuM5iU1lse0SHJDf6d%2FZzLBuXOgekVeAWZ1F4%2B6A1eDkDeh5XZlpvpn23wIF%2Bldb6dnBPa8zHj%2CEND&GuardEncType=2&tenantId=8601",
       "sourceName": "江苏卫视4K",
       "sourceRepository": "qist/tvbox",
@@ -402,7 +402,8 @@
       "playbackStatus": "verified",
       "playbackVerifiedAt": "2026-10-18",
       "verifiedAlternate": true,
-      "playbackNote": "用户于2026-10-18反馈这批测试中该IP下的线路正常播放；视频实际分辨率尚未检测。按既有同资源ID频道名称归类，若名称有出入以实播节目进一步核验。"
+      "playbackNote": "用户于2026-10-18反馈这批测试中该IP下的线路正常播放；视频实际分辨率尚未检测。按既有同资源ID频道名称归类，若名称有出入以实播节目进一步核验。",
+      "verifiedQualityHint": "4k"
     },
     {
       "name": "金鹰卡通",
@@ -465,7 +466,7 @@
       "playbackNote": "用户于2026-10-18反馈这批测试中该IP下的线路正常播放；视频实际分辨率尚未检测。按既有同资源ID频道名称归类，若名称有出入以实播节目进一步核验。"
     },
     {
-      "name": "深圳卫视4K",
+      "name": "深圳卫视",
       "url": "http://112.89.33.7:80/PLTV/88888973/224/3221226683/371164180.smil/01.m3u8?fmt=ts2hls,1706,01.m3u8,0,24369,0,0&accountinfo=7P9%2FPZjGeZIv%2BPttGdhw9SUy2v3weVxkOFl4CStfwsm3BmTwjyEukLKuM5iU1lseKqeUED7BJaS624jgQaeaoAWZ1F4%2B6A1eDkDeh5XZlpvpn23wIF%2Bldb6dnBPa8zHj%2CEND&GuardEncType=2&tenantId=8601",
       "sourceName": "深圳卫视4K",
       "sourceRepository": "qist/tvbox",
@@ -474,10 +475,11 @@
       "playbackStatus": "verified",
       "playbackVerifiedAt": "2026-10-18",
       "verifiedAlternate": true,
-      "playbackNote": "用户于2026-10-18反馈这批测试中该IP下的线路正常播放；视频实际分辨率尚未检测。按既有同资源ID频道名称归类，若名称有出入以实播节目进一步核验。"
+      "playbackNote": "用户于2026-10-18反馈这批测试中该IP下的线路正常播放；视频实际分辨率尚未检测。按既有同资源ID频道名称归类，若名称有出入以实播节目进一步核验。",
+      "verifiedQualityHint": "4k"
     },
     {
-      "name": "浙江卫视4K",
+      "name": "浙江卫视",
       "url": "http://112.89.33.7:80/PLTV/88888973/224/3221226717/371266855.smil/01.m3u8?fmt=ts2hls,1706,01.m3u8,0,37192,0,0&accountinfo=7P9%2FPZjGeZIv%2BPttGdhw9SUy2v3weVxkOFl4CStfwsm3BmTwjyEukLKuM5iU1lse53%2B6Mxty9TuCASBDY1r58wWZ1F4%2B6A1eDkDeh5XZlpvpn23wIF%2Bldb6dnBPa8zHj%2CEND&GuardEncType=2&tenantId=8601",
       "sourceName": "浙江卫视4K",
       "sourceRepository": "qist/tvbox",
@@ -486,7 +488,8 @@
       "playbackStatus": "verified",
       "playbackVerifiedAt": "2026-10-18",
       "verifiedAlternate": true,
-      "playbackNote": "用户于2026-10-18反馈这批测试中该IP下的线路正常播放；视频实际分辨率尚未检测。按既有同资源ID频道名称归类，若名称有出入以实播节目进一步核验。"
+      "playbackNote": "用户于2026-10-18反馈这批测试中该IP下的线路正常播放；视频实际分辨率尚未检测。按既有同资源ID频道名称归类，若名称有出入以实播节目进一步核验。",
+      "verifiedQualityHint": "4k"
     },
     {
       "name": "CCTV10",
@@ -633,7 +636,7 @@
       "playbackNote": "用户于2026-10-18反馈这批测试中该IP下的线路正常播放；视频实际分辨率尚未检测。按既有同资源ID频道名称归类，若名称有出入以实播节目进一步核验。"
     },
     {
-      "name": "广东卫视4K",
+      "name": "广东卫视",
       "url": "http://112.89.33.8:80/PLTV/88888973/224/3221226702/371164168.smil/01.m3u8?fmt=ts2hls,1707,01.m3u8,0,23800,0,0&accountinfo=7P9%2FPZjGeZIv%2BPttGdhw9SUy2v3weVxkOFl4CStfwsm3BmTwjyEukLKuM5iU1lseDMa3JUeYA78BvOgiQL6ooQWZ1F4%2B6A1eDkDeh5XZlpvpn23wIF%2Bldb6dnBPa8zHj%2CEND&GuardEncType=2&tenantId=8601",
       "sourceName": "广东卫视4K",
       "sourceRepository": "qist/tvbox",
@@ -642,7 +645,8 @@
       "playbackStatus": "verified",
       "playbackVerifiedAt": "2026-10-18",
       "verifiedAlternate": true,
-      "playbackNote": "用户于2026-10-18反馈这批测试中该IP下的线路正常播放；视频实际分辨率尚未检测。按既有同资源ID频道名称归类，若名称有出入以实播节目进一步核验。"
+      "playbackNote": "用户于2026-10-18反馈这批测试中该IP下的线路正常播放；视频实际分辨率尚未检测。按既有同资源ID频道名称归类，若名称有出入以实播节目进一步核验。",
+      "verifiedQualityHint": "4k"
     },
     {
       "name": "西藏卫视",
