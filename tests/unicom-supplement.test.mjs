@@ -80,9 +80,15 @@ test('unverified attachment URLs stay out of main playlists and remain in an exp
   } finally { fs.rmSync(temp, { recursive: true, force: true }); }
 });
 
-test('reviewed attachment data keeps seven missing Unicom channels and excludes Zhejiang and codec labels', () => {
+test('reviewed attachment data preserves seven unverified legacy channels, and verified Yanbian TV, excluding Zhejiang and codec labels', () => {
   const data = JSON.parse(fs.readFileSync('config/gd-unicom-supplement.json', 'utf8'));
-  assert.deepEqual(data.unicast.map(e => e.name), ['广东房产', '梨园频道', '靓装', 'CETV早期教育', '武术世界', '文物宝库', '环球奇观']);
+  assert.deepEqual(data.unicast.filter(e => e.playbackStatus !== 'verified').map(e => e.name),
+    ['广东房产', '梨园频道', '靓装', 'CETV早期教育', '武术世界', '文物宝库', '环球奇观']);
+  const yanbian = data.unicast.find(e => e.name === '延边卫视');
+  assert.equal(yanbian?.playbackStatus, 'verified');
+  assert.equal(yanbian?.sourceRepository, 'qist/tvbox');
+  assert.match(yanbian.url, /^http:\/\/120\.87\.4\.17:80\/PLTV\/88888973\/224\/3221225725\//);
+  assert.ok(!data.unicast.some(e => e.name === '精选4K频道' || e.name === '广东综艺'));
   assert.equal(data.importSummary.forumMulticastEntries, 190);
   assert.equal(data.importSummary.forumProxyEntries, 44);
   assert.equal(data.provenance[2].postId, '22003010');
