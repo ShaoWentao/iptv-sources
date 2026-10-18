@@ -34,7 +34,10 @@ function isUnicomIptvUrl(value) {
   try {
     const url = new URL(value);
     if (!/^https?:$/.test(url.protocol)) return false;
-    const hostOk = /^120\.87\.\d{1,3}\.\d{1,3}$/.test(url.hostname) || url.hostname === '112.89.121.23';
+    const hostOk = /^120\.87\.\d{1,3}\.\d{1,3}$/.test(url.hostname)
+      || url.hostname === '112.89.121.23'
+      || /^112\.89\.33\.(?:4|6|7|8|9)$/.test(url.hostname)
+      || url.hostname === '112.89.35.70';
     if (!hostOk) return false;
     return url.pathname.includes('/PLTV/88888973/224/') && /\.m3u8$/i.test(url.pathname);
   } catch {
@@ -268,7 +271,7 @@ const secondary = parseSecondary(readText(secondaryInput));
 const supplement = args.supplement ? JSON.parse(readText(args.supplement)) : null;
 const supplementAccepted = [];
 const unverifiedAccepted = [];
-const supplementReport = { addedChannels: [], quarantinedChannels: [], acceptedEntries: 0, rejectedEntries: 0, skippedExistingEntries: 0 };
+const supplementReport = { addedChannels: [], addedAlternateLines: [], quarantinedChannels: [], acceptedEntries: 0, rejectedEntries: 0, skippedExistingEntries: 0 };
 if (supplement) {
   if (supplement.schemaVersion !== 1 || !Array.isArray(supplement.unicast) || !Array.isArray(supplement.multicast)) {
     throw new Error('Invalid Guangdong Unicom supplement schema');
@@ -279,7 +282,8 @@ if (supplement) {
       supplementReport.rejectedEntries += 1;
       continue;
     }
-    if (existingNames.has(item.name)) {
+    const existingChannel = existingNames.has(item.name);
+    if (existingChannel && item.verifiedAlternate !== true) {
       supplementReport.skippedExistingEntries += 1;
       continue;
     }
@@ -288,9 +292,11 @@ if (supplement) {
       if (!supplementReport.quarantinedChannels.includes(item.name)) supplementReport.quarantinedChannels.push(item.name);
       continue;
     }
-    supplementAccepted.push({ name: item.name, url: item.url, source: 'user-attachment', sourcePriority: 2,
-      index: supplementAccepted.length, groupCandidate: inferGroup(item.name), quality: qualityFromEntry(item.url, item.sourceName || item.name) });
-    if (!supplementReport.addedChannels.includes(item.name)) supplementReport.addedChannels.push(item.name);
+    supplementAccepted.push({ name: item.name, url: item.url, source: 'user-playback-verified', sourcePriority: 2,
+      index: supplementAccepted.length, groupCandidate: inferGroup(item.name),
+      quality: qualityFromEntry(item.url, item.name), verifiedAlternate: existingChannel && item.verifiedAlternate === true });
+    if (existingChannel) supplementReport.addedAlternateLines.push(item.name);
+    else if (!supplementReport.addedChannels.includes(item.name)) supplementReport.addedChannels.push(item.name);
   }
   supplementReport.acceptedEntries = supplementAccepted.length;
   supplementReport.provenance = supplement.provenance || [];
@@ -359,8 +365,12 @@ for (const [name, items] of buckets) {
 
   const higherQuality = items.filter((item) => item.quality === 'hd' || item.quality === '4k');
   if (higherQuality.length > 0) {
-    standardDefinitionLinesRemoved += items.length - higherQuality.length;
-    buckets.set(name, higherQuality);
+    // Keep playback-verified alternatives whose codec/resolution has not been probed.
+    // Explicitly identified SD alternatives still get removed when HD/4K is present.
+    const verifiedUnknownAlternates = items.filter(item => item.verifiedAlternate && item.quality === 'normal');
+    const selected = [...higherQuality, ...verifiedUnknownAlternates];
+    standardDefinitionLinesRemoved += items.length - selected.length;
+    buckets.set(name, selected);
   } else if (items.length > 1) {
     standardDefinitionLinesRemoved += items.length - 1;
     standardDefinitionOnlyFallbackChannels += 1;
@@ -471,7 +481,7 @@ const report = {
   primaryPlaylistMode: 'merged-all-lines-plus-4k-group',
   simplePlaylistMode: 'best-line-per-channel-plus-4k-group',
   qualityOrder: ['4k', 'hd', 'sd', 'normal'],
-  allowedIptvHosts: ['120.87.0.0/16', '112.89.121.23'],
+  allowedIptvHosts: ['120.87.0.0/16', '112.89.121.23', '112.89.33.4', '112.89.33.6', '112.89.33.7', '112.89.33.8', '112.89.33.9', '112.89.35.70'],
   note: 'Only Guangdong Unicom PLTV unicast URLs are retained. For Guangdong Unicom PLTV, fmt=244 is treated as the 1080-class stream while fmt=504/744 are treated as lower-resolution variants. 720/lower lines are removed when 1080/4K alternatives exist; channels with only lower-resolution lines keep one fallback line. Stream reachability is network-dependent and is not tested by GitHub Actions.',
 };
 if (supplement) {
