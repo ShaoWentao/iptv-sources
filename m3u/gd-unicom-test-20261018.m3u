@@ -1,0 +1,8 @@
+#EXTM3U
+# 广东联通单播测试列表 - 3条；2021年旧源已排除
+#EXTINF:-1 tvg-name="阳江综合" group-title="广东联通测试-qist",阳江综合｜qist
+http://120.87.4.29:80/PLTV/88888973/224/3221226682/370934572.smil/01.m3u8?fmt=ts2hls,1666,01.m3u8,0,8594,0,0&accountinfo=7P9%2FPZjGeZIv%2BPttGdhw9SUy2v3weVxkOFl4CStfwsnkh3kcFCJXwqkgcXGDUDPqyEmdA8c5SCpMT2DX5tK7tgWZ1F4%2B6A1eDkDeh5XZlpvpn23wIF%2Bldb6dnBPa8zHj%2CEND&GuardEncType=2&tenantId=8601
+#EXTINF:-1 tvg-name="阳江文化生活" group-title="广东联通测试-x22c",阳江文化生活｜x22c
+http://120.87.4.28:80/PLTV/88888973/224/3221226696/370934643.smil/01.m3u8?fmt=ts2hls
+#EXTINF:-1 tvg-name="CCTV风云足球" group-title="广东联通测试-sumingyd",CCTV风云足球｜sumingyd
+http://120.87.19.109:80/PLTV/88888973/224/3221226616/10000100000000060000000001611739_0.smil/01.m3u8?fmt=ts2hls,244,01.m3u8&accountinfo=UoQbCSdhOfs+Fhzpjb+WON1faRQ9pU15SBx6EULzJM/q63EjPL5/UXSVfEKzDq3xzI8wliEPDEX7/t+Q1C3MNAWZ1F4+6A1eDkDeh5XZlpvpn23wIF+ldb6dnBPa8zHj,END&tenantId=8601
