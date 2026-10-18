@@ -270,7 +270,7 @@ function resourceKey(value) {
 }
 
 function isCctv4KLabelOrResource(name, url) {
-  const normalizedName = String(name || '').replace(/[\\s_-]/g, '');
+  const normalizedName = String(name || '').replace(/[\s_-]/g, '');
   return /^CCTV4K(?:超高清)?$/i.test(normalizedName)
     || /\/PLTV\/88888973\/224\/3221226217\//.test(String(url || ''));
 }
