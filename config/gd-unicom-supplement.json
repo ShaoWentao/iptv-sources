@@ -30,6 +30,12 @@
       "playbackVerifiedAt": "2026-10-18",
       "batchAudit": "docs/gd-unicom-batch-verification-20261018.json",
       "note": "223条线路按IP测试；168正常，55超时；正常中160条频道身份可按现有ID归档，8条频道标签冲突单独保留。"
+    },
+    {
+      "filename": "广东联通IPTV.m3u",
+      "testPlaylist": "m3u/gd-unicom-test-4k-tailfix-20261022.m3u",
+      "verifiedBy": "user-playback-2026-10-22",
+      "note": "CCTV4K 3221226704 和 CCTV-奥林匹克4K 3221226698 的A/B尾部修正版均实测可播放；正式源收录A版，旧资源3221226217仍禁用。"
     }
   ],
   "unicast": [
@@ -2171,6 +2177,30 @@
       "playbackVerifiedAt": "2026-10-18",
       "verifiedAlternate": true,
       "playbackNote": "用户于2026-10-18反馈这批测试中该IP下的线路正常播放；视频实际分辨率尚未检测。按既有同资源ID频道名称归类，若名称有出入以实播节目进一步核验。"
+    },
+    {
+      "name": "CCTV4K",
+      "url": "http://120.87.19.109:80/PLTV/88888973/224/3221226704/371672351.smil/01.m3u8?fmt=ts2hls,1650,01.m3u8,0,37191,0,0&accountinfo=EyPXUAWwbWaasuwUuT3gu1%2Bwgs8CVwiwV8O5ttA7G6L6JOKNr2X7Sf5flRQQHAIaV5Y2U3MiCpb4wb%2FVP1DgJwWZ1F4%2B6A1eDkDeh5XZlpvpn23wIF%2Bldb6dnBPa8zHj%2CEND&GuardEncType=2&tenantId=8601",
+      "sourceName": "CCTV-4K",
+      "sourceRepository": "user-attachment",
+      "sourcePath": "广东联通IPTV.m3u",
+      "resourceId": "3221226704",
+      "playbackStatus": "verified",
+      "playbackVerifiedAt": "2026-10-22",
+      "verifiedQualityHint": "4k",
+      "playbackNote": "用户在广东联通网络中实测：删除异常鉴权时间戳后的A版与仅修正编码的B版均正常播放。正式源采用A版；B版保留在 m3u/gd-unicom-test-4k-tailfix-20261022.m3u 作为同一IP同一资源ID的已验证替代参数，不重复增加频道/播放线路。原始未修正URL超时、仅有静态画面。实际分辨率尚未探针检测。"
+    },
+    {
+      "name": "CCTV-奥林匹克4K",
+      "url": "http://120.87.4.103:80/PLTV/88888973/224/3221226698/371444890.smil/01.m3u8?fmt=ts2hls,924,01.m3u8,0,36864,0,0&accountinfo=EyPXUAWwbWaasuwUuT3gu1%2Bwgs8CVwiwV8O5ttA7G6L6JOKNr2X7Sf5flRQQHAIah9Rsjk55XocyUGUmuys3qwWZ1F4%2B6A1eDkDeh5XZlpvpn23wIF%2Bldb6dnBPa8zHj%2CEND&GuardEncType=2&tenantId=8601",
+      "sourceName": "CCTV-奥林匹克4K",
+      "sourceRepository": "user-attachment",
+      "sourcePath": "广东联通IPTV.m3u",
+      "resourceId": "3221226698",
+      "playbackStatus": "verified",
+      "playbackVerifiedAt": "2026-10-22",
+      "verifiedQualityHint": "4k",
+      "playbackNote": "用户在广东联通网络中实测：删除异常鉴权时间戳后的A版与仅修正编码的B版均正常播放。正式源采用A版；B版保留在 m3u/gd-unicom-test-4k-tailfix-20261022.m3u 作为同一IP同一资源ID的已验证替代参数，不重复增加频道/播放线路。原始未修正URL超时、仅有静态画面。实际分辨率尚未探针检测。"
     }
   ],
   "multicast": [
