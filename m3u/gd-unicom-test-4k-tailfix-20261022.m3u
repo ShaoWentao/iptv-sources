@@ -1,0 +1,18 @@
+#EXTM3U
+# 广东联通 CCTV4K & 奥林匹克4K 的 accountinfo 尾部修正对照测试
+# 仅变更 accountinfo 末尾格式，原PLTV资源、host、fmt、签名主体、GuardEncType、tenantId均保持不变
+# A: 删除疑似错误的时间戳/裸%/逗号，参考已测正常源以 %2CEND 结尾
+# B: 保留原时间戳，只把裸 % 和逗号修正成 %2C（仅格式对照，时间戳有效性未知）
+# CONTROL: 本次并列放入2条此前用户实测可播放的原始线路，用于核对网络/播放器状态
+#EXTINF:-1 tvg-name="CCTV-4K" group-title="4K尾部修正待测",CCTV-4K｜A-删除时间戳
+http://120.87.19.109:80/PLTV/88888973/224/3221226704/371672351.smil/01.m3u8?fmt=ts2hls,1650,01.m3u8,0,37191,0,0&accountinfo=EyPXUAWwbWaasuwUuT3gu1%2Bwgs8CVwiwV8O5ttA7G6L6JOKNr2X7Sf5flRQQHAIaV5Y2U3MiCpb4wb%2FVP1DgJwWZ1F4%2B6A1eDkDeh5XZlpvpn23wIF%2Bldb6dnBPa8zHj%2CEND&GuardEncType=2&tenantId=8601
+#EXTINF:-1 tvg-name="CCTV-4K" group-title="4K尾部修正待测",CCTV-4K｜B-保留时间戳仅编码
+http://120.87.19.109:80/PLTV/88888973/224/3221226704/371672351.smil/01.m3u8?fmt=ts2hls,1650,01.m3u8,0,37191,0,0&accountinfo=EyPXUAWwbWaasuwUuT3gu1%2Bwgs8CVwiwV8O5ttA7G6L6JOKNr2X7Sf5flRQQHAIaV5Y2U3MiCpb4wb%2FVP1DgJwWZ1F4%2B6A1eDkDeh5XZlpvpn23wIF%2Bldb6dnBPa8zHj%2C20260101410934%2CEND&GuardEncType=2&tenantId=8601
+#EXTINF:-1 tvg-name="CCTV-奥林匹克4K" group-title="4K尾部修正待测",CCTV-奥林匹克4K｜A-删除时间戳
+http://120.87.4.103:80/PLTV/88888973/224/3221226698/371444890.smil/01.m3u8?fmt=ts2hls,924,01.m3u8,0,36864,0,0&accountinfo=EyPXUAWwbWaasuwUuT3gu1%2Bwgs8CVwiwV8O5ttA7G6L6JOKNr2X7Sf5flRQQHAIah9Rsjk55XocyUGUmuys3qwWZ1F4%2B6A1eDkDeh5XZlpvpn23wIF%2Bldb6dnBPa8zHj%2CEND&GuardEncType=2&tenantId=8601
+#EXTINF:-1 tvg-name="CCTV-奥林匹克4K" group-title="4K尾部修正待测",CCTV-奥林匹克4K｜B-保留时间戳仅编码
+http://120.87.4.103:80/PLTV/88888973/224/3221226698/371444890.smil/01.m3u8?fmt=ts2hls,924,01.m3u8,0,36864,0,0&accountinfo=EyPXUAWwbWaasuwUuT3gu1%2Bwgs8CVwiwV8O5ttA7G6L6JOKNr2X7Sf5flRQQHAIah9Rsjk55XocyUGUmuys3qwWZ1F4%2B6A1eDkDeh5XZlpvpn23wIF%2Bldb6dnBPa8zHj%2C20260101410934%2CEND&GuardEncType=2&tenantId=8601
+#EXTINF:-1 tvg-name="风云足球" group-title="测试对照-已实测正常",风云足球｜正常源对照
+http://120.87.19.109:80/PLTV/88888973/224/3221226616/10000100000000060000000001611739_0.smil/01.m3u8?fmt=ts2hls,244,01.m3u8&accountinfo=UoQbCSdhOfs+Fhzpjb+WON1faRQ9pU15SBx6EULzJM/q63EjPL5/UXSVfEKzDq3xzI8wliEPDEX7/t+Q1C3MNAWZ1F4+6A1eDkDeh5XZlpvpn23wIF+ldb6dnBPa8zHj,END&tenantId=8601
+#EXTINF:-1 tvg-name="阳江综合" group-title="测试对照-已实测正常",阳江综合｜正常源对照
+http://120.87.4.29:80/PLTV/88888973/224/3221226682/370934572.smil/01.m3u8?fmt=ts2hls,1666,01.m3u8,0,8594,0,0&accountinfo=7P9%2FPZjGeZIv%2BPttGdhw9SUy2v3weVxkOFl4CStfwsnkh3kcFCJXwqkgcXGDUDPqyEmdA8c5SCpMT2DX5tK7tgWZ1F4%2B6A1eDkDeh5XZlpvpn23wIF%2Bldb6dnBPa8zHj%2CEND&GuardEncType=2&tenantId=8601
