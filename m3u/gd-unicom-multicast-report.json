@@ -30,6 +30,12 @@
       "playbackVerifiedAt": "2026-10-18",
       "batchAudit": "docs/gd-unicom-batch-verification-20261018.json",
       "note": "223条线路按IP测试；168正常，55超时；正常中160条频道身份可按现有ID归档，8条频道标签冲突单独保留。"
+    },
+    {
+      "filename": "广东联通IPTV.m3u",
+      "testPlaylist": "m3u/gd-unicom-test-4k-tailfix-20261022.m3u",
+      "verifiedBy": "user-playback-2026-10-22",
+      "note": "CCTV4K 3221226704 和 CCTV-奥林匹克4K 3221226698 的A/B尾部修正版均实测可播放；正式源收录A版，旧资源3221226217仍禁用。"
     }
   ],
   "inputEntries": 390,
@@ -108,7 +114,6 @@
   "selectedChannels": 122,
   "selectedLines": 135,
   "missingFromUnicast": [
-    "CCTV4K",
     "潮州民生",
     "潮州综合",
     "VSPN电竞",
