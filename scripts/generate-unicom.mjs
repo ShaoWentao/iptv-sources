@@ -285,7 +285,8 @@ if (supplement) {
   if (supplement.schemaVersion !== 1 || !Array.isArray(supplement.unicast) || !Array.isArray(supplement.multicast)) {
     throw new Error('Invalid Guangdong Unicom supplement schema');
   }
-  const existingNames = new Set([...primary.accepted, ...secondary.accepted].map(e => e.name));
+  const existingNames = new Set([...primary.accepted, ...secondary.accepted]
+    .filter(entry => !isBrokenCctv4KResource(entry.url)).map(entry => entry.name));
   for (const item of supplement.unicast) {
     if (!item.name || /[\r\n"]/.test(item.name) || !isUnicomIptvUrl(item.url)) {
       supplementReport.rejectedEntries += 1;
