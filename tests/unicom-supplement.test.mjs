@@ -193,3 +193,34 @@ test('reviewed attachment data preserves seven unverified legacy channels, and v
   assert.ok(data.multicast.some(e => e.name === '北京纪实'));
   assert.ok(data.multicast.some(e => e.name === '上海纪实'));
 });
+
+
+test('tail-corrected CCTV4K and Olympic4K URLs are verified in supplement without old broken feed', () => {
+  const cfg = JSON.parse(fs.readFileSync('config/gd-unicom-supplement.json', 'utf8'));
+  const testList = fs.readFileSync('m3u/gd-unicom-test-4k-tailfix-20261022.m3u', 'utf8');
+  const lines = testList.split(/\r?\n/);
+  const candidates = new Map();
+  for (let i = 0; i < lines.length; i++) {
+    if (!lines[i].startsWith('#EXTINF:')) continue;
+    const label = lines[i].slice(lines[i].indexOf(',') + 1);
+    const playbackUrl = lines[i + 1] || '';
+    const id = playbackUrl.match(/\/PLTV\/88888973\/224\/(\d+)\//)?.[1];
+    if (!id || !['3221226704', '3221226698'].includes(id)) continue;
+    if (!candidates.has(id)) candidates.set(id, new Map());
+    if (/A-删除时间戳/.test(label)) candidates.get(id).set('A', playbackUrl);
+    if (/B-保留时间戳/.test(label)) candidates.get(id).set('B', playbackUrl);
+  }
+  assert.equal(candidates.size, 2);
+  for (const id of ['3221226704', '3221226698']) {
+    const variants = candidates.get(id);
+    assert.ok(variants?.get('A') && variants?.get('B'));
+    const verified = cfg.unicast.filter(e => e.resourceId === id && e.playbackStatus === 'verified');
+    assert.equal(verified.length, 1, 'one canonical entry per verified 4K resource ID');
+    assert.equal(verified[0].url, variants.get('A'), 'official feed uses user-tested A version');
+    assert.ok(verified[0].url.includes('%2CEND&GuardEncType=2&tenantId=8601'));
+    assert.ok(verified[0].verifiedQualityHint === '4k');
+    assert.notEqual(variants.get('B'), variants.get('A'));
+    assert.ok(variants.get('B').includes('%2C20260101410934%2CEND'), 'B remains in test list');
+  }
+  assert.ok(!cfg.unicast.some(e => e.url.includes('/3221226217/')), 'broken CCTV4K remains excluded');
+});
