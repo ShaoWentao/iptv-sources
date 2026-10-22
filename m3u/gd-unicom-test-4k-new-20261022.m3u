@@ -1,0 +1,8 @@
+#EXTM3U
+# 广东联通单播：新4K资源待测；附件“广东联通IPTV.m3u”原始地址
+# 旧资源ID 3221226217 经用户测试有声无画，未包含
+# 未对原始URL中的鉴权参数作任何修改；本列表不代表已验证可播放
+#EXTINF:-1 tvg-id="CCTV-4K" tvg-name="CCTV-4K" group-title="4K新源待验证",CCTV-4K
+http://120.87.19.109:80/PLTV/88888973/224/3221226704/371672351.smil/01.m3u8?fmt=ts2hls,1650,01.m3u8,0,37191,0,0&accountinfo=EyPXUAWwbWaasuwUuT3gu1%2Bwgs8CVwiwV8O5ttA7G6L6JOKNr2X7Sf5flRQQHAIaV5Y2U3MiCpb4wb%2FVP1DgJwWZ1F4%2B6A1eDkDeh5XZlpvpn23wIF%2Bldb6dnBPa8zHj%2C20260101410934%,END&GuardEncType=2&tenantId=8601
+#EXTINF:-1 tvg-id="CCTV-奥林匹克4K" tvg-name="CCTV-奥林匹克4K" group-title="4K新源待验证",CCTV-奥林匹克4K
+http://120.87.4.103:80/PLTV/88888973/224/3221226698/371444890.smil/01.m3u8?fmt=ts2hls,924,01.m3u8,0,36864,0,0&accountinfo=EyPXUAWwbWaasuwUuT3gu1%2Bwgs8CVwiwV8O5ttA7G6L6JOKNr2X7Sf5flRQQHAIah9Rsjk55XocyUGUmuys3qwWZ1F4%2B6A1eDkDeh5XZlpvpn23wIF%2Bldb6dnBPa8zHj%2C20260101410934%,END&GuardEncType=2&tenantId=8601
