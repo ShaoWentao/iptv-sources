@@ -177,7 +177,7 @@ test('normalizes Guangdong, satellite, children and city channel groups instead 
 });
 
 
-test('excludes CCTV4K and its PLTV ID on regeneration while keeping Guangdong 4K', () => {
+test('excludes broken CCTV4K PLTV ID while permitting verified replacement 4K feeds', () => {
   const temp = fs.mkdtempSync(path.join(os.tmpdir(), 'unicom-no-cctv4k-'));
   try {
     const primary = path.join(temp, 'primary.txt');
@@ -201,6 +201,8 @@ test('excludes CCTV4K and its PLTV ID on regeneration while keeping Guangdong 4K
       unicast: [
         { name: 'CCTV4K', url: url('120.87.19.109', 3221226217, 'supplement-a'), playbackStatus: 'verified' },
         { name: '广东4K', url: url('120.87.19.109', 3221226217, 'supplement-b'), playbackStatus: 'verified', verifiedAlternate: true },
+        { name: 'CCTV4K', url: url('120.87.19.109', 3221226704, 'replacement', '1650'), playbackStatus: 'verified' },
+        { name: 'CCTV-奥林匹克4K', url: url('120.87.19.109', 3221226698, 'olympics', '924'), playbackStatus: 'verified' },
       ],
     }));
     const result = spawnSync(process.execPath, [
@@ -210,17 +212,22 @@ test('excludes CCTV4K and its PLTV ID on regeneration while keeping Guangdong 4K
     assert.equal(result.status, 0, result.stderr || result.stdout);
     for (const filename of ['gd-unicom.m3u', 'gd-unicom-simple.m3u', 'gd-unicom-unverified.m3u']) {
       const playlist = fs.readFileSync(path.join(output, filename), 'utf8');
-      assert.doesNotMatch(playlist, /CCTV[\s_-]*4K|\/3221226217\//i,
-        'Disallowed CCTV4K resource should never appear in ' + filename);
+      assert.doesNotMatch(playlist, /\/3221226217\//,
+        'Only the confirmed broken CCTV4K resource should be excluded from ' + filename);
     }
     const main = fs.readFileSync(path.join(output, 'gd-unicom.m3u'), 'utf8');
     const simple = fs.readFileSync(path.join(output, 'gd-unicom-simple.m3u'), 'utf8');
     assert.match(main, /\/3221226174\//, 'Guangdong4K should remain in main');
     assert.match(simple, /\/3221226174\//, 'Guangdong4K should remain in simple');
     assert.match(main, /广东卫视4K/, 'Other satellite 4K channel should remain');
+    assert.match(main, /\/3221229010\//, 'New CCTV-4K upstream ID is not blocked by name');
+    assert.match(main, /\/3221226704\//, 'Verified CCTV4K replacement ID must be eligible');
+    assert.match(simple, /\/3221226704\//, 'Verified replacement survives simple playlist');
+    assert.match(main, /\/3221226698\//, 'Olympics 4K is independently eligible');
+    assert.match(simple, /\/3221226698\//, 'Olympics 4K survives simple playlist');
     assert.match(main, /group-title="4K超高清",广东4K/, 'Keep Guangdong 4K group');
     const report = JSON.parse(fs.readFileSync(path.join(output, 'gd-unicom-report.json'), 'utf8'));
-    assert.equal(report.excludedCctv4KLines, 3, 'CCTV4K primary and secondary entries must be filtered');
+    assert.equal(report.excludedCctv4KLines, 2, 'Only two primary entries with broken resource ID are excluded');
     assert.ok(report.fourKChannels >= 2);
   } finally { fs.rmSync(temp, { recursive: true, force: true }); }
 });
