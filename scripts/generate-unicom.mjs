@@ -269,10 +269,10 @@ function resourceKey(value) {
   }
 }
 
-function isCctv4KLabelOrResource(name, url) {
-  const normalizedName = String(name || '').replace(/[\s_-]/g, '');
-  return /^CCTV4K(?:超高清)?$/i.test(normalizedName)
-    || /\/PLTV\/88888973\/224\/3221226217\//.test(String(url || ''));
+// Only the tested-broken CCTV4K PLTV resource is blocked. Other CCTV4K
+// resources may be added after playback verification.
+function isBrokenCctv4KResource(url) {
+  return /\/PLTV\/88888973\/224\/3221226217\//.test(String(url || ''));
 }
 
 const primary = parsePrimary(readText(input));
@@ -291,7 +291,7 @@ if (supplement) {
       supplementReport.rejectedEntries += 1;
       continue;
     }
-    if (isCctv4KLabelOrResource(item.name, item.url)) {
+    if (isBrokenCctv4KResource(item.url)) {
       supplementReport.skippedExistingEntries += 1;
       continue;
     }
@@ -318,11 +318,10 @@ if (supplement) {
   supplementReport.note = 'Only attachments explicitly marked playbackStatus=verified enter the main playlists. Unverified legacy URLs remain in gd-unicom-unverified.m3u. Address whitelisting and workflow success do not establish playback or token validity. Unknown fmt codes are not promoted to 1080.';
   supplementReport.playbackIssues = supplement.playbackIssues || [];
 }
-// The user's Guangdong Unicom CCTV4K feed plays audio without video.
-// Exclude this channel (including alternative display names for its resource ID)
-// from both regular and 4K-group outputs on every scheduled regeneration.
+// Keep the confirmed broken PLTV resource out of both regular and 4K groups.
+// Channel names remain eligible for separately verified replacement sources.
 function isExcludedCctv4K(entry) {
-  return isCctv4KLabelOrResource(entry.name, entry.url);
+  return isBrokenCctv4KResource(entry.url);
 }
 
 const combinedCandidates = [...primary.accepted, ...secondary.accepted, ...supplementAccepted];
