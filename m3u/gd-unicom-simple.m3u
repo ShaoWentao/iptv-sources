@@ -1,6 +1,6 @@
 #EXTM3U
 # Generated from merged Guangdong Unicom IPTV unicast sources
-# Primary upstream commit: 3b6c558e2e53487257f5ed9b4befe1c624f28fb5
+# Primary upstream commit: f0f32960c9ccf692e4c85fc1d3a8964a68db84da
 # Secondary upstream commit: e0addaad6761b998c257e1af4a82e4fffe25aa3e
 #EXTINF:-1 tvg-id="CCTV4K-4K分组" tvg-name="CCTV4K" group-title="4K超高清",CCTV4K
 http://120.87.19.109:80/PLTV/88888973/224/3221226704/371672351.smil/01.m3u8?fmt=ts2hls,1650,01.m3u8,0,37191,0,0&accountinfo=EyPXUAWwbWaasuwUuT3gu1%2Bwgs8CVwiwV8O5ttA7G6L6JOKNr2X7Sf5flRQQHAIaV5Y2U3MiCpb4wb%2FVP1DgJwWZ1F4%2B6A1eDkDeh5XZlpvpn23wIF%2Bldb6dnBPa8zHj%2CEND&GuardEncType=2&tenantId=8601
