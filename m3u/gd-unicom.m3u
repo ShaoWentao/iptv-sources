@@ -1,6 +1,6 @@
 #EXTM3U
 # Generated from merged Guangdong Unicom IPTV unicast sources
-# Primary upstream commit: ed7a51c85a72a3630dd94ef9b92a7d249e8c188d
+# Primary upstream commit: 0961814bdfbc4a1e396ac567fe3421a7649c6d33
 # Secondary upstream commit: e0addaad6761b998c257e1af4a82e4fffe25aa3e
 #EXTINF:-1 tvg-id="CCTV4K-4K分组" tvg-name="CCTV4K" group-title="4K超高清",CCTV4K
 http://120.87.19.109:80/PLTV/88888973/224/3221226704/371672351.smil/01.m3u8?fmt=ts2hls,1650,01.m3u8,0,37191,0,0&accountinfo=EyPXUAWwbWaasuwUuT3gu1%2Bwgs8CVwiwV8O5ttA7G6L6JOKNr2X7Sf5flRQQHAIaV5Y2U3MiCpb4wb%2FVP1DgJwWZ1F4%2B6A1eDkDeh5XZlpvpn23wIF%2Bldb6dnBPa8zHj%2CEND&GuardEncType=2&tenantId=8601
@@ -490,6 +490,8 @@ http://120.87.19.109:80/PLTV/88888973/224/3221226668/100001000000000600000000021
 http://120.87.19.109:80/PLTV/88888973/224/3221226605/10000100000000060000000001565708_0.smil/01.m3u8?fmt=ts2hls,244,01.m3u8&accountinfo=UoQbCSdhOfs+Fhzpjb+WON1faRQ9pU15SBx6EULzJM/q63EjPL5/UXSVfEKzDq3xrakgNzbBuZb9vE9HF2GwxwWZ1F4+6A1eDkDeh5XZlpvpn23wIF+ldb6dnBPa8zHj,END&tenantId=8601
 #EXTINF:-1 tvg-name="中山综合" group-title="地方",中山综合
 http://120.87.19.109:80/PLTV/88888973/224/3221226358/10000100000000060000000001483642_0.smil/01.m3u8?fmt=ts2hls,244,01.m3u8&accountinfo=UoQbCSdhOfs+Fhzpjb+WON1faRQ9pU15SBx6EULzJM/q63EjPL5/UXSVfEKzDq3xghbfSvuOBNxo+cbfbI6ZkwWZ1F4+6A1eDkDeh5XZlpvpn23wIF+ldb6dnBPa8zHj,END&tenantId=8601
+#EXTINF:-1 tvg-name="潮州民生" group-title="地方",潮州民生
+http://120.87.19.109/PLTV/88888973/224/3221226707/371689860.smil/01.m3u8?fmt=ts2hls&accountinfo=fNQ4o7cVx9loISe75F4Q8uFNVbGXaIhYPaSNSiRV1HxAZFsA6zXZ4XzuulG2%2BtRumCJJ3JBelxpht7rV3AyXlfGw3jfiYNtZmmptdW1UL%2BlGAMCQWKP%2FVYv0YgXiGkmJ%3A20261108090419%2C1%2CEND&GuardEncType=2fNQ4o7cVx9loISe75F4Q
 #EXTINF:-1 tvg-name="佛山南海" group-title="地方",佛山南海
 http://120.87.19.109:80/PLTV/88888973/224/3221226687/10000100000000060000000002162261_0.smil/01.m3u8?fmt=ts2hls,244,01.m3u8&accountinfo=UoQbCSdhOfs+Fhzpjb+WON1faRQ9pU15SBx6EULzJM/q63EjPL5/UXSVfEKzDq3xJ21SRMCn8pjhXp4fHukMzAWZ1F4+6A1eDkDeh5XZlpvpn23wIF+ldb6dnBPa8zHj,END&tenantId=8601
 #EXTINF:-1 tvg-name="佛山南海" group-title="地方",佛山南海

@@ -4,9 +4,9 @@
     {
       "repository": "xisohi/CHINA-IPTV",
       "file": "Unicast/guangdong/unicom.txt",
-      "sha": "ed7a51c85a72a3630dd94ef9b92a7d249e8c188d",
-      "parsedEntries": 191,
-      "acceptedEntries": 191,
+      "sha": "0961814bdfbc4a1e396ac567fe3421a7649c6d33",
+      "parsedEntries": 192,
+      "acceptedEntries": 192,
       "rejectedNonUnicom": 0
     },
     {
@@ -18,24 +18,24 @@
       "rejectedNonUnicom": 61
     }
   ],
-  "upstreamEntries": 354,
+  "upstreamEntries": 355,
   "filteredNonUnicom": 61,
   "excludedCctv4KLines": 1,
   "deduplicatedEntries": 158,
   "standardDefinitionLinesRemoved": 64,
   "standardDefinitionOnlyFallbackChannels": 2,
-  "selectedChannels": 123,
-  "selectedLines": 307,
+  "selectedChannels": 124,
+  "selectedLines": 308,
   "alternateEntries": 184,
   "fourKChannels": 12,
   "fourKLines": 17,
-  "renderedPrimaryEntries": 324,
+  "renderedPrimaryEntries": 325,
   "groups": {
     "4K超高清": 12,
     "央视": 24,
     "卫视": 36,
     "广东": 14,
-    "地方": 7,
+    "地方": 8,
     "少儿": 4,
     "教育": 8,
     "专业": 2,
@@ -314,7 +314,7 @@
       }
     ]
   },
-  "totalInputEntries": 529,
+  "totalInputEntries": 530,
   "multicast": {
     "schemaVersion": 1,
     "provenance": [
@@ -431,7 +431,6 @@
     "selectedChannels": 122,
     "selectedLines": 135,
     "missingFromUnicast": [
-      "潮州民生",
       "潮州综合",
       "VSPN电竞",
       "广东公共",
